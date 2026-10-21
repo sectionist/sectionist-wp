@@ -8,6 +8,6 @@ final class Plugin
 {
     public static function boot(): void
     {
-        // Hooks are registered here later.Ic
+        // Hooks are registered here later.
     }
 }
