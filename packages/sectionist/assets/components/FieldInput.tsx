@@ -1,5 +1,5 @@
 import type { FieldDef } from '../types';
-import { RichTextEditor } from './RichTextEditor';
+import { RichTextEditor } from './richtext/RichTextEditor';
 
 export function FieldInput(props: {
   id: string;

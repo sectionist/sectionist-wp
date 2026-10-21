@@ -131,7 +131,7 @@ final class MetaBox
             'rtBlock' => __('Text format', 'sectionist'),
             'rtParagraph' => __('Paragraph', 'sectionist'),
             'rtHeading' => __('Heading', 'sectionist'),
-            'rtLook' => __('Paragraph looks like', 'sectionist'),
+            'rtLook' => __('looks like', 'sectionist'),
             'rtLookNone' => __('Normal', 'sectionist'),
             'rtBold' => __('Bold', 'sectionist'),
             'rtItalic' => __('Italic', 'sectionist'),
