@@ -17,5 +17,10 @@
       "name": "Heiko Martini",
       "email": "dev.heikomartini@gmail.com"
     }
-  ]
+  ],
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true
+    }
+  }
 }
