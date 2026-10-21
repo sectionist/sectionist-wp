@@ -302,6 +302,20 @@ if (! class_exists('WP_REST_Request')) {
     }
 }
 
+if (! function_exists('rest_url')) {
+    function rest_url(string $path = ''): string
+    {
+        return 'http://example.test/wp-json/' . ltrim($path, '/');
+    }
+}
+
+if (! function_exists('wp_create_nonce')) {
+    function wp_create_nonce(string $action): string
+    {
+        return 'nonce-' . $action;
+    }
+}
+
 if (! function_exists('get_current_user_id')) {
     function get_current_user_id(): int
     {

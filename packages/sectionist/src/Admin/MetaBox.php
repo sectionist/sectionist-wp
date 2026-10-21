@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sectionist\Admin;
 
+use Sectionist\Rest\PreviewController;
 use Sectionist\Sections\Registry;
 use Sectionist\Storage\Repository;
 
@@ -88,10 +89,19 @@ final class MetaBox
         }
 
         $config = wp_json_encode([
+            'preview' => [
+                'url' => rest_url(PreviewController::NAMESPACE . PreviewController::ROUTE),
+                'nonce' => wp_create_nonce('wp_rest'),
+                'postId' => $postId,
+            ],
             'types' => $types,
             'sections' => $document->sections,
             'i18n' => [
                 'tabSections' => __('Section Editor', 'sectionist'),
+                'tabPreview' => __('Preview', 'sectionist'),
+                'previewLoading' => __('Loading preview…', 'sectionist'),
+                'previewError' => __('The preview could not be loaded.', 'sectionist'),
+                'previewEmpty' => __('Nothing to preview yet.', 'sectionist'),
                 'tabSeo' => __('SEO', 'sectionist'),
                 'seoSoon' => __('SEO settings are coming soon.', 'sectionist'),
                 'closeAll' => __('Collapse all sections', 'sectionist'),

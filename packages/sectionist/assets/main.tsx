@@ -4,7 +4,9 @@ import { reducer } from './state';
 import type { Config, FieldDef, Section, TypeDef } from './types';
 import { Collapsible } from './components/Collapsible';
 import { Icon, IconButton } from './components/Icon';
+import { Preview } from './components/Preview';
 import { Tabs } from './components/Tabs';
+import { useFlip } from './components/useFlip';
 import './style.css';
 
 function sectionTitle(type: TypeDef | undefined, section: Section): string {
@@ -40,7 +42,7 @@ function App({ config }: { config: Config }) {
   const [sections, dispatch] = useReducer(reducer, config.sections);
   const [error, setError] = useState('');
   const [tab, setTab] = useState('sections');
-  const [closed, setClosed] = useState<Set<string>>(new Set());
+  const [closed, setClosed] = useState<Set<string>>(() => new Set(config.sections.map((s) => s.id)));
   const toggle = (id: string) =>
     setClosed((prev) => {
       const next = new Set(prev);
@@ -54,6 +56,7 @@ function App({ config }: { config: Config }) {
   const allClosed = sections.length > 0 && closed.size >= sections.length;
   const toggleAll = () => setClosed(allClosed ? new Set() : new Set(sections.map((s) => s.id)));
   const t = config.i18n;
+  const listRef = useFlip(sections.map((s) => s.id).join(','));
   const typeOf = (name: string): TypeDef | undefined => config.types.find((x) => x.name === name);
 
   useEffect(() => {
@@ -73,6 +76,7 @@ function App({ config }: { config: Config }) {
     return (
       <Collapsible
         key={section.id}
+        id={section.id}
         open={!closed.has(section.id)}
         onToggle={() => toggle(section.id)}
         toggleLabel={t.toggle}
@@ -139,6 +143,7 @@ function App({ config }: { config: Config }) {
       <Tabs
         tabs={[
           { id: 'sections', label: t.tabSections, icon: 'layout' },
+          { id: 'preview', label: t.tabPreview, icon: 'visibility' },
           { id: 'seo', label: t.tabSeo, icon: 'search' },
         ]}
         active={tab}
@@ -154,10 +159,12 @@ function App({ config }: { config: Config }) {
           )
         }
       >
-      {tab === 'seo' ? <p class="sectionist-note">{t.seoSoon}</p> : (
+      {tab === 'preview' ? (
+        <Preview sections={sections} config={config.preview} loading={t.previewLoading} error={t.previewError} empty={t.previewEmpty} />
+      ) : tab === 'seo' ? <p class="sectionist-note">{t.seoSoon}</p> : (
       <>
       {sections.length === 0 && <p class="sectionist-note">{t.empty}</p>}
-      {sections.map(renderSection)}
+      <div ref={listRef}>{sections.map(renderSection)}</div>
       <div class="sectionist-add">
         <button type="button" class="button button-primary" onClick={() => setModalOpen(true)}>
           {t.add}

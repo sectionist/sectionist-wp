@@ -2,6 +2,7 @@ import type { ComponentChildren } from 'preact';
 import { Icon, IconButton } from './Icon';
 
 export function Collapsible(props: {
+  id: string;
   open: boolean;
   onToggle: () => void;
   title: ComponentChildren;
@@ -19,7 +20,7 @@ export function Collapsible(props: {
 }) {
   const cls = 'sectionist-card' + (props.open ? ' is-open' : '') + (props.dragging ? ' is-dragging' : '') + (props.dropTarget ? ' is-drop-target' : '');
   return (
-    <div class={cls} onDragOver={props.onDragOver} onDrop={props.onDrop}>
+    <div class={cls} data-flip-id={props.id} onDragOver={props.onDragOver} onDrop={props.onDrop}>
       <div
         class="sectionist-card__header"
         onClick={(e) => {

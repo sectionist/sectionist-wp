@@ -21,7 +21,14 @@ export interface Section {
   [key: string]: unknown;
 }
 
+export interface Preview {
+  url: string;
+  nonce: string;
+  postId: number;
+}
+
 export interface Config {
+  preview: Preview;
   types: TypeDef[];
   sections: Section[];
   i18n: Record<string, string>;

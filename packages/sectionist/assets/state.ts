@@ -18,10 +18,12 @@ export function reducer(sections: Section[], action: Action): Section[] {
     case 'reorder': {
       const item = sections.find((s) => s.id === action.id);
       if (!item || action.id === action.before) return sections;
+      const from = sections.indexOf(item);
       const rest = sections.filter((s) => s.id !== action.id);
       const at = rest.findIndex((s) => s.id === action.before);
       if (at < 0) return sections;
-      rest.splice(at, 0, item);
+      // Dragging downwards drops the item after the target, upwards before it.
+      rest.splice(from < sections.findIndex((s) => s.id === action.before) ? at + 1 : at, 0, item);
       return rest;
     }
     case 'move': {
