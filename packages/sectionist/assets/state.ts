@@ -3,6 +3,7 @@ import type { Section, TypeDef } from './types';
 export type Action =
   | { kind: 'add'; type: TypeDef }
   | { kind: 'remove'; id: string }
+  | { kind: 'reorder'; id: string; before: string }
   | { kind: 'move'; id: string; offset: -1 | 1 }
   | { kind: 'update'; id: string; field: string; value: string };
 
@@ -14,6 +15,15 @@ export function reducer(sections: Section[], action: Action): Section[] {
       return [...sections, { id: newId(), type: action.type.name, data: { ...action.type.defaults } }];
     case 'remove':
       return sections.filter((s) => s.id !== action.id);
+    case 'reorder': {
+      const item = sections.find((s) => s.id === action.id);
+      if (!item || action.id === action.before) return sections;
+      const rest = sections.filter((s) => s.id !== action.id);
+      const at = rest.findIndex((s) => s.id === action.before);
+      if (at < 0) return sections;
+      rest.splice(at, 0, item);
+      return rest;
+    }
     case 'move': {
       const index = sections.findIndex((s) => s.id === action.id);
       const target = index + action.offset;

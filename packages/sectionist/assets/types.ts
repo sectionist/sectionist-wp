@@ -8,6 +8,8 @@ export interface FieldDef {
 export interface TypeDef {
   name: string;
   label: string;
+  description: string;
+  icon: string;
   defaults: Record<string, string>;
   fields: FieldDef[];
 }
