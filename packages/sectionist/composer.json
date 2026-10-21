@@ -22,5 +22,10 @@
     "allow-plugins": {
       "composer/installers": true
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Sectionist\\Tests\\": "tests/"
+    }
   }
 }

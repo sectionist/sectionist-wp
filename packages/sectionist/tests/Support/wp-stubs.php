@@ -1,0 +1,303 @@
+<?php
+
+declare(strict_types=1);
+
+/*
+ * Minimal stand-ins for the WordPress functions used by the plugin, so unit
+ * tests run without a WordPress install. Also used as a PHPStan bootstrap.
+ */
+
+use Sectionist\Tests\Support\WpState;
+
+if (! function_exists('add_action')) {
+    function add_action(string $hook, callable $callback, int $priority = 10, int $acceptedArgs = 1): bool
+    {
+        WpState::$actions[$hook][] = $callback;
+
+        return true;
+    }
+}
+
+if (! function_exists('do_action')) {
+    function do_action(string $hook, mixed ...$args): void
+    {
+        foreach (WpState::$actions[$hook] ?? [] as $callback) {
+            $callback(...$args);
+        }
+    }
+}
+
+if (! function_exists('get_option')) {
+    function get_option(string $name, mixed $default = false): mixed
+    {
+        return WpState::$options[$name] ?? $default;
+    }
+}
+
+if (! function_exists('update_option')) {
+    function update_option(string $name, mixed $value): bool
+    {
+        WpState::$options[$name] = $value;
+
+        return true;
+    }
+}
+
+if (! function_exists('get_transient')) {
+    function get_transient(string $name): mixed
+    {
+        return WpState::$transients[$name] ?? false;
+    }
+}
+
+if (! function_exists('set_transient')) {
+    function set_transient(string $name, mixed $value, int $expiration = 0): bool
+    {
+        WpState::$transients[$name] = $value;
+
+        return true;
+    }
+}
+
+if (! function_exists('delete_transient')) {
+    function delete_transient(string $name): bool
+    {
+        unset(WpState::$transients[$name]);
+
+        return true;
+    }
+}
+
+if (! function_exists('get_post_meta')) {
+    function get_post_meta(int $postId, string $key, bool $single = false): mixed
+    {
+        return WpState::$meta[$postId . ':' . $key] ?? '';
+    }
+}
+
+if (! function_exists('update_post_meta')) {
+    // Like WordPress, unslashes the value before storing it.
+    function update_post_meta(int $postId, string $key, mixed $value): int|bool
+    {
+        WpState::$meta[$postId . ':' . $key] = is_string($value) ? stripslashes($value) : $value;
+
+        return true;
+    }
+}
+
+if (! function_exists('wp_slash')) {
+    function wp_slash(mixed $value): mixed
+    {
+        return is_string($value) ? addslashes($value) : $value;
+    }
+}
+
+if (! function_exists('wp_json_encode')) {
+    function wp_json_encode(mixed $value, int $flags = 0): string|false
+    {
+        return json_encode($value, $flags);
+    }
+}
+
+if (! function_exists('sanitize_text_field')) {
+    function sanitize_text_field(string $value): string
+    {
+        return trim((string) preg_replace('/\s+/', ' ', strip_tags($value)));
+    }
+}
+
+if (! function_exists('wp_kses')) {
+    /**
+     * Approximation of wp_kses(): drops tags and attributes that are not allowed.
+     *
+     * @param array<string, array<string, mixed>> $allowedHtml
+     */
+    function wp_kses(string $value, array $allowedHtml): string
+    {
+        return (string) preg_replace_callback(
+            '#<(/?)([a-z0-9]+)([^>]*)>#i',
+            static function (array $m) use ($allowedHtml): string {
+                $tag = strtolower($m[2]);
+                if (! isset($allowedHtml[$tag])) {
+                    return '';
+                }
+                if ($m[1] === '/') {
+                    return '</' . $tag . '>';
+                }
+                $attributes = '';
+                preg_match_all('/([a-z\-]+)\s*=\s*"([^"]*)"/i', $m[3], $found, PREG_SET_ORDER);
+                foreach ($found as $attribute) {
+                    if (isset($allowedHtml[$tag][strtolower($attribute[1])])) {
+                        $attributes .= ' ' . strtolower($attribute[1]) . '="' . $attribute[2] . '"';
+                    }
+                }
+
+                return '<' . $tag . $attributes . '>';
+            },
+            $value,
+        );
+    }
+}
+
+if (! function_exists('__')) {
+    function __(string $text, string $domain = 'default'): string
+    {
+        return $text;
+    }
+}
+
+if (! function_exists('apply_filters')) {
+    function apply_filters(string $hook, mixed $value, mixed ...$args): mixed
+    {
+        return $value;
+    }
+}
+
+if (! function_exists('wp_verify_nonce')) {
+    function wp_verify_nonce(string $nonce, string $action): int|false
+    {
+        return $nonce === 'valid:' . $action ? 1 : false;
+    }
+}
+
+if (! function_exists('current_user_can')) {
+    function current_user_can(string $capability, mixed ...$args): bool
+    {
+        return \Sectionist\Tests\Support\WpState::$canEdit;
+    }
+}
+
+if (! function_exists('wp_unslash')) {
+    function wp_unslash(string $value): string
+    {
+        return stripslashes($value);
+    }
+}
+
+if (! function_exists('wp_is_post_revision')) {
+    function wp_is_post_revision(int $postId): int|false
+    {
+        return false;
+    }
+}
+
+if (! function_exists('esc_html')) {
+    function esc_html(string $text): string
+    {
+        return htmlspecialchars($text, ENT_QUOTES);
+    }
+}
+
+if (! function_exists('esc_html__')) {
+    function esc_html__(string $text, string $domain = 'default'): string
+    {
+        return esc_html($text);
+    }
+}
+
+if (! function_exists('esc_attr')) {
+    function esc_attr(string $text): string
+    {
+        return htmlspecialchars($text, ENT_QUOTES);
+    }
+}
+
+if (! function_exists('wp_nonce_field')) {
+    function wp_nonce_field(string $action, string $name): void
+    {
+        echo '<input type="hidden" name="' . $name . '" value="valid:' . $action . '">';
+    }
+}
+
+if (! function_exists('add_meta_box')) {
+    function add_meta_box(string $id, string $title, callable $callback, string $screen, string $context = 'advanced', string $priority = 'default'): void
+    {
+    }
+}
+
+if (! function_exists('wp_enqueue_script')) {
+    function wp_enqueue_script(string $handle, string $src, array $deps = [], string $ver = '', bool $inFooter = false): void
+    {
+    }
+}
+
+if (! function_exists('wp_enqueue_style')) {
+    function wp_enqueue_style(string $handle, string $src, array $deps = [], string $ver = ''): void
+    {
+    }
+}
+
+if (! function_exists('plugins_url')) {
+    function plugins_url(string $path, string $plugin): string
+    {
+        return 'http://example.test/' . $path;
+    }
+}
+
+if (! function_exists('get_current_screen')) {
+    function get_current_screen(): ?object
+    {
+        return null;
+    }
+}
+
+if (! function_exists('add_filter')) {
+    function add_filter(string $hook, callable $callback, int $priority = 10, int $args = 1): bool
+    {
+        return true;
+    }
+}
+
+if (! function_exists('remove_post_type_support')) {
+    function remove_post_type_support(string $postType, string $feature): void
+    {
+    }
+}
+
+if (! function_exists('get_stylesheet_directory')) {
+    function get_stylesheet_directory(): string
+    {
+        return \Sectionist\Tests\Support\WpState::$childDir;
+    }
+}
+
+if (! function_exists('get_template_directory')) {
+    function get_template_directory(): string
+    {
+        return \Sectionist\Tests\Support\WpState::$parentDir;
+    }
+}
+
+if (! function_exists('wp_kses_post')) {
+    function wp_kses_post(string $text): string
+    {
+        return $text;
+    }
+}
+
+if (! function_exists('register_rest_route')) {
+    /**
+     * @param array<string, mixed> $args
+     */
+    function register_rest_route(string $namespace, string $route, array $args): bool
+    {
+        return true;
+    }
+}
+
+if (! class_exists('WP_REST_Request')) {
+    class WP_REST_Request
+    {
+        /**
+         * @param array<string, mixed> $params
+         */
+        public function __construct(private array $params = [])
+        {
+        }
+
+        public function get_param(string $key): mixed
+        {
+            return $this->params[$key] ?? null;
+        }
+    }
+}

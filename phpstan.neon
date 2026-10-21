@@ -2,3 +2,6 @@ parameters:
     level: 8
     paths:
         - packages/sectionist/src
+    bootstrapFiles:
+        - packages/sectionist/tests/Support/WpState.php
+        - packages/sectionist/tests/Support/wp-stubs.php
