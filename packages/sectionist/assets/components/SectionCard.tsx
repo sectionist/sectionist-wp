@@ -1,4 +1,4 @@
-import type { Section, TypeDef } from '../types';
+import type { Background, Section, TypeDef } from '../types';
 import { Collapsible } from './Collapsible';
 import { FieldInput } from './FieldInput';
 import { IconButton } from './Icon';
@@ -42,14 +42,19 @@ export function SectionCard(props: {
   first: boolean;
   last: boolean;
   labels: Record<string, string>;
+  backgrounds: Background[];
   drag: DragProps;
   onToggle: () => void;
   onMove: (offset: -1 | 1) => void;
   onRemove: () => void;
+  onActive: (value: boolean) => void;
+  onBackground: (value: string) => void;
   onUpdate: (field: string, value: string) => void;
 }) {
   const { section, type, labels: t } = props;
   const { title, level } = sectionSummary(type, section);
+  const active = section.active !== false;
+  const background = section.background ?? '';
   return (
     <Collapsible
       id={section.id}
@@ -61,6 +66,7 @@ export function SectionCard(props: {
           <strong>{type?.label ?? section.type}</strong>
           {level > 0 && <span class="sectionist-badge">{`H${level}`}</span>}
           {title && <span class="sectionist-card__title">{title}</span>}
+          {!active && <span class="sectionist-badge sectionist-badge--muted">{t.inactive}</span>}
         </>
       }
       dragLabel={t.drag}
@@ -71,8 +77,37 @@ export function SectionCard(props: {
           <IconButton icon="arrow-down-alt2" label={t.moveDown} disabled={props.last} onClick={() => props.onMove(1)} />
         </>
       }
-      actions={<IconButton icon="trash" label={t.remove} danger onClick={props.onRemove} />}
+      actions={
+        <>
+          <IconButton
+            icon={active ? 'visibility' : 'hidden'}
+            label={`${t.toggleActive} (${active ? t.active : t.inactive})`}
+            onClick={() => props.onActive(!active)}
+          />
+          <IconButton icon="trash" label={t.remove} danger onClick={props.onRemove} />
+        </>
+      }
     >
+      {props.backgrounds.length > 0 && (
+        <div class="sectionist-field">
+          <span class="sectionist-field__label">{t.background}</span>
+          <div class="sectionist-swatches" role="radiogroup" aria-label={t.background}>
+            {[{ key: '', label: t.backgroundNone, color: '' }, ...props.backgrounds].map((bg) => (
+              <button
+                type="button"
+                role="radio"
+                aria-checked={background === bg.key}
+                class={'sectionist-swatch' + (background === bg.key ? ' is-active' : '')}
+                title={bg.label}
+                onClick={() => props.onBackground(bg.key)}
+              >
+                <span class="sectionist-swatch__color" style={bg.color ? { background: bg.color } : undefined} />
+                {bg.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
       {type ? (
         type.fields.map((field) => (
           <FieldInput

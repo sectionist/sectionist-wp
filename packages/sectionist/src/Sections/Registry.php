@@ -44,6 +44,7 @@ final class Registry
     /**
      * Sanitizes sections with the sanitizer of their type. Sections of unknown
      * types are preserved unchanged; entries without id or type are dropped.
+     * Container fields: `active` (missing means true) and `background` (a theme-defined key).
      *
      * @param  array<mixed>  $sections
      * @return list<array<string, mixed>>
@@ -70,6 +71,8 @@ final class Registry
             $clean[] = [
                 'id' => $section['id'],
                 'type' => $section['type'],
+                'active' => ! array_key_exists('active', $section) || (bool) $section['active'],
+                'background' => is_string($section['background'] ?? null) ? sanitize_key($section['background']) : '',
                 'data' => $type->sanitize($data),
             ];
         }

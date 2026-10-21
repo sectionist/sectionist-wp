@@ -5,14 +5,16 @@ export type Action =
   | { kind: 'remove'; id: string }
   | { kind: 'reorder'; id: string; before: string }
   | { kind: 'move'; id: string; offset: -1 | 1 }
-  | { kind: 'update'; id: string; field: string; value: string };
+  | { kind: 'update'; id: string; field: string; value: string }
+  | { kind: 'active'; id: string; value: boolean }
+  | { kind: 'background'; id: string; value: string };
 
 const newId = (): string => Math.random().toString(36).slice(2, 10);
 
 export function reducer(sections: Section[], action: Action): Section[] {
   switch (action.kind) {
     case 'add':
-      return [...sections, { id: newId(), type: action.type.name, data: { ...action.type.defaults } }];
+      return [...sections, { id: newId(), type: action.type.name, active: true, background: '', data: { ...action.type.defaults } }];
     case 'remove':
       return sections.filter((s) => s.id !== action.id);
     case 'reorder': {
@@ -34,6 +36,10 @@ export function reducer(sections: Section[], action: Action): Section[] {
       [next[index], next[target]] = [next[target], next[index]];
       return next;
     }
+    case 'active':
+      return sections.map((s) => (s.id === action.id ? { ...s, active: action.value } : s));
+    case 'background':
+      return sections.map((s) => (s.id === action.id ? { ...s, background: action.value } : s));
     case 'update':
       return sections.map((s) =>
         s.id === action.id ? { ...s, data: { ...s.data, [action.field]: action.value } } : s,

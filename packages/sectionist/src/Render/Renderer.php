@@ -27,7 +27,7 @@ final class Renderer
     }
 
     /**
-     * Sections of unknown types or without a view render as empty strings.
+     * Sections of unknown types, without a view or marked inactive render as empty strings.
      *
      * @param list<array<string, mixed>> $sections
      */
@@ -47,7 +47,7 @@ final class Renderer
     public function renderSection(array $section): string
     {
         $name = $section['type'] ?? null;
-        if (! is_string($name)) {
+        if (! is_string($name) || ($section['active'] ?? true) === false) {
             return '';
         }
 

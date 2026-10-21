@@ -99,6 +99,13 @@ if (! function_exists('wp_json_encode')) {
     }
 }
 
+if (! function_exists('sanitize_key')) {
+    function sanitize_key(string $key): string
+    {
+        return (string) preg_replace('/[^a-z0-9_\-]/', '', strtolower($key));
+    }
+}
+
 if (! function_exists('sanitize_text_field')) {
     function sanitize_text_field(string $value): string
     {

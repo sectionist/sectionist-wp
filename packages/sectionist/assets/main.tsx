@@ -82,10 +82,13 @@ function App({ config }: { config: Config }) {
                   first={index === 0}
                   last={index === sections.length - 1}
                   labels={t}
+                  backgrounds={config.backgrounds ?? []}
                   drag={{ dragging: drag.isDragging(section.id), dropTarget: drag.isDropTarget(section.id), ...drag.handlers(section.id) }}
                   onToggle={() => toggle(section.id)}
                   onMove={(offset) => dispatch({ kind: 'move', id: section.id, offset })}
                   onRemove={() => setRemoveId(section.id)}
+                  onActive={(value) => dispatch({ kind: 'active', id: section.id, value })}
+                  onBackground={(value) => dispatch({ kind: 'background', id: section.id, value })}
                   onUpdate={(field, value) => dispatch({ kind: 'update', id: section.id, field, value })}
                 />
               ))}

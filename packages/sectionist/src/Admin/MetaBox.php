@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sectionist\Admin;
 
 use Sectionist\Rest\PreviewController;
+use Sectionist\Sections\Backgrounds;
 use Sectionist\Sections\Registry;
 use Sectionist\Storage\Repository;
 
@@ -75,6 +76,7 @@ final class MetaBox
                 'postId' => $postId,
             ],
             'types' => $this->typeDefinitions(),
+            'backgrounds' => Backgrounds::all(),
             'sections' => $document->sections,
             'i18n' => $this->labels(),
         ]);
@@ -143,6 +145,11 @@ final class MetaBox
             'rtAlignRight' => __('Align right', 'sectionist'),
             'rtLink' => __('Link', 'sectionist'),
             'rtLinkPrompt' => __('Link URL (empty removes the link)', 'sectionist'),
+            'active' => __('Active', 'sectionist'),
+            'inactive' => __('Inactive', 'sectionist'),
+            'toggleActive' => __('Show or hide this section on the page', 'sectionist'),
+            'background' => __('Background', 'sectionist'),
+            'backgroundNone' => __('None', 'sectionist'),
             'closeAll' => __('Collapse all sections', 'sectionist'),
             'expandAll' => __('Expand all sections', 'sectionist'),
             'chooseType' => __('Choose a section type', 'sectionist'),

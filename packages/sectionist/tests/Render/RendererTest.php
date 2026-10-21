@@ -50,6 +50,11 @@ final class RendererTest extends TestCase
         $this->assertStringContainsString('sectionist-section--text', $html);
     }
 
+    public function testInactiveSectionRendersNothing(): void
+    {
+        $this->assertSame('', $this->renderer->renderSection(['id' => 'a', 'type' => 'text', 'active' => false, 'data' => []]));
+    }
+
     public function testUnknownTypeRendersNothing(): void
     {
         $this->assertSame('', $this->renderer->renderSection(['id' => 'a', 'type' => 'custom', 'data' => []]));

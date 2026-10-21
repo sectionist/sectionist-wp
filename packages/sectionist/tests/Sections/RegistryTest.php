@@ -56,8 +56,24 @@ final class RegistryTest extends TestCase
         ]);
 
         $this->assertSame(
-            [['id' => 'a', 'type' => 'text', 'data' => ['body' => 'H']], $unknown],
+            [['id' => 'a', 'type' => 'text', 'active' => true, 'background' => '', 'data' => ['body' => 'H']], $unknown],
             $clean,
         );
+    }
+
+    public function testContainerFieldsActiveAndBackgroundAreSanitized(): void
+    {
+        $registry = new Registry();
+        $registry->register(new TextType());
+
+        $clean = $registry->sanitizeSections([
+            ['id' => 'a', 'type' => 'text', 'active' => false, 'background' => 'Dark<b>', 'data' => []],
+            ['id' => 'b', 'type' => 'text', 'data' => []],
+        ]);
+
+        $this->assertFalse($clean[0]['active']);
+        $this->assertSame('darkb', $clean[0]['background']);
+        $this->assertTrue($clean[1]['active']);
+        $this->assertSame('', $clean[1]['background']);
     }
 }
