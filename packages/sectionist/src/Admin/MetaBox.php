@@ -68,6 +68,30 @@ final class MetaBox
             return;
         }
 
+        $config = wp_json_encode([
+            'preview' => [
+                'url' => rest_url(PreviewController::NAMESPACE . PreviewController::ROUTE),
+                'nonce' => wp_create_nonce('wp_rest'),
+                'postId' => $postId,
+            ],
+            'types' => $this->typeDefinitions(),
+            'sections' => $document->sections,
+            'i18n' => $this->labels(),
+        ]);
+
+        wp_nonce_field(SaveHandler::NONCE_ACTION, SaveHandler::NONCE_FIELD);
+        printf(
+            '<div id="sectionist-editor" data-config="%s"></div><input type="hidden" id="sectionist-data" name="%s" value="">',
+            esc_attr($config === false ? '{}' : $config),
+            esc_attr(SaveHandler::DATA_FIELD),
+        );
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    private function typeDefinitions(): array
+    {
         $types = [];
         foreach ($this->registry->all() as $type) {
             $types[] = [
@@ -88,46 +112,38 @@ final class MetaBox
             ];
         }
 
-        $config = wp_json_encode([
-            'preview' => [
-                'url' => rest_url(PreviewController::NAMESPACE . PreviewController::ROUTE),
-                'nonce' => wp_create_nonce('wp_rest'),
-                'postId' => $postId,
-            ],
-            'types' => $types,
-            'sections' => $document->sections,
-            'i18n' => [
-                'tabSections' => __('Section Editor', 'sectionist'),
-                'tabPreview' => __('Preview', 'sectionist'),
-                'previewLoading' => __('Loading preview…', 'sectionist'),
-                'previewError' => __('The preview could not be loaded.', 'sectionist'),
-                'previewEmpty' => __('Nothing to preview yet.', 'sectionist'),
-                'tabSeo' => __('SEO', 'sectionist'),
-                'seoSoon' => __('SEO settings are coming soon.', 'sectionist'),
-                'closeAll' => __('Collapse all sections', 'sectionist'),
-                'expandAll' => __('Expand all sections', 'sectionist'),
-                'chooseType' => __('Choose a section type', 'sectionist'),
-                'cancel' => __('Cancel', 'sectionist'),
-                'drag' => __('Drag to reorder', 'sectionist'),
-                'toggle' => __('Expand or collapse section', 'sectionist'),
-                'add' => __('Add section', 'sectionist'),
-                'remove' => __('Remove', 'sectionist'),
-                'confirmRemoveTitle' => __('Delete section?', 'sectionist'),
-                'confirmRemoveText' => __('This section and its content will be removed once you save the page.', 'sectionist'),
-                'confirmRemoveAction' => __('Delete section', 'sectionist'),
-                'moveUp' => __('Move up', 'sectionist'),
-                'moveDown' => __('Move down', 'sectionist'),
-                'empty' => __('No sections yet. Add the first one below.', 'sectionist'),
-                'unknownType' => __('This section type is not available. Its content is kept unchanged.', 'sectionist'),
-                'saveError' => __('The sections could not be prepared for saving. Please reload the page.', 'sectionist'),
-            ],
-        ]);
+        return $types;
+    }
 
-        wp_nonce_field(SaveHandler::NONCE_ACTION, SaveHandler::NONCE_FIELD);
-        printf(
-            '<div id="sectionist-editor" data-config="%s"></div><input type="hidden" id="sectionist-data" name="%s" value="">',
-            esc_attr($config === false ? '{}' : $config),
-            esc_attr(SaveHandler::DATA_FIELD),
-        );
+    /**
+     * @return array<string, string>
+     */
+    private function labels(): array
+    {
+        return [
+            'tabSections' => __('Section Editor', 'sectionist'),
+            'tabPreview' => __('Preview', 'sectionist'),
+            'previewLoading' => __('Loading preview…', 'sectionist'),
+            'previewError' => __('The preview could not be loaded.', 'sectionist'),
+            'previewEmpty' => __('Nothing to preview yet.', 'sectionist'),
+            'tabSeo' => __('SEO', 'sectionist'),
+            'seoSoon' => __('SEO settings are coming soon.', 'sectionist'),
+            'closeAll' => __('Collapse all sections', 'sectionist'),
+            'expandAll' => __('Expand all sections', 'sectionist'),
+            'chooseType' => __('Choose a section type', 'sectionist'),
+            'cancel' => __('Cancel', 'sectionist'),
+            'drag' => __('Drag to reorder', 'sectionist'),
+            'toggle' => __('Expand or collapse section', 'sectionist'),
+            'add' => __('Add section', 'sectionist'),
+            'remove' => __('Remove', 'sectionist'),
+            'confirmRemoveTitle' => __('Delete section?', 'sectionist'),
+            'confirmRemoveText' => __('This section and its content will be removed once you save the page.', 'sectionist'),
+            'confirmRemoveAction' => __('Delete section', 'sectionist'),
+            'moveUp' => __('Move up', 'sectionist'),
+            'moveDown' => __('Move down', 'sectionist'),
+            'empty' => __('No sections yet. Add the first one below.', 'sectionist'),
+            'unknownType' => __('This section type is not available. Its content is kept unchanged.', 'sectionist'),
+            'saveError' => __('The sections could not be prepared for saving. Please reload the page.', 'sectionist'),
+        ];
     }
 }
