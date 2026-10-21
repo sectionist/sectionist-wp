@@ -1,0 +1,27 @@
+<?php
+
+declare(strict_types=1);
+
+?><!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+<head>
+	<meta charset="<?php bloginfo('charset'); ?>">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<?php wp_head(); ?>
+</head>
+<body <?php body_class(); ?>>
+<?php wp_body_open(); ?>
+<?php while (have_posts()) : the_post(); ?>
+	<h1><?php the_title(); ?></h1>
+	<?php
+	if (! class_exists(\Sectionist\Storage\PostMetaRepository::class)) {
+		echo '<p>' . esc_html__('The Sectionist plugin is not active.', 'sectionist-dump-theme') . '</p>';
+	} else {
+		$document = (new \Sectionist\Storage\PostMetaRepository())->load(get_the_ID());
+		echo '<pre>' . esc_html((string) wp_json_encode($document->toArray(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) . '</pre>';
+	}
+	?>
+<?php endwhile; ?>
+<?php wp_footer(); ?>
+</body>
+</html>
