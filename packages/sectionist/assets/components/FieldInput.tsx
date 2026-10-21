@@ -1,12 +1,19 @@
 import type { FieldDef } from '../types';
+import { RichTextEditor } from './RichTextEditor';
 
-export function FieldInput(props: { id: string; field: FieldDef; value: string; onInput: (v: string) => void }) {
+export function FieldInput(props: {
+  id: string;
+  field: FieldDef;
+  value: string;
+  labels: Record<string, string>;
+  onInput: (v: string) => void;
+}) {
   const { id, field, value, onInput } = props;
   return (
     <div class="sectionist-field">
       <label for={id}>{field.label}</label>
-      {field.kind === 'textarea' ? (
-        <textarea id={id} rows={8} value={value} onInput={(e) => onInput(e.currentTarget.value)} />
+      {field.kind === 'richtext' ? (
+        <RichTextEditor id={id} value={value} labels={props.labels} onInput={onInput} />
       ) : field.kind === 'select' ? (
         <select id={id} value={value} onChange={(e) => onInput(e.currentTarget.value)}>
           {field.options.map((o) => (

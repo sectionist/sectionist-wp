@@ -39,14 +39,13 @@ final class SaveHandlerTest extends TestCase
     public function testSavesSanitizedSectionsAndKeepsUnknownTypes(): void
     {
         $json = (string) json_encode(['sections' => [
-            ['id' => 'a', 'type' => 'text', 'data' => ['heading' => '<b>Hi</b>', 'body' => '<script>x</script><p>ok</p>']],
+            ['id' => 'a', 'type' => 'text', 'data' => ['body' => '<script>x</script><p>ok</p>']],
             ['id' => 'b', 'type' => 'custom', 'data' => ['x' => '<i>1</i>']],
         ]]);
 
         $this->assertTrue($this->handler->process(1, $this->request($json)));
 
         $sections = $this->repository->load(1)->sections;
-        $this->assertSame('Hi', $sections[0]['data']['heading']);
         $this->assertSame('x<p>ok</p>', $sections[0]['data']['body']);
         $this->assertSame(['x' => '<i>1</i>'], $sections[1]['data']);
     }

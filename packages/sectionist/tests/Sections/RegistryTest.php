@@ -49,14 +49,14 @@ final class RegistryTest extends TestCase
         $unknown = ['id' => 'u1', 'type' => 'hero', 'data' => ['x' => '<i>raw</i>']];
 
         $clean = $registry->sanitizeSections([
-            ['id' => 'a', 'type' => 'text', 'data' => ['heading' => '<i>H</i>']],
+            ['id' => 'a', 'type' => 'text', 'data' => ['body' => '<i>H</i>']],
             $unknown,
             ['type' => 'text'],
             'garbage',
         ]);
 
         $this->assertSame(
-            [['id' => 'a', 'type' => 'text', 'data' => ['heading' => 'H', 'body' => '']], $unknown],
+            [['id' => 'a', 'type' => 'text', 'data' => ['body' => 'H']], $unknown],
             $clean,
         );
     }

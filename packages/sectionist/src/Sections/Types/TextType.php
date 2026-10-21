@@ -21,7 +21,7 @@ final class TextType implements SectionType
 
     public function description(): string
     {
-        return __('Heading and body text.', 'sectionist');
+        return __('Rich text with headings, lists and links.', 'sectionist');
     }
 
     public function icon(): string
@@ -32,8 +32,7 @@ final class TextType implements SectionType
     public function fields(): array
     {
         return [
-            Field::text('heading', __('Heading', 'sectionist')),
-            Field::textarea('body', __('Body', 'sectionist')),
+            Field::richtext('body', __('Content', 'sectionist')),
         ];
     }
 

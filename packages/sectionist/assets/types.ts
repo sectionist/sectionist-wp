@@ -1,5 +1,5 @@
 export interface FieldDef {
-  kind: 'text' | 'textarea' | 'select';
+  kind: 'text' | 'richtext' | 'select';
   name: string;
   label: string;
   options: string[];

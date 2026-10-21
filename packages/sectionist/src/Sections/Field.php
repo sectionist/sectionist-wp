@@ -8,7 +8,7 @@ final readonly class Field
 {
     public const TEXT = 'text';
 
-    public const TEXTAREA = 'textarea';
+    public const RICHTEXT = 'richtext';
 
     public const SELECT = 'select';
 
@@ -16,15 +16,16 @@ final readonly class Field
     public const ALLOWED_HTML = [
         'a' => ['href' => true, 'title' => true],
         'em' => [],
-        'h1' => [],
-        'h2' => [],
-        'h3' => [],
-        'h4' => [],
-        'h5' => [],
-        'h6' => [],
+        'h1' => ['class' => true],
+        'h2' => ['class' => true],
+        'h3' => ['class' => true],
+        'h4' => ['class' => true],
+        'h5' => ['class' => true],
+        'h6' => ['class' => true],
         'li' => [],
         'ol' => [],
         'p' => ['class' => true],
+        's' => [],
         'strong' => [],
         'ul' => [],
     ];
@@ -34,6 +35,9 @@ final readonly class Field
      * The theme decides how each class looks.
      */
     public const PARAGRAPH_CLASSES = ['as-h1', 'as-h2', 'as-h3', 'as-h4', 'as-h5', 'as-h6'];
+
+    /** Classes allowed on `p` and `h1`-`h6`: text alignment without inline styles. */
+    public const ALIGN_CLASSES = ['has-text-align-left', 'has-text-align-center', 'has-text-align-right'];
 
     /**
      * @param list<string> $options allowed values (select only)
@@ -52,9 +56,9 @@ final readonly class Field
         return new self(self::TEXT, $name, $label, [], $default);
     }
 
-    public static function textarea(string $name, string $label, string $default = ''): self
+    public static function richtext(string $name, string $label, string $default = ''): self
     {
-        return new self(self::TEXTAREA, $name, $label, [], $default);
+        return new self(self::RICHTEXT, $name, $label, [], $default);
     }
 
     /**
@@ -73,20 +77,22 @@ final readonly class Field
 
         return match ($this->kind) {
             self::TEXT => sanitize_text_field($value),
-            self::TEXTAREA => $this->filterParagraphClasses(wp_kses($value, self::ALLOWED_HTML)),
+            self::RICHTEXT => $this->filterClasses(wp_kses($value, self::ALLOWED_HTML)),
             self::SELECT => in_array($value, $this->options, true) ? $value : $this->default,
             default => $this->default,
         };
     }
 
-    private function filterParagraphClasses(string $html): string
+    private function filterClasses(string $html): string
     {
         return (string) preg_replace_callback(
-            '#<p class="([^"]*)">#i',
+            '#<(p|h[1-6]) class="([^"]*)">#i',
             static function (array $m): string {
-                $classes = array_intersect(preg_split('/\s+/', trim($m[1])) ?: [], self::PARAGRAPH_CLASSES);
+                $tag = strtolower($m[1]);
+                $allowed = $tag === 'p' ? [...self::PARAGRAPH_CLASSES, ...self::ALIGN_CLASSES] : self::ALIGN_CLASSES;
+                $classes = array_intersect(preg_split('/\s+/', trim($m[2])) ?: [], $allowed);
 
-                return $classes === [] ? '<p>' : '<p class="' . implode(' ', $classes) . '">';
+                return $classes === [] ? '<' . $tag . '>' : '<' . $tag . ' class="' . implode(' ', $classes) . '">';
             },
             $html,
         );

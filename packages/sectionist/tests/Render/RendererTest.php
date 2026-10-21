@@ -30,15 +30,15 @@ final class RendererTest extends TestCase
         $this->renderer = new Renderer($registry, $this->repository, new ViewResolver([dirname(__DIR__, 2) . '/views']));
     }
 
-    public function testRendersTextSectionWithEscapedHeading(): void
+    public function testRendersTextSectionBody(): void
     {
         $html = $this->renderer->renderSection([
             'id' => 'a',
             'type' => 'text',
-            'data' => ['heading' => 'A & <b>B</b>', 'body' => '<p>Hello</p>'],
+            'data' => ['body' => '<h2>Title</h2><p>Hello</p>'],
         ]);
 
-        $this->assertStringContainsString('<h2>A &amp; &lt;b&gt;B&lt;/b&gt;</h2>', $html);
+        $this->assertStringContainsString('<h2>Title</h2>', $html);
         $this->assertStringContainsString('<p>Hello</p>', $html);
     }
 
@@ -58,7 +58,7 @@ final class RendererTest extends TestCase
 
     public function testRenderPostUsesStoredSections(): void
     {
-        $this->repository->save(5, new Document([['id' => 'a', 'type' => 'text', 'data' => ['heading' => 'Stored']]]));
+        $this->repository->save(5, new Document([['id' => 'a', 'type' => 'text', 'data' => ['body' => '<p>Stored</p>']]]));
 
         $this->assertStringContainsString('Stored', $this->renderer->renderPost(5));
         $this->assertSame('', $this->renderer->renderPost(6));
@@ -66,8 +66,8 @@ final class RendererTest extends TestCase
 
     public function testRenderPostRendersNothingForNewerSchemaVersion(): void
     {
-        $this->repository->save(5, new Document([['id' => 'a', 'type' => 'text', 'data' => ['heading' => 'Stored']]]));
-        WpState::$meta['5:_sectionist_data'] = '{"schema_version":99,"sections":[{"id":"a","type":"text","data":{"heading":"X"}}]}';
+        $this->repository->save(5, new Document([['id' => 'a', 'type' => 'text', 'data' => ['body' => '<p>Stored</p>']]]));
+        WpState::$meta['5:_sectionist_data'] = '{"schema_version":99,"sections":[{"id":"a","type":"text","data":{"body":"X"}}]}';
 
         $this->assertSame('', $this->renderer->renderPost(5));
     }

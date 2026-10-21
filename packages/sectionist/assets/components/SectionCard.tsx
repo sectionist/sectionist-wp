@@ -3,13 +3,27 @@ import { Collapsible } from './Collapsible';
 import { FieldInput } from './FieldInput';
 import { IconButton } from './Icon';
 
-function sectionTitle(type: TypeDef | undefined, section: Section): string {
+const HEADING = /<h([1-6])[^>]*>([\s\S]*?)<\/h\1>/i;
+
+function plain(html: string): string {
+  return html.replace(/<[^>]*>/g, '').trim();
+}
+
+/** Title for the header (first heading, else first text) and the level of the first heading. */
+function sectionSummary(type: TypeDef | undefined, section: Section): { title: string; level: number } {
+  let title = '';
+  let level = 0;
   for (const field of type?.fields ?? []) {
     if (field.kind === 'select') continue;
-    const text = String(section.data[field.name] ?? '').replace(/<[^>]*>/g, '').trim();
-    if (text) return text.length > 60 ? text.slice(0, 60) + '…' : text;
+    const html = String(section.data[field.name] ?? '');
+    const heading = field.kind === 'richtext' ? HEADING.exec(html) : null;
+    if (heading && !level) {
+      level = Number(heading[1]);
+      title = plain(heading[2]);
+    }
+    if (!title) title = plain(html);
   }
-  return '';
+  return { title: title.length > 60 ? title.slice(0, 60) + '…' : title, level };
 }
 
 export interface DragProps {
@@ -35,7 +49,7 @@ export function SectionCard(props: {
   onUpdate: (field: string, value: string) => void;
 }) {
   const { section, type, labels: t } = props;
-  const title = sectionTitle(type, section);
+  const { title, level } = sectionSummary(type, section);
   return (
     <Collapsible
       id={section.id}
@@ -45,6 +59,7 @@ export function SectionCard(props: {
       title={
         <>
           <strong>{type?.label ?? section.type}</strong>
+          {level > 0 && <span class="sectionist-badge">{`H${level}`}</span>}
           {title && <span class="sectionist-card__title">{title}</span>}
         </>
       }
@@ -63,6 +78,7 @@ export function SectionCard(props: {
           <FieldInput
             id={`sectionist-${section.id}-${field.name}`}
             field={field}
+            labels={t}
             value={String(section.data[field.name] ?? '')}
             onInput={(value) => props.onUpdate(field.name, value)}
           />

@@ -42,7 +42,7 @@ final class PreviewControllerTest extends TestCase
     public function testPreviewSanitizesBeforeRendering(): void
     {
         $request = new WP_REST_Request(['post_id' => 3, 'sections' => [
-            ['id' => 'a', 'type' => 'text', 'data' => ['heading' => 'Hi', 'body' => '<script>x</script><p>ok</p>']],
+            ['id' => 'a', 'type' => 'text', 'data' => ['body' => '<script>x</script><p>ok</p>']],
         ]]);
 
         $html = $this->controller->handle($request)['html'];

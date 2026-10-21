@@ -16,7 +16,7 @@ Gutenberg serializes blocks as HTML comments in `post_content`. The stored HTML 
 {
   "schema_version": 1,
   "sections": [
-    { "id": "a1b2c3", "type": "text", "data": { "heading": "Hello", "body": "..." } }
+    { "id": "a1b2c3", "type": "text", "data": { "body": "<h2>Hello</h2><p>...</p>" } }
   ]
 }
 ```

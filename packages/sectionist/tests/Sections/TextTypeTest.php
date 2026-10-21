@@ -16,11 +16,9 @@ final class TextTypeTest extends TestCase
     public function testStripsDisallowedHtmlAndInlineStyles(): void
     {
         $clean = (new TextType())->sanitize([
-            'heading' => '<b>Hi</b>',
             'body' => '<p style="color:red">A <strong>b</strong> <script>x</script><a href="/x" onclick="y">l</a></p>',
         ]);
 
-        $this->assertSame('Hi', $clean['heading']);
         $this->assertSame('<p>A <strong>b</strong> x<a href="/x">l</a></p>', $clean['body']);
     }
 
@@ -33,16 +31,25 @@ final class TextTypeTest extends TestCase
         $this->assertSame('<h2>T</h2>a<p class="as-h2">x</p><p>y</p>', $clean['body']);
     }
 
+    public function testKeepsAlignmentClassesAndStrikeOnly(): void
+    {
+        $clean = (new TextType())->sanitize([
+            'body' => '<h3 class="has-text-align-center as-h1">T</h3><p class="has-text-align-right as-h2"><s>x</s></p>',
+        ]);
+
+        $this->assertSame('<h3 class="has-text-align-center">T</h3><p class="has-text-align-right as-h2"><s>x</s></p>', $clean['body']);
+    }
+
     public function testMissingOrInvalidFieldsFallBackToDefaults(): void
     {
-        $clean = (new TextType())->sanitize(['heading' => ['nope']]);
+        $clean = (new TextType())->sanitize(['body' => ['nope']]);
 
-        $this->assertSame(['heading' => '', 'body' => ''], $clean);
+        $this->assertSame(['body' => ''], $clean);
     }
 
     public function testDefaultsMatchFields(): void
     {
-        $this->assertSame(['heading' => '', 'body' => ''], (new TextType())->defaults());
+        $this->assertSame(['body' => ''], (new TextType())->defaults());
     }
 
     public function testSelectRejectsValuesOutsideOptions(): void

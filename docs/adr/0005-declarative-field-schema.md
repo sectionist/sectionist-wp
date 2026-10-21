@@ -23,7 +23,7 @@ Two field kinds keep design out of the data:
 - The formatting whitelist from the PHP schema configures the editor extensions.
 - Fallback if the vendor risk materializes: ProseMirror directly (Tiptap is a layer on top of it) or a fork.
 - Bundle size is measured in the prototype.
-- In the vertical slice the rich-text field is first a `textarea`. Tiptap follows as its own sub-step.
+- The rich-text field kind is `richtext`, edited with Tiptap (h1-h6, paragraph look classes `as-h1`..`as-h6`, alignment classes `has-text-align-*`, strong, em, strike, lists, links).
 
 ## Consequences
 
