@@ -1,5 +1,5 @@
 export interface FieldDef {
-  kind: 'text' | 'richtext' | 'select';
+  kind: 'text' | 'richtext' | 'select' | 'cta';
   name: string;
   label: string;
   options: string[];
@@ -10,7 +10,7 @@ export interface TypeDef {
   label: string;
   description: string;
   icon: string;
-  defaults: Record<string, string>;
+  defaults: Record<string, unknown>;
   fields: FieldDef[];
 }
 
@@ -33,6 +33,7 @@ export interface Preview {
   url: string;
   nonce: string;
   postId: number;
+  pagesUrl: string;
 }
 
 export interface Config {

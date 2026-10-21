@@ -10,9 +10,11 @@ declare(strict_types=1);
  */
 
 $body = is_string($data['body'] ?? null) ? $data['body'] : '';
+$cta = is_array($data['cta'] ?? null) ? $data['cta'] : [];
 ?>
 <section class="sectionist-section sectionist-section--text">
 <?php if ($body !== '') : ?>
     <?php echo wp_kses_post($body); ?>
 <?php endif; ?>
+<?php require __DIR__ . '/partials/cta.php'; ?>
 </section>

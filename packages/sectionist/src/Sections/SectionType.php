@@ -23,13 +23,13 @@ interface SectionType
     public function fields(): array;
 
     /**
-     * @return array<string, string>
+     * @return array<string, mixed>
      */
     public function defaults(): array;
 
     /**
      * @param  array<mixed>  $data
-     * @return array<string, string>
+     * @return array<string, mixed>
      */
     public function sanitize(array $data): array;
 }

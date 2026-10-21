@@ -1,14 +1,25 @@
-import type { FieldDef } from '../types';
+import type { FieldDef, Preview } from '../types';
+import { CtaField } from './CtaField';
 import { RichTextEditor } from './richtext/RichTextEditor';
 
 export function FieldInput(props: {
   id: string;
   field: FieldDef;
-  value: string;
+  value: unknown;
+  rest: Preview;
   labels: Record<string, string>;
-  onInput: (v: string) => void;
+  onInput: (v: unknown) => void;
 }) {
-  const { id, field, value, onInput } = props;
+  const { id, field, onInput } = props;
+  if (field.kind === 'cta') {
+    return (
+      <div class="sectionist-field">
+        <span class="sectionist-field__label">{field.label}</span>
+        <CtaField id={id} value={props.value} rest={props.rest} labels={props.labels} onInput={onInput} />
+      </div>
+    );
+  }
+  const value = String(props.value ?? '');
   return (
     <div class="sectionist-field">
       <label for={id}>{field.label}</label>

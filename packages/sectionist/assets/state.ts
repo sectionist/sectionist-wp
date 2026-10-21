@@ -5,7 +5,7 @@ export type Action =
   | { kind: 'remove'; id: string }
   | { kind: 'reorder'; id: string; before: string }
   | { kind: 'move'; id: string; offset: -1 | 1 }
-  | { kind: 'update'; id: string; field: string; value: string }
+  | { kind: 'update'; id: string; field: string; value: unknown }
   | { kind: 'active'; id: string; value: boolean }
   | { kind: 'background'; id: string; value: string };
 

@@ -33,6 +33,7 @@ final class TextType implements SectionType
     {
         return [
             Field::richtext('body', __('Content', 'sectionist')),
+            Field::cta('cta', __('Call to action', 'sectionist')),
         ];
     }
 

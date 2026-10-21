@@ -6,6 +6,7 @@ namespace Sectionist\Tests\Sections;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Sectionist\Sections\Cta;
 use Sectionist\Sections\Field;
 use Sectionist\Sections\Types\TextType;
 
@@ -44,12 +45,12 @@ final class TextTypeTest extends TestCase
     {
         $clean = (new TextType())->sanitize(['body' => ['nope']]);
 
-        $this->assertSame(['body' => ''], $clean);
+        $this->assertSame(['body' => '', 'cta' => Cta::defaults()], $clean);
     }
 
     public function testDefaultsMatchFields(): void
     {
-        $this->assertSame(['body' => ''], (new TextType())->defaults());
+        $this->assertSame(['body' => '', 'cta' => Cta::defaults()], (new TextType())->defaults());
     }
 
     public function testSelectRejectsValuesOutsideOptions(): void

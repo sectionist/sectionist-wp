@@ -329,3 +329,38 @@ if (! function_exists('get_current_user_id')) {
         return 1;
     }
 }
+
+if (! function_exists('absint')) {
+    function absint(mixed $value): int
+    {
+        return abs((int) $value);
+    }
+}
+
+if (! function_exists('esc_url_raw')) {
+    function esc_url_raw(string $url): string
+    {
+        return preg_match('#^(https?://|mailto:|tel:|/|\#)#i', trim($url)) === 1 ? trim($url) : '';
+    }
+}
+
+if (! function_exists('get_post_status')) {
+    function get_post_status(int $id): string|false
+    {
+        return $GLOBALS['sectionist_test_posts'][$id]['status'] ?? false;
+    }
+}
+
+if (! function_exists('get_permalink')) {
+    function get_permalink(int $id): string|false
+    {
+        return $GLOBALS['sectionist_test_posts'][$id]['url'] ?? false;
+    }
+}
+
+if (! function_exists('esc_url')) {
+    function esc_url(string $url): string
+    {
+        return esc_url_raw($url);
+    }
+}

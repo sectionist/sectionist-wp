@@ -12,6 +12,8 @@ final readonly class Field
 
     public const SELECT = 'select';
 
+    public const CTA = 'cta';
+
     /** Whitelist for rich-text fields. No inline styles, no font information. */
     public const ALLOWED_HTML = [
         'a' => ['href' => true, 'title' => true],
@@ -41,13 +43,14 @@ final readonly class Field
 
     /**
      * @param list<string> $options allowed values (select only)
+     * @param string|array<string, mixed> $default
      */
     private function __construct(
         public string $kind,
         public string $name,
         public string $label,
         public array $options = [],
-        public string $default = '',
+        public string|array $default = '',
     ) {
     }
 
@@ -69,8 +72,20 @@ final readonly class Field
         return new self(self::SELECT, $name, $label, $options, $default);
     }
 
-    public function sanitize(mixed $value): string
+    public static function cta(string $name, string $label): self
     {
+        return new self(self::CTA, $name, $label, [], Cta::defaults());
+    }
+
+    /**
+     * @return string|array<string, mixed>
+     */
+    public function sanitize(mixed $value): string|array
+    {
+        if ($this->kind === self::CTA) {
+            return Cta::sanitize($value);
+        }
+
         if (! is_string($value)) {
             return $this->default;
         }

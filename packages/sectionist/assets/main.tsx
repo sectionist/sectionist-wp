@@ -83,6 +83,7 @@ function App({ config }: { config: Config }) {
                   last={index === sections.length - 1}
                   labels={t}
                   backgrounds={config.backgrounds ?? []}
+                  rest={config.preview}
                   drag={{ dragging: drag.isDragging(section.id), dropTarget: drag.isDropTarget(section.id), ...drag.handlers(section.id) }}
                   onToggle={() => toggle(section.id)}
                   onMove={(offset) => dispatch({ kind: 'move', id: section.id, offset })}

@@ -1,4 +1,4 @@
-import type { Background, Section, TypeDef } from '../types';
+import type { Background, Preview, Section, TypeDef } from '../types';
 import { Collapsible } from './Collapsible';
 import { FieldInput } from './FieldInput';
 import { IconButton } from './Icon';
@@ -49,7 +49,8 @@ export function SectionCard(props: {
   onRemove: () => void;
   onActive: (value: boolean) => void;
   onBackground: (value: string) => void;
-  onUpdate: (field: string, value: string) => void;
+  onUpdate: (field: string, value: unknown) => void;
+  rest: Preview;
 }) {
   const { section, type, labels: t } = props;
   const { title, level } = sectionSummary(type, section);
@@ -114,7 +115,8 @@ export function SectionCard(props: {
             id={`sectionist-${section.id}-${field.name}`}
             field={field}
             labels={t}
-            value={String(section.data[field.name] ?? '')}
+            value={section.data[field.name]}
+            rest={props.rest}
             onInput={(value) => props.onUpdate(field.name, value)}
           />
         ))

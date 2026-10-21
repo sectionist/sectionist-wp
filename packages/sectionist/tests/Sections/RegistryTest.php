@@ -7,6 +7,7 @@ namespace Sectionist\Tests\Sections;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Sectionist\Sections\Cta;
 use Sectionist\Sections\Registry;
 use Sectionist\Sections\Types\TextType;
 use Sectionist\Tests\Support\WpState;
@@ -56,7 +57,7 @@ final class RegistryTest extends TestCase
         ]);
 
         $this->assertSame(
-            [['id' => 'a', 'type' => 'text', 'active' => true, 'background' => '', 'data' => ['body' => 'H']], $unknown],
+            [['id' => 'a', 'type' => 'text', 'active' => true, 'background' => '', 'data' => ['body' => 'H', 'cta' => Cta::defaults()]], $unknown],
             $clean,
         );
     }
