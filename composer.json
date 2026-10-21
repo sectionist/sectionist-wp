@@ -1,0 +1,19 @@
+{
+  "name": "sectionist/sectionist-wp",
+  "description": "Monorepo for Sectionist (development only).",
+  "type": "project",
+  "license": "GPL-3.0-or-later",
+  "require-dev": {
+    "phpunit/phpunit": "^13.4",
+    "phpstan/phpstan": "^2.3",
+    "laravel/pint": "^1.32"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "scripts": {
+    "test": "phpunit",
+    "lint": "pint --test",
+    "analyse": "phpstan analyse"
+  }
+}
