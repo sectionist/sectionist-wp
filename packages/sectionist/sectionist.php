@@ -1,14 +1,16 @@
 <?php
 /**
- * Plugin Name: Sectionist Core
- * Description: Structured section editor core for WordPress.
+ * Plugin Name: Sectionist
+ * Description: Structured section editor for WordPress.
  * Version: 0.0.1
  * Requires PHP: 8.5
  * License: GPL-3.0-or-later
- * Text Domain: sectionist-core
+ * Text Domain: sectionist
  */
 
 declare(strict_types=1);
+
+use Sectionist\Plugin;
 
 if (! defined('ABSPATH')) {
     exit;
@@ -16,4 +18,4 @@ if (! defined('ABSPATH')) {
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-\Sectionist\Core\Plugin::boot();
+Plugin::boot();

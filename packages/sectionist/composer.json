@@ -1,6 +1,6 @@
 {
-  "name": "sectionist/core",
-  "description": "Structured section editor core for WordPress.",
+  "name": "sectionist/sectionist",
+  "description": "Structured section editor for WordPress.",
   "type": "wordpress-plugin",
   "license": "GPL-3.0-or-later",
   "require": {
@@ -9,7 +9,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Sectionist\\Core\\": "src/"
+      "Sectionist\\": "src/"
     }
   },
   "authors": [
