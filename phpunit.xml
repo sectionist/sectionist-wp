@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="packages/sectionist/vendor/autoload.php"
+         colors="true"
+         failOnWarning="true"
+         failOnRisky="true">
+    <testsuites>
+        <testsuite name="sectionist">
+            <directory>packages/sectionist/tests</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory>packages/sectionist/src</directory>
+        </include>
+    </source>
+</phpunit>

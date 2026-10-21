@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name: Sectionist
  * Description: Structured section editor for WordPress.
