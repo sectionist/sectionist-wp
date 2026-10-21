@@ -14,6 +14,12 @@ final class Assets
     {
         add_action('admin_enqueue_scripts', [$this, 'enqueue']);
         add_action('admin_notices', [$this, 'notice']);
+        add_filter('admin_body_class', [$this, 'bodyClass']);
+    }
+
+    public function bodyClass(string $classes): string
+    {
+        return $this->isEditorScreen() ? trim($classes . ' sectionist-screen') : $classes;
     }
 
     public function enqueue(): void

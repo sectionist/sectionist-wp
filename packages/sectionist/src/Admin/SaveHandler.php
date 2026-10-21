@@ -25,13 +25,34 @@ final class SaveHandler
     public function register(): void
     {
         add_action('save_post', [$this, 'handle'], 10, 1);
+        add_action('admin_notices', [$this, 'showError']);
+    }
+
+    public function showError(): void
+    {
+        $key = self::errorKey();
+        if (get_transient($key) === false) {
+            return;
+        }
+
+        delete_transient($key);
+        echo '<div class="notice notice-error"><p>'
+            . esc_html__('Sectionist: the sections could not be saved. Your previous sections were kept. Please reload the page and try again.', 'sectionist')
+            . '</p></div>';
+    }
+
+    private static function errorKey(): string
+    {
+        return 'sectionist_save_error_' . get_current_user_id();
     }
 
     public function handle(int $postId): void
     {
         $autosave = (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || wp_is_post_revision($postId) !== false;
 
-        $this->process($postId, $_POST, $autosave);
+        if (! $this->process($postId, $_POST, $autosave) && ! $autosave && isset($_POST[self::DATA_FIELD])) {
+            set_transient(self::errorKey(), 1, 60);
+        }
     }
 
     /**

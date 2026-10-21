@@ -10,6 +10,13 @@ interface SectionType
 
     public function label(): string;
 
+    public function description(): string;
+
+    /**
+     * Dashicons name without the `dashicons-` prefix.
+     */
+    public function icon(): string;
+
     /**
      * @return list<Field>
      */

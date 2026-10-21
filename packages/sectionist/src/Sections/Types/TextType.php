@@ -19,6 +19,16 @@ final class TextType implements SectionType
         return __('Text', 'sectionist');
     }
 
+    public function description(): string
+    {
+        return __('Heading and body text.', 'sectionist');
+    }
+
+    public function icon(): string
+    {
+        return 'editor-paragraph';
+    }
+
     public function fields(): array
     {
         return [

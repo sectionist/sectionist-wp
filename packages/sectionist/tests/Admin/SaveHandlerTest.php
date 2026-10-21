@@ -81,4 +81,21 @@ final class SaveHandlerTest extends TestCase
         $this->assertFalse($this->handler->process(1, $this->request('{"foo":1}')));
         $this->assertSame($before, WpState::$meta);
     }
+
+    public function testFailedSaveShowsNoticeOnce(): void
+    {
+        $_POST = $this->request('not json');
+        $this->handler->handle(1);
+
+        ob_start();
+        $this->handler->showError();
+        $first = (string) ob_get_clean();
+        ob_start();
+        $this->handler->showError();
+        $second = (string) ob_get_clean();
+        $_POST = [];
+
+        $this->assertStringContainsString('notice-error', $first);
+        $this->assertSame('', $second);
+    }
 }

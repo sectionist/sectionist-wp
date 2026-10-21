@@ -301,3 +301,10 @@ if (! class_exists('WP_REST_Request')) {
         }
     }
 }
+
+if (! function_exists('get_current_user_id')) {
+    function get_current_user_id(): int
+    {
+        return 1;
+    }
+}

@@ -3,5 +3,6 @@
   "rules": {
     "declare_strict_types": true
   },
-  "exclude": ["vendor", "packages/sectionist/vendor"]
+  "exclude": ["vendor", "packages/sectionist/vendor"],
+  "notPath": ["packages/dump-theme/index.php"]
 }
