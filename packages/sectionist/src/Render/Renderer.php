@@ -23,7 +23,7 @@ final class Renderer
     {
         $document = $this->repository->load($postId);
 
-        return $document->isNewerThanSupported() ? '' : $this->renderSections($document->sections);
+        return $document->isNewerThanSupported() ? '' : $this->renderSections($document->activeSections());
     }
 
     /**

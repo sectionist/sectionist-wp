@@ -39,6 +39,19 @@ final readonly class Document
     }
 
     /**
+     * Sections that are visible on the public site (`active` missing means true).
+     *
+     * @return list<array<string, mixed>>
+     */
+    public function activeSections(): array
+    {
+        return array_values(array_filter(
+            $this->sections,
+            static fn (array $section): bool => ($section['active'] ?? true) !== false,
+        ));
+    }
+
+    /**
      * @return array{schema_version: int, sections: list<array<string, mixed>>}
      */
     public function toArray(): array

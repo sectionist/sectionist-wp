@@ -21,17 +21,17 @@ final class Plugin
     public static function boot(): void
     {
         add_action(Registry::HOOK, static function (Registry $registry): void {
-            $registry->register(new TextType());
+            $registry->register(new TextType);
         });
 
-        $registry = new Registry();
-        $repository = new PostMetaRepository();
+        $registry = new Registry;
+        $repository = new PostMetaRepository;
 
-        (new MetaBox($registry, $repository))->register();
-        (new SaveHandler($registry, $repository))->register();
-        (new Assets())->register();
+        new MetaBox($registry, $repository)->register();
+        new SaveHandler($registry, $repository)->register();
+        (new Assets)->register();
         $renderer = new Renderer($registry, $repository, ViewResolver::forWordPress(dirname(__DIR__)));
-        (new PreviewController($registry, $renderer))->register();
-        (new Runner(Document::CURRENT_VERSION))->register();
+        new PreviewController($registry, $renderer)->register();
+        new Runner(Document::CURRENT_VERSION)->register();
     }
 }
