@@ -16,7 +16,7 @@ Gutenberg serializes blocks as HTML comments in `post_content`. The stored HTML 
 {
   "schema_version": 1,
   "sections": [
-    { "id": "a1b2c3", "type": "text", "data": { "body": "<h2>Hello</h2><p>...</p>" } }
+    { "id": "a1b2c3", "type": "text", "active": true, "background": "", "data": { "body": "<h2>Hello</h2><p>...</p>" } }
   ]
 }
 ```
@@ -25,6 +25,10 @@ Gutenberg serializes blocks as HTML comments in `post_content`. The stored HTML 
 - Unknown section types are preserved unchanged.
 - Only rich-text fields contain markup: a sanitized HTML fragment inside the JSON. All other fields are plain values.
 - Optional values get defaults when read.
+- Container fields per section: `id`, `type`, `active` (missing means true), `background` (a single theme-defined key, never a color), `data`. They are additive, so `schema_version` stays 1.
+- Inactive sections are stored, never deleted. Public read paths use `Document::activeSections()`, and the renderer checks `active` as a second safeguard. Only the admin editor and preview read all sections.
+- `background` keys are offered by the active theme through the filter `sectionist/backgrounds` (entries with `key`, `label`, `color`). Without entries, no choice is shown. The server checks only the key format, so a previously stored key survives if the theme stops offering it. Themes must ignore unknown keys.
+- Storage stays a single JSON blob in post meta. No custom table and no index until cross-post queries are needed (a later additive index is possible, the repository is the only place to change).
 
 **Migrations.**
 

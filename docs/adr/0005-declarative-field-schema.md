@@ -10,10 +10,11 @@ Each section type needs an editor form, validation and sanitizing. Hand-written 
 
 A section type declares its fields as a schema in PHP. A generic renderer builds the admin form from it. The admin editor is a slim TypeScript app built with Preact and Vite. It uses neither `wp.element` nor `@wordpress/components`. `dist/` is not committed and is produced only by the release build. Each type has exactly one sanitizer. Types are registered via the hook `sectionist/sections/register`.
 
-Two field kinds keep design out of the data:
+Three field kinds keep design out of the data:
 
 - **Rich text.** A field type with a developer-declared whitelist of formatting (for example bold, italic, links, lists). The type's sanitizer enforces it server-side (for example via `wp_kses`), stripping inline styles and font information. The restriction is not UI-only.
 - **Select with fixed values.** Variations such as `light|dark` are declared as options. There are no free color, font or size inputs.
+- **CTA.** A reusable composite field (`Field::cta`, `Sections/Cta`) usable by any section type. Data: `active`, `label`, `style` (`button` or `link`), `page_id`, `url`, `new_tab`. One toggle switches the whole CTA. A given `url` takes precedence over `page_id`. The page URL is resolved at render time, only for published pages. The renderer outputs nothing for an inactive CTA or one without target or label.
 
 **Rich-text editor: Tiptap.** The admin uses the Tiptap core (MIT). Rules:
 
