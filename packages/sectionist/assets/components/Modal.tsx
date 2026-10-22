@@ -2,6 +2,8 @@ import type { ComponentChildren } from 'preact';
 import { useEffect, useRef } from 'preact/hooks';
 import { IconButton } from './Icon';
 
+const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [contenteditable="true"], [tabindex]:not([tabindex="-1"])';
+
 export function Modal(props: {
   title: string;
   closeLabel: string;
@@ -24,6 +26,24 @@ export function Modal(props: {
     if (e.key === 'Escape') {
       e.stopPropagation();
       props.onClose();
+      return;
+    }
+    if (e.key !== 'Tab' || !dialog.current) return;
+    const items = Array.from(dialog.current.querySelectorAll<HTMLElement>(FOCUSABLE));
+    if (items.length === 0) {
+      e.preventDefault();
+      dialog.current.focus();
+      return;
+    }
+    const first = items[0];
+    const last = items[items.length - 1];
+    const current = document.activeElement;
+    if (e.shiftKey && (current === first || current === dialog.current)) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && current === last) {
+      e.preventDefault();
+      first.focus();
     }
   };
 
