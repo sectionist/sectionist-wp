@@ -1,5 +1,5 @@
 import { render } from 'preact';
-import { useEffect, useReducer, useState } from 'preact/hooks';
+import { useEffect, useReducer, useRef, useState } from 'preact/hooks';
 import { reducer } from './state';
 import type { Config, TypeDef } from './types';
 import { ConfirmModal } from './components/ConfirmModal';
@@ -19,6 +19,7 @@ function App({ config }: { config: Config }) {
   const [closed, setClosed] = useState<Set<string>>(() => new Set(config.sections.map((s) => s.id)));
   const [modalOpen, setModalOpen] = useState(false);
   const [removeId, setRemoveId] = useState('');
+  const [leaveUrl, setLeaveUrl] = useState('');
   const t = config.i18n;
   const listRef = useFlip(sections.map((s) => s.id).join(','));
   const drag = useDragReorder((id, before) => dispatch({ kind: 'reorder', id, before }));
@@ -32,11 +33,47 @@ function App({ config }: { config: Config }) {
     });
   const typeOf = (name: string): TypeDef | undefined => config.types.find((x) => x.name === name);
 
+  const initial = useRef(JSON.stringify({ sections: config.sections }));
+  const dirty = useRef(false);
+  const saving = useRef(false);
+
+  useEffect(() => {
+    const form = document.getElementById('post');
+    const onSubmit = () => {
+      saving.current = true;
+    };
+    const onUnload = (e: BeforeUnloadEvent) => {
+      if (!dirty.current || saving.current) return;
+      e.preventDefault();
+      e.returnValue = '';
+    };
+    const onClick = (e: MouseEvent) => {
+      if (!dirty.current || saving.current || e.defaultPrevented || e.button !== 0) return;
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const link = (e.target as Element | null)?.closest?.('a[href]') as HTMLAnchorElement | null;
+      if (!link || (link.target && link.target !== '_self') || link.hasAttribute('download')) return;
+      const url = new URL(link.href, window.location.href);
+      if (!/^https?:$/.test(url.protocol)) return;
+      if (url.pathname === window.location.pathname && url.search === window.location.search && url.hash !== '') return;
+      e.preventDefault();
+      setLeaveUrl(url.href);
+    };
+    form?.addEventListener('submit', onSubmit);
+    window.addEventListener('beforeunload', onUnload);
+    document.addEventListener('click', onClick, true);
+    return () => {
+      document.removeEventListener('click', onClick, true);
+      form?.removeEventListener('submit', onSubmit);
+      window.removeEventListener('beforeunload', onUnload);
+    };
+  }, []);
+
   useEffect(() => {
     const input = document.getElementById('sectionist-data') as HTMLInputElement | null;
     if (!input) return;
     try {
       input.value = JSON.stringify({ sections });
+      dirty.current = input.value !== initial.current;
       setError('');
     } catch {
       setError(t.saveError);
@@ -127,6 +164,19 @@ function App({ config }: { config: Config }) {
           </>
         )}
       </Tabs>
+      {leaveUrl && (
+        <ConfirmModal
+          title={t.unsavedTitle}
+          text={t.unsavedText}
+          confirmLabel={t.unsavedLeave}
+          cancelLabel={t.unsavedStay}
+          onCancel={() => setLeaveUrl('')}
+          onConfirm={() => {
+            saving.current = true;
+            window.location.href = leaveUrl;
+          }}
+        />
+      )}
     </div>
   );
 }

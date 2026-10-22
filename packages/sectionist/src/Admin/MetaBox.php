@@ -182,6 +182,10 @@ final class MetaBox
             'unavailable' => __('Unavailable', 'sectionist'),
             'unknownType' => __('This section type is not available. Its content is kept unchanged.', 'sectionist'),
             'saveError' => __('The sections could not be prepared for saving. Please reload the page.', 'sectionist'),
+                        'unsavedTitle' => __('Leave without saving?', 'sectionist'),
+                        'unsavedText' => __('You have unsaved changes to the sections. If you leave now, they will be lost.', 'sectionist'),
+                        'unsavedLeave' => __('Discard changes', 'sectionist'),
+                        'unsavedStay' => __('Stay on page', 'sectionist'),
         ];
     }
 }
