@@ -23,13 +23,13 @@ final class PreviewControllerTest extends TestCase
     protected function setUp(): void
     {
         WpState::reset();
-        $registry = new Registry();
-        $registry->register(new TextType());
-        $renderer = new Renderer($registry, new PostMetaRepository(), new ViewResolver([dirname(__DIR__, 2) . '/views']));
+        $registry = new Registry;
+        $registry->register(new TextType);
+        $renderer = new Renderer($registry, new PostMetaRepository, new ViewResolver([dirname(__DIR__, 2).'/views']));
         $this->controller = new PreviewController($registry, $renderer);
     }
 
-    public function testPermissionFollowsEditCapability(): void
+    public function test_permission_follows_edit_capability(): void
     {
         $request = new WP_REST_Request(['post_id' => 3]);
 
@@ -39,7 +39,7 @@ final class PreviewControllerTest extends TestCase
         $this->assertFalse($this->controller->permission($request));
     }
 
-    public function testPreviewSanitizesBeforeRendering(): void
+    public function test_preview_sanitizes_before_rendering(): void
     {
         $request = new WP_REST_Request(['post_id' => 3, 'sections' => [
             ['id' => 'a', 'type' => 'text', 'data' => ['body' => '<script>x</script><p>ok</p>']],
@@ -51,7 +51,7 @@ final class PreviewControllerTest extends TestCase
         $this->assertStringContainsString('<p>ok</p>', $html);
     }
 
-    public function testInvalidSectionsParamGivesEmptyHtml(): void
+    public function test_invalid_sections_param_gives_empty_html(): void
     {
         $this->assertSame('', $this->controller->handle(new WP_REST_Request(['sections' => 'nope']))['html']);
     }

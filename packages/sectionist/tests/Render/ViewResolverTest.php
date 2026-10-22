@@ -17,29 +17,29 @@ final class ViewResolverTest extends TestCase
     protected function setUp(): void
     {
         WpState::reset();
-        $this->base = sys_get_temp_dir() . '/sectionist-' . uniqid();
+        $this->base = sys_get_temp_dir().'/sectionist-'.uniqid();
         foreach (['child', 'parent', 'plugin'] as $dir) {
-            mkdir($this->base . '/' . $dir . '/sectionist', 0777, true);
+            mkdir($this->base.'/'.$dir.'/sectionist', 0777, true);
         }
-        WpState::$childDir = $this->base . '/child';
-        WpState::$parentDir = $this->base . '/parent';
+        WpState::$childDir = $this->base.'/child';
+        WpState::$parentDir = $this->base.'/parent';
     }
 
     protected function tearDown(): void
     {
-        foreach (glob($this->base . '/*/sectionist/*.php') ?: [] as $file) {
+        foreach (glob($this->base.'/*/sectionist/*.php') ?: [] as $file) {
             unlink($file);
         }
         foreach (['child', 'parent', 'plugin'] as $dir) {
-            rmdir($this->base . '/' . $dir . '/sectionist');
-            rmdir($this->base . '/' . $dir);
+            rmdir($this->base.'/'.$dir.'/sectionist');
+            rmdir($this->base.'/'.$dir);
         }
         rmdir($this->base);
     }
 
     private function view(string $root, string $type): string
     {
-        $file = $this->base . '/' . $root . '/sectionist/' . $type . '.php';
+        $file = $this->base.'/'.$root.'/sectionist/'.$type.'.php';
         file_put_contents($file, '<?php');
 
         return $file;
@@ -49,13 +49,13 @@ final class ViewResolverTest extends TestCase
     {
         // The plugin fallback lives in "views/"; reuse the temp dir layout for it.
         return new ViewResolver([
-            $this->base . '/child/sectionist',
-            $this->base . '/parent/sectionist',
-            $this->base . '/plugin/sectionist',
+            $this->base.'/child/sectionist',
+            $this->base.'/parent/sectionist',
+            $this->base.'/plugin/sectionist',
         ]);
     }
 
-    public function testChildThemeWinsOverParentAndPlugin(): void
+    public function test_child_theme_wins_over_parent_and_plugin(): void
     {
         $child = $this->view('child', 'text');
         $this->view('parent', 'text');
@@ -64,7 +64,7 @@ final class ViewResolverTest extends TestCase
         $this->assertSame($child, $this->resolver()->resolve('text'));
     }
 
-    public function testParentThemeWinsOverPlugin(): void
+    public function test_parent_theme_wins_over_plugin(): void
     {
         $parent = $this->view('parent', 'text');
         $this->view('plugin', 'text');
@@ -72,19 +72,19 @@ final class ViewResolverTest extends TestCase
         $this->assertSame($parent, $this->resolver()->resolve('text'));
     }
 
-    public function testFallsBackToPlugin(): void
+    public function test_falls_back_to_plugin(): void
     {
         $plugin = $this->view('plugin', 'text');
 
         $this->assertSame($plugin, $this->resolver()->resolve('text'));
     }
 
-    public function testReturnsNullWhenNoViewExists(): void
+    public function test_returns_null_when_no_view_exists(): void
     {
         $this->assertNull($this->resolver()->resolve('missing'));
     }
 
-    public function testRejectsUnsafeTypeNames(): void
+    public function test_rejects_unsafe_type_names(): void
     {
         $this->view('plugin', 'text');
 
@@ -92,21 +92,21 @@ final class ViewResolverTest extends TestCase
         $this->assertNull($this->resolver()->resolve(''));
     }
 
-    public function testForWordPressOrdersChildParentPlugin(): void
+    public function test_for_word_press_orders_child_parent_plugin(): void
     {
         $this->view('plugin', 'text');
-        mkdir($this->base . '/plugin/views');
-        $fallback = $this->base . '/plugin/views/text.php';
+        mkdir($this->base.'/plugin/views');
+        $fallback = $this->base.'/plugin/views/text.php';
         file_put_contents($fallback, '<?php');
         $parent = $this->view('parent', 'text');
 
-        $resolver = ViewResolver::forWordPress($this->base . '/plugin');
+        $resolver = ViewResolver::forWordPress($this->base.'/plugin');
         $this->assertSame($parent, $resolver->resolve('text'));
 
         unlink($parent);
         $this->assertSame($fallback, $resolver->resolve('text'));
 
         unlink($fallback);
-        rmdir($this->base . '/plugin/views');
+        rmdir($this->base.'/plugin/views');
     }
 }

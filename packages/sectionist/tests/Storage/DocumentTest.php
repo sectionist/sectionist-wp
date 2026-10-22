@@ -9,7 +9,7 @@ use Sectionist\Storage\Document;
 
 final class DocumentTest extends TestCase
 {
-    public function testActiveSectionsSkipsOnlyExplicitlyInactive(): void
+    public function test_active_sections_skips_only_explicitly_inactive(): void
     {
         $document = new Document([
             ['id' => 'a', 'type' => 'text'],

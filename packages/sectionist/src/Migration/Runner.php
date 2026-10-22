@@ -11,13 +11,12 @@ final class Runner
     public const LOCK = 'sectionist_migration_lock';
 
     /**
-     * @param array<int, callable(): void> $steps keyed by the version they migrate from
+     * @param  array<int, callable(): void>  $steps  keyed by the version they migrate from
      */
     public function __construct(
         private readonly int $targetVersion,
         private readonly array $steps = [],
-    ) {
-    }
+    ) {}
 
     public function register(): void
     {

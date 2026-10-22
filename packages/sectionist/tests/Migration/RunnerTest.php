@@ -17,13 +17,13 @@ final class RunnerTest extends TestCase
         WpState::reset();
     }
 
-    public function testFreshInstallStoresTargetVersion(): void
+    public function test_fresh_install_stores_target_version(): void
     {
         $this->assertFalse((new Runner(1))->run());
         $this->assertSame(1, WpState::$options[Runner::OPTION]);
     }
 
-    public function testNoOpWhenVersionsMatch(): void
+    public function test_no_op_when_versions_match(): void
     {
         WpState::$options[Runner::OPTION] = 1;
         $calls = 0;
@@ -34,7 +34,7 @@ final class RunnerTest extends TestCase
         $this->assertSame(0, $calls);
     }
 
-    public function testRunsStepsInOrderAndRaisesVersion(): void
+    public function test_runs_steps_in_order_and_raises_version(): void
     {
         WpState::$options[Runner::OPTION] = 1;
         $log = [];
@@ -54,7 +54,7 @@ final class RunnerTest extends TestCase
         $this->assertFalse(get_transient(Runner::LOCK));
     }
 
-    public function testLockPreventsDoubleRun(): void
+    public function test_lock_prevents_double_run(): void
     {
         WpState::$options[Runner::OPTION] = 1;
         set_transient(Runner::LOCK, 1, 60);
@@ -66,7 +66,7 @@ final class RunnerTest extends TestCase
         $this->assertSame(0, $calls);
     }
 
-    public function testMissingStepKeepsVersionAndReleasesLock(): void
+    public function test_missing_step_keeps_version_and_releases_lock(): void
     {
         WpState::$options[Runner::OPTION] = 1;
 

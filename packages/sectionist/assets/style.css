@@ -10,7 +10,9 @@
 	--sx-muted: #646970;
 	--sx-nav: #1e2327;
 	--sx-nav-hover: #2c3338;
-	--sx-danger: #b32d2e;
+	--sx-danger: #d63638;
+	--sx-danger-dark: #b32d2e;
+	--sx-ring: 0 0 0 1px var(--sx-accent);
 	--sx-radius: 8px;
 	--sx-radius-sm: 6px;
 	--sx-shadow: 0 1px 2px rgb(16 24 40 / 6%), 0 1px 3px rgb(16 24 40 / 8%);
@@ -44,7 +46,7 @@
 }
 .sectionist-screen #titlewrap input#title:focus {
 	border-color: var(--sx-accent);
-	box-shadow: 0 0 0 1px var(--sx-accent);
+	box-shadow: var(--sx-ring);
 	outline: none;
 }
 .sectionist-screen #edit-slug-box { padding: 10px 0 0; margin: 0; }
@@ -92,7 +94,7 @@
 .sectionist-screen select:focus,
 .sectionist-screen textarea:focus {
 	border-color: var(--sx-accent);
-	box-shadow: 0 0 0 1px var(--sx-accent);
+	box-shadow: var(--sx-ring);
 }
 
 /* The editor metabox loses its shell: the tab bar becomes the top edge. */
@@ -106,7 +108,7 @@
 .sectionist-tabs__nav { display: flex; gap: 6px; padding: 0 0 12px; }
 .sectionist-tabs__tab { display: flex; align-items: center; gap: 6px; background: var(--sx-surface); border: 1px solid var(--sx-border); padding: 8px 14px; color: var(--sx-muted); font-size: 13px; cursor: pointer; border-radius: var(--sx-radius-sm); transition: color .15s, border-color .15s; }
 .sectionist-tabs__tab:hover { color: var(--sx-text); border-color: var(--sx-muted); }
-.sectionist-tabs__tab.is-active { color: var(--sx-accent-dark); border-color: var(--sx-accent); box-shadow: 0 0 0 1px var(--sx-accent); font-weight: 600; }
+.sectionist-tabs__tab.is-active { color: var(--sx-accent-dark); border-color: var(--sx-accent); box-shadow: var(--sx-ring); font-weight: 600; }
 .sectionist-tabs__tab .dashicons { font-size: 16px; width: 16px; height: 16px; }
 .sectionist-tabs__panel { padding: 0; }
 .sectionist-tabs__actions { margin-left: auto; display: flex; align-items: center; }
@@ -119,7 +121,7 @@
 .sectionist-modal__head { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: var(--sx-surface); border-bottom: 1px solid var(--sx-border); font-size: 15px; }
 .sectionist-modal__list { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 16px; list-style: none; overflow-y: auto; }
 .sectionist-type-card { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; padding: 12px 16px; background: var(--sx-surface); border: 1px solid var(--sx-border); border-radius: var(--sx-radius); box-shadow: var(--sx-shadow); cursor: pointer; font-family: var(--sx-font); transition: border-color .15s, box-shadow .15s; }
-.sectionist-type-card:hover, .sectionist-type-card:focus-visible { border-color: var(--sx-accent); box-shadow: 0 0 0 1px var(--sx-accent); outline: none; }
+.sectionist-type-card:hover, .sectionist-type-card:focus-visible { border-color: var(--sx-accent); box-shadow: var(--sx-ring); outline: none; }
 .sectionist-type-card .dashicons { flex: none; color: var(--sx-accent); font-size: 22px; width: 22px; height: 22px; }
 .sectionist-type-card__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .sectionist-type-card__text strong { color: var(--sx-text); font-size: 13px; }
@@ -138,7 +140,7 @@
 .sectionist-card__actions { display: flex; gap: 2px; }
 .sectionist-icon-button { display: inline-flex; background: var(--sx-bg); border: 1px solid var(--sx-border); padding: 4px; border-radius: var(--sx-radius-sm); cursor: pointer; color: var(--sx-muted); }
 .sectionist-icon-button:hover:not(:disabled) { background: var(--sx-border); color: var(--sx-text); }
-.sectionist-icon-button.is-danger:hover:not(:disabled) { color: var(--sx-danger); }
+.sectionist-icon-button.is-danger:hover:not(:disabled) { color: var(--sx-danger-dark); }
 .sectionist-icon-button:disabled { opacity: .3; cursor: default; }
 .sectionist-icon-button.sectionist-card__handle { background: none; border-color: transparent; }
 .sectionist-icon-button.sectionist-card__handle:hover { background: var(--sx-border); }
@@ -146,20 +148,20 @@
 .sectionist-card__body[hidden] { display: none; }
 @keyframes sectionist-open { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 .sectionist-field { margin-bottom: 12px; }
-.sectionist-field label { display: block; font-weight: 600; margin-bottom: 4px; }
+.sectionist-field label, .sectionist-field__label { display: block; font-weight: 600; margin-bottom: 4px; }
 .sectionist-field input[type="text"], .sectionist-field textarea, .sectionist-field select { width: 100%; max-width: none; }
 .sectionist-note { color: var(--sx-muted); font-style: italic; }
 .sectionist-modal__dialog--small { width: 420px; }
 .sectionist-modal__body { margin: 0; padding: 16px; color: var(--sx-text); font-size: 13px; line-height: 1.5; }
 .sectionist-modal__footer { display: flex; justify-content: flex-end; gap: 8px; padding: 12px 16px; background: var(--sx-surface); border-top: 1px solid var(--sx-border); }
-.sectionist-button-danger.button-primary { background: #d63638; border-color: #d63638; }
-.sectionist-button-danger.button-primary:hover, .sectionist-button-danger.button-primary:focus { background: #b32d2e; border-color: #b32d2e; }
+.sectionist-button-danger.button-primary { background: var(--sx-danger); border-color: var(--sx-danger); }
+.sectionist-button-danger.button-primary:hover, .sectionist-button-danger.button-primary:focus { background: var(--sx-danger-dark); border-color: var(--sx-danger-dark); }
 .sectionist-preview { padding: 16px; border: 1px solid var(--sx-border); border-radius: var(--sx-radius); background: var(--sx-surface); overflow-x: auto; }
 .sectionist-badge { flex: none; padding: 1px 6px; border-radius: 4px; background: var(--sx-accent); color: #fff; font-size: 11px; font-weight: 600; line-height: 1.6; }
 
 /* Rich text (Tiptap) */
 .sectionist-rt { border: 1px solid var(--sx-border); border-radius: var(--sx-radius-sm); background: var(--sx-surface); }
-.sectionist-rt:focus-within { border-color: var(--sx-accent); box-shadow: 0 0 0 1px var(--sx-accent); }
+.sectionist-rt:focus-within { border-color: var(--sx-accent); box-shadow: var(--sx-ring); }
 .sectionist-rt__toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 6px; background: var(--sx-bg); border-bottom: 1px solid var(--sx-border); }
 .sectionist-rt__toolbar select { width: auto; max-width: 220px; min-height: 30px; }
 .sectionist-rt__button { display: inline-flex; background: var(--sx-surface); border: 1px solid var(--sx-border); padding: 4px; border-radius: var(--sx-radius-sm); cursor: pointer; color: var(--sx-muted); }
@@ -190,23 +192,22 @@
 .sectionist-rt__content ol { list-style: decimal; padding-left: 1.5em; }
 .sectionist-rt__content a { color: var(--sx-accent); }
 
-.sectionist-field__label { display: block; font-weight: 600; margin-bottom: 4px; }
+
 .sectionist-badge--muted { background: var(--sx-border); color: var(--sx-text); }
 .sectionist-badge--warning { display: inline-flex; align-items: center; gap: 2px; background: #fcf9e8; color: #6e4b00; border: 1px solid #dba617; }
 .sectionist-badge--warning .dashicons { font-size: 14px; width: 14px; height: 14px; color: #996800; }
 .sectionist-swatches { display: flex; flex-wrap: wrap; gap: 8px; }
 .sectionist-swatch { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 6px; border: 1px solid var(--sx-border); border-radius: var(--sx-radius-sm); background: var(--sx-surface); cursor: pointer; }
-.sectionist-swatch.is-active { border-color: var(--sx-accent); box-shadow: 0 0 0 1px var(--sx-accent); }
+.sectionist-swatch.is-active { border-color: var(--sx-accent); box-shadow: var(--sx-ring); }
 .sectionist-swatch__color { width: 16px; height: 16px; border-radius: 50%; border: 1px solid var(--sx-border); background: repeating-linear-gradient(45deg, #fff, #fff 3px, #e5e5e5 3px, #e5e5e5 6px); }
 
-.sectionist-cta-field { display: grid; gap: 10px; padding: 12px; border: 1px solid var(--sx-border); border-radius: var(--sx-radius-sm); background: var(--sx-surface); }
+.sectionist-cta-field { display: grid; gap: 10px; padding: 12px; border: 1px solid var(--sx-border); border-radius: var(--sx-radius-sm); background: rgb(0 0 0 / 5%); }
 .sectionist-cta-field__toggle { display: flex; align-items: center; gap: 6px; font-weight: 600; }
 .sectionist-cta-field__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; }
 .sectionist-cta-field__newtab { grid-column: 1 / -1; font-weight: 400; }
-.sectionist-cta-field { background: rgba(0, 0, 0, 0.05); border-radius: var(--sx-radius-sm, 4px); padding: 12px; }
 
 .sectionist-input-group { display: flex; align-items: stretch; border: 1px solid var(--sx-border); border-radius: var(--sx-radius-sm); background: var(--sx-bg); overflow: hidden; }
-.sectionist-input-group:focus-within { border-color: var(--sx-accent); box-shadow: 0 0 0 1px var(--sx-accent); }
+.sectionist-input-group:focus-within { border-color: var(--sx-accent); box-shadow: var(--sx-ring); }
 .sectionist-input-group__prefix { display: inline-flex; align-items: center; padding: 0 10px; background: var(--sx-surface); color: var(--sx-muted); border-right: 1px solid var(--sx-border); user-select: none; }
 .sectionist-input-group input[type="text"] { flex: 1; border: 0; box-shadow: none; outline: 0; border-radius: 0; min-width: 0; }
 .sectionist-modal__footer--split .sectionist-modal__remove { margin-right: auto; }

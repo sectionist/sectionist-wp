@@ -13,8 +13,7 @@ final class Renderer
         private readonly Registry $registry,
         private readonly Repository $repository,
         private readonly ViewResolver $resolver,
-    ) {
-    }
+    ) {}
 
     /**
      * Renders all sections stored for a post. Data in, HTML out.
@@ -29,7 +28,7 @@ final class Renderer
     /**
      * Sections of unknown types, without a view or marked inactive render as empty strings.
      *
-     * @param list<array<string, mixed>> $sections
+     * @param  list<array<string, mixed>>  $sections
      */
     public function renderSections(array $sections): string
     {
@@ -42,7 +41,7 @@ final class Renderer
     }
 
     /**
-     * @param array<string, mixed> $section
+     * @param  array<string, mixed>  $section
      */
     public function renderSection(array $section): string
     {

@@ -17,12 +17,12 @@ final class CtaTest extends TestCase
         ];
     }
 
-    public function testInvalidInputGivesInactiveDefaults(): void
+    public function test_invalid_input_gives_inactive_defaults(): void
     {
         $this->assertSame(Cta::defaults(), Cta::sanitize('nope'));
     }
 
-    public function testFieldsAreSanitized(): void
+    public function test_fields_are_sanitized(): void
     {
         $cta = Cta::sanitize([
             'active' => true,
@@ -39,7 +39,7 @@ final class CtaTest extends TestCase
         $this->assertSame('', $cta['url']);
     }
 
-    public function testUrlResolvesPublishedPageOnly(): void
+    public function test_url_resolves_published_page_only(): void
     {
         $this->assertSame('https://example.test/about/', Cta::url(['page_id' => 5]));
         $this->assertSame('https://x.test', Cta::url(['page_id' => 5, 'url' => 'https://x.test']));

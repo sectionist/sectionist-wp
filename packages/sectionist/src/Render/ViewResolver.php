@@ -9,11 +9,9 @@ final class ViewResolver
     public const THEME_DIRECTORY = 'sectionist';
 
     /**
-     * @param list<string> $roots Directories searched in order, first match wins.
+     * @param  list<string>  $roots  Directories searched in order, first match wins.
      */
-    public function __construct(private readonly array $roots)
-    {
-    }
+    public function __construct(private readonly array $roots) {}
 
     /**
      * Resolution order: child theme, parent theme, plugin fallback.
@@ -21,9 +19,9 @@ final class ViewResolver
     public static function forWordPress(string $pluginDir): self
     {
         $roots = [
-            get_stylesheet_directory() . '/' . self::THEME_DIRECTORY,
-            get_template_directory() . '/' . self::THEME_DIRECTORY,
-            rtrim($pluginDir, '/') . '/views',
+            get_stylesheet_directory().'/'.self::THEME_DIRECTORY,
+            get_template_directory().'/'.self::THEME_DIRECTORY,
+            rtrim($pluginDir, '/').'/views',
         ];
 
         return new self(array_values(array_unique($roots)));
@@ -36,7 +34,7 @@ final class ViewResolver
         }
 
         foreach ($this->roots as $root) {
-            $file = rtrim($root, '/') . '/' . $type . '.php';
+            $file = rtrim($root, '/').'/'.$type.'.php';
             if (is_file($file)) {
                 return $file;
             }

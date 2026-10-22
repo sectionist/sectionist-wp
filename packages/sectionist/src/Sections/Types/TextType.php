@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Sectionist\Sections\Types;
 
+use Sectionist\Sections\AbstractSectionType;
 use Sectionist\Sections\Field;
-use Sectionist\Sections\SectionType;
 
-final class TextType implements SectionType
+final class TextType extends AbstractSectionType
 {
     public function name(): string
     {
@@ -35,25 +35,5 @@ final class TextType implements SectionType
             Field::richtext('body', __('Content', 'sectionist')),
             Field::cta('cta', __('Call to action', 'sectionist')),
         ];
-    }
-
-    public function defaults(): array
-    {
-        $defaults = [];
-        foreach ($this->fields() as $field) {
-            $defaults[$field->name] = $field->default;
-        }
-
-        return $defaults;
-    }
-
-    public function sanitize(array $data): array
-    {
-        $clean = [];
-        foreach ($this->fields() as $field) {
-            $clean[$field->name] = $field->sanitize($data[$field->name] ?? null);
-        }
-
-        return $clean;
     }
 }

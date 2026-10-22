@@ -19,8 +19,7 @@ final class SaveHandler
     public function __construct(
         private readonly Registry $registry,
         private readonly Repository $repository,
-    ) {
-    }
+    ) {}
 
     public function register(): void
     {
@@ -37,13 +36,8 @@ final class SaveHandler
 
         delete_transient($key);
         echo '<div class="notice notice-error"><p>'
-            . esc_html__('Sectionist: the sections could not be saved. Your previous sections were kept. Please reload the page and try again.', 'sectionist')
-            . '</p></div>';
-    }
-
-    private static function errorKey(): string
-    {
-        return 'sectionist_save_error_' . get_current_user_id();
+            .esc_html__('Sectionist: the sections could not be saved. Your previous sections were kept. Please reload the page and try again.', 'sectionist')
+            .'</p></div>';
     }
 
     public function handle(int $postId): void
@@ -59,7 +53,7 @@ final class SaveHandler
      * Validates the request, sanitizes every section with its type and stores
      * the document. Returns false when nothing was written.
      *
-     * @param array<mixed> $request
+     * @param  array<mixed>  $request
      */
     public function process(int $postId, array $request, bool $autosave = false): bool
     {
@@ -90,5 +84,10 @@ final class SaveHandler
             $postId,
             new Document($this->registry->sanitizeSections($decoded['sections'])),
         );
+    }
+
+    private static function errorKey(): string
+    {
+        return 'sectionist_save_error_'.get_current_user_id();
     }
 }

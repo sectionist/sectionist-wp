@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 import type { Preview } from '../types';
+import { Checkbox, Field, Select, TextInput } from './Field';
 
 export interface CtaValue {
   active: boolean;
@@ -42,38 +43,35 @@ export function CtaField(props: { id: string; value: unknown; rest: Preview; lab
 
   return (
     <div class="sectionist-cta-field">
-      <label class="sectionist-cta-field__toggle">
-        <input type="checkbox" checked={v.active} onChange={(e) => set({ active: e.currentTarget.checked })} /> {t.ctaActive}
-      </label>
+      <Checkbox class="sectionist-cta-field__toggle" checked={v.active} label={t.ctaActive} onInput={(active) => set({ active })} />
       {v.active && (
         <div class="sectionist-cta-field__grid">
-          <div class="sectionist-field">
-            <label for={`${id}-style`}>{t.ctaStyle}</label>
-            <select id={`${id}-style`} value={v.style} onChange={(e) => set({ style: e.currentTarget.value as CtaValue['style'] })}>
-              <option value="button">{t.ctaButton}</option>
-              <option value="link">{t.ctaLink}</option>
-            </select>
-          </div>
-          <div class="sectionist-field">
-            <label for={`${id}-label`}>{t.ctaLabel}</label>
-            <input id={`${id}-label`} type="text" value={v.label} onInput={(e) => set({ label: e.currentTarget.value })} />
-          </div>
-          <div class="sectionist-field">
-            <label for={`${id}-page`}>{t.ctaPage}</label>
-            <select id={`${id}-page`} value={String(v.page_id)} onChange={(e) => set({ page_id: Number(e.currentTarget.value) })}>
-              <option value="0">{t.ctaPageNone}</option>
-              {pages.map((p) => (
-                <option value={String(p.id)}>{p.title}</option>
-              ))}
-            </select>
-          </div>
-          <div class="sectionist-field">
-            <label for={`${id}-url`}>{t.ctaUrl}</label>
-            <input id={`${id}-url`} type="text" placeholder="https://… / /offer" value={v.url} onInput={(e) => set({ url: e.currentTarget.value })} />
-          </div>
-          <label class="sectionist-cta-field__toggle sectionist-cta-field__newtab">
-            <input type="checkbox" checked={v.new_tab} onChange={(e) => set({ new_tab: e.currentTarget.checked })} /> {t.ctaNewTab}
-          </label>
+          <Field id={`${id}-style`} label={t.ctaStyle}>
+            <Select
+              id={`${id}-style`}
+              value={v.style}
+              options={[
+                { value: 'button', label: t.ctaButton },
+                { value: 'link', label: t.ctaLink },
+              ]}
+              onInput={(style) => set({ style: style as CtaValue['style'] })}
+            />
+          </Field>
+          <Field id={`${id}-label`} label={t.ctaLabel}>
+            <TextInput id={`${id}-label`} value={v.label} onInput={(label) => set({ label })} />
+          </Field>
+          <Field id={`${id}-page`} label={t.ctaPage}>
+            <Select
+              id={`${id}-page`}
+              value={String(v.page_id)}
+              options={[{ value: '0', label: t.ctaPageNone }, ...pages.map((p) => ({ value: String(p.id), label: p.title }))]}
+              onInput={(page) => set({ page_id: Number(page) })}
+            />
+          </Field>
+          <Field id={`${id}-url`} label={t.ctaUrl}>
+            <TextInput id={`${id}-url`} placeholder="https://… / /offer" value={v.url} onInput={(url) => set({ url })} />
+          </Field>
+          <Checkbox class="sectionist-cta-field__toggle sectionist-cta-field__newtab" checked={v.new_tab} label={t.ctaNewTab} onInput={(new_tab) => set({ new_tab })} />
         </div>
       )}
     </div>

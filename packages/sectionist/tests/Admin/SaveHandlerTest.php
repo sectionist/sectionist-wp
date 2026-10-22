@@ -22,9 +22,9 @@ final class SaveHandlerTest extends TestCase
     protected function setUp(): void
     {
         WpState::reset();
-        $registry = new Registry();
-        $registry->register(new TextType());
-        $this->repository = new PostMetaRepository();
+        $registry = new Registry;
+        $registry->register(new TextType);
+        $this->repository = new PostMetaRepository;
         $this->handler = new SaveHandler($registry, $this->repository);
     }
 
@@ -36,7 +36,7 @@ final class SaveHandlerTest extends TestCase
         return [SaveHandler::NONCE_FIELD => $nonce, SaveHandler::DATA_FIELD => $json];
     }
 
-    public function testSavesSanitizedSectionsAndKeepsUnknownTypes(): void
+    public function test_saves_sanitized_sections_and_keeps_unknown_types(): void
     {
         $json = (string) json_encode(['sections' => [
             ['id' => 'a', 'type' => 'text', 'data' => ['body' => '<script>x</script><p>ok</p>']],
@@ -50,14 +50,14 @@ final class SaveHandlerTest extends TestCase
         $this->assertSame(['x' => '<i>1</i>'], $sections[1]['data']);
     }
 
-    public function testAbortsWithoutValidNonce(): void
+    public function test_aborts_without_valid_nonce(): void
     {
         $this->assertFalse($this->handler->process(1, $this->request('{"sections":[]}', 'bad')));
         $this->assertFalse($this->handler->process(1, [SaveHandler::DATA_FIELD => '{"sections":[]}']));
         $this->assertSame([], WpState::$meta);
     }
 
-    public function testAbortsWithoutCapability(): void
+    public function test_aborts_without_capability(): void
     {
         WpState::$canEdit = false;
 
@@ -65,13 +65,13 @@ final class SaveHandlerTest extends TestCase
         $this->assertSame([], WpState::$meta);
     }
 
-    public function testAbortsOnAutosave(): void
+    public function test_aborts_on_autosave(): void
     {
         $this->assertFalse($this->handler->process(1, $this->request('{"sections":[]}'), true));
         $this->assertSame([], WpState::$meta);
     }
 
-    public function testInvalidJsonDoesNotOverwriteExistingData(): void
+    public function test_invalid_json_does_not_overwrite_existing_data(): void
     {
         $this->handler->process(1, $this->request('{"sections":[{"id":"a","type":"text","data":{}}]}'));
         $before = WpState::$meta;
@@ -81,7 +81,7 @@ final class SaveHandlerTest extends TestCase
         $this->assertSame($before, WpState::$meta);
     }
 
-    public function testFailedSaveShowsNoticeOnce(): void
+    public function test_failed_save_shows_notice_once(): void
     {
         $_POST = $this->request('not json');
         $this->handler->handle(1);

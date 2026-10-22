@@ -19,7 +19,7 @@ final class Assets
 
     public function bodyClass(string $classes): string
     {
-        return $this->isEditorScreen() ? trim($classes . ' sectionist-screen') : $classes;
+        return $this->isEditorScreen() ? trim($classes.' sectionist-screen') : $classes;
     }
 
     public function enqueue(): void
@@ -61,11 +61,11 @@ final class Assets
 
     private function path(string $relative): string
     {
-        return dirname(__DIR__, 2) . '/' . $relative;
+        return dirname(__DIR__, 2).'/'.$relative;
     }
 
     private function url(string $relative): string
     {
-        return plugins_url($relative, dirname(__DIR__, 2) . '/sectionist.php');
+        return plugins_url($relative, dirname(__DIR__, 2).'/sectionist.php');
     }
 }

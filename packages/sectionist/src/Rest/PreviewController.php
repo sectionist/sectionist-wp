@@ -17,8 +17,7 @@ final class PreviewController
     public function __construct(
         private readonly Registry $registry,
         private readonly Renderer $renderer,
-    ) {
-    }
+    ) {}
 
     public function register(): void
     {
@@ -53,7 +52,7 @@ final class PreviewController
     /**
      * Sanitizes with the section types first, so a preview never renders more than a save would store.
      *
-     * @param array<mixed> $sections
+     * @param  array<mixed>  $sections
      */
     public function preview(array $sections): string
     {

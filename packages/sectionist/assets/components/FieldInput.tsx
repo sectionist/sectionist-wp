@@ -1,5 +1,6 @@
 import type { FieldDef, Preview } from '../types';
 import { CtaField } from './CtaField';
+import { Field, Select, TextInput } from './Field';
 import { RichTextEditor } from './richtext/RichTextEditor';
 
 export function FieldInput(props: {
@@ -13,27 +14,21 @@ export function FieldInput(props: {
   const { id, field, onInput } = props;
   if (field.kind === 'cta') {
     return (
-      <div class="sectionist-field">
-        <span class="sectionist-field__label">{field.label}</span>
+      <Field label={field.label}>
         <CtaField id={id} value={props.value} rest={props.rest} labels={props.labels} onInput={onInput} />
-      </div>
+      </Field>
     );
   }
   const value = String(props.value ?? '');
   return (
-    <div class="sectionist-field">
-      <label for={id}>{field.label}</label>
+    <Field id={id} label={field.label}>
       {field.kind === 'richtext' ? (
         <RichTextEditor id={id} value={value} labels={props.labels} onInput={onInput} />
       ) : field.kind === 'select' ? (
-        <select id={id} value={value} onChange={(e) => onInput(e.currentTarget.value)}>
-          {field.options.map((o) => (
-            <option value={o}>{o}</option>
-          ))}
-        </select>
+        <Select id={id} value={value} options={field.options.map((o) => ({ value: o, label: o }))} onInput={onInput} />
       ) : (
-        <input id={id} type="text" value={value} onInput={(e) => onInput(e.currentTarget.value)} />
+        <TextInput id={id} value={value} onInput={onInput} />
       )}
-    </div>
+    </Field>
   );
 }

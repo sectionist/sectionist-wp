@@ -20,33 +20,33 @@ final class RegistryTest extends TestCase
         WpState::reset();
     }
 
-    public function testTypesRegisterViaHook(): void
+    public function test_types_register_via_hook(): void
     {
-        add_action(Registry::HOOK, static fn (Registry $r) => $r->register(new TextType()));
+        add_action(Registry::HOOK, static fn (Registry $r) => $r->register(new TextType));
 
-        $registry = new Registry();
+        $registry = new Registry;
 
         $this->assertInstanceOf(TextType::class, $registry->get('text'));
     }
 
-    public function testUnknownNameReturnsNull(): void
+    public function test_unknown_name_returns_null(): void
     {
-        $this->assertNull((new Registry())->get('missing'));
+        $this->assertNull((new Registry)->get('missing'));
     }
 
-    public function testDuplicateIsRejected(): void
+    public function test_duplicate_is_rejected(): void
     {
-        $registry = new Registry();
-        $registry->register(new TextType());
+        $registry = new Registry;
+        $registry->register(new TextType);
 
         $this->expectException(InvalidArgumentException::class);
-        $registry->register(new TextType());
+        $registry->register(new TextType);
     }
 
-    public function testSanitizeSectionsPreservesUnknownTypesAndDropsInvalidEntries(): void
+    public function test_sanitize_sections_preserves_unknown_types_and_drops_invalid_entries(): void
     {
-        $registry = new Registry();
-        $registry->register(new TextType());
+        $registry = new Registry;
+        $registry->register(new TextType);
         $unknown = ['id' => 'u1', 'type' => 'hero', 'data' => ['x' => '<i>raw</i>']];
 
         $clean = $registry->sanitizeSections([
@@ -62,10 +62,10 @@ final class RegistryTest extends TestCase
         );
     }
 
-    public function testContainerFieldsActiveAndBackgroundAreSanitized(): void
+    public function test_container_fields_active_and_background_are_sanitized(): void
     {
-        $registry = new Registry();
-        $registry->register(new TextType());
+        $registry = new Registry;
+        $registry->register(new TextType);
 
         $clean = $registry->sanitizeSections([
             ['id' => 'a', 'type' => 'text', 'active' => false, 'background' => 'Dark<b>', 'data' => []],

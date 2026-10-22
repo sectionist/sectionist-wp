@@ -51,7 +51,7 @@ final class Cta
     /**
      * Target URL of a sanitized CTA: a custom URL wins over the selected page, or '' when there is none (e.g. page missing or unpublished).
      *
-     * @param array<string, mixed> $cta
+     * @param  array<string, mixed>  $cta
      */
     public static function url(array $cta): string
     {

@@ -24,13 +24,13 @@ final class RendererTest extends TestCase
     protected function setUp(): void
     {
         WpState::reset();
-        $registry = new Registry();
-        $registry->register(new TextType());
-        $this->repository = new PostMetaRepository();
-        $this->renderer = new Renderer($registry, $this->repository, new ViewResolver([dirname(__DIR__, 2) . '/views']));
+        $registry = new Registry;
+        $registry->register(new TextType);
+        $this->repository = new PostMetaRepository;
+        $this->renderer = new Renderer($registry, $this->repository, new ViewResolver([dirname(__DIR__, 2).'/views']));
     }
 
-    public function testRendersTextSectionBody(): void
+    public function test_renders_text_section_body(): void
     {
         $html = $this->renderer->renderSection([
             'id' => 'a',
@@ -42,7 +42,7 @@ final class RendererTest extends TestCase
         $this->assertStringContainsString('<p>Hello</p>', $html);
     }
 
-    public function testMissingFieldsGetDefaults(): void
+    public function test_missing_fields_get_defaults(): void
     {
         $html = $this->renderer->renderSection(['id' => 'a', 'type' => 'text', 'data' => []]);
 
@@ -50,18 +50,18 @@ final class RendererTest extends TestCase
         $this->assertStringContainsString('sectionist-section--text', $html);
     }
 
-    public function testInactiveSectionRendersNothing(): void
+    public function test_inactive_section_renders_nothing(): void
     {
         $this->assertSame('', $this->renderer->renderSection(['id' => 'a', 'type' => 'text', 'active' => false, 'data' => []]));
     }
 
-    public function testUnknownTypeRendersNothing(): void
+    public function test_unknown_type_renders_nothing(): void
     {
         $this->assertSame('', $this->renderer->renderSection(['id' => 'a', 'type' => 'custom', 'data' => []]));
         $this->assertSame('', $this->renderer->renderSection(['id' => 'a']));
     }
 
-    public function testRenderPostUsesStoredSections(): void
+    public function test_render_post_uses_stored_sections(): void
     {
         $this->repository->save(5, new Document([['id' => 'a', 'type' => 'text', 'data' => ['body' => '<p>Stored</p>']]]));
 
@@ -69,7 +69,7 @@ final class RendererTest extends TestCase
         $this->assertSame('', $this->renderer->renderPost(6));
     }
 
-    public function testRenderPostRendersNothingForNewerSchemaVersion(): void
+    public function test_render_post_renders_nothing_for_newer_schema_version(): void
     {
         $this->repository->save(5, new Document([['id' => 'a', 'type' => 'text', 'data' => ['body' => '<p>Stored</p>']]]));
         WpState::$meta['5:_sectionist_data'] = '{"schema_version":99,"sections":[{"id":"a","type":"text","data":{"body":"X"}}]}';

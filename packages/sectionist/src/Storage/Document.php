@@ -9,19 +9,18 @@ final readonly class Document
     public const CURRENT_VERSION = 1;
 
     /**
-     * @param list<array<string, mixed>> $sections
+     * @param  list<array<string, mixed>>  $sections
      */
     public function __construct(
         public array $sections = [],
         public int $schemaVersion = self::CURRENT_VERSION,
-    ) {
-    }
+    ) {}
 
     public static function fromJson(string $json): self
     {
         $decoded = json_decode($json, true);
         if (! is_array($decoded)) {
-            return new self();
+            return new self;
         }
 
         $version = $decoded['schema_version'] ?? self::CURRENT_VERSION;

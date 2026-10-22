@@ -45,8 +45,8 @@ final readonly class Field
     public const LINK_PROTOCOLS = ['https', 'mailto', 'tel'];
 
     /**
-     * @param list<string> $options allowed values (select only)
-     * @param string|array<string, mixed> $default
+     * @param  list<string>  $options  allowed values (select only)
+     * @param  string|array<string, mixed>  $default
      */
     private function __construct(
         public string $kind,
@@ -54,8 +54,7 @@ final readonly class Field
         public string $label,
         public array $options = [],
         public string|array $default = '',
-    ) {
-    }
+    ) {}
 
     public static function text(string $name, string $label, string $default = ''): self
     {
@@ -110,7 +109,7 @@ final readonly class Field
                 $allowed = $tag === 'p' ? [...self::PARAGRAPH_CLASSES, ...self::ALIGN_CLASSES] : self::ALIGN_CLASSES;
                 $classes = array_intersect(preg_split('/\s+/', trim($m[2])) ?: [], $allowed);
 
-                return $classes === [] ? '<' . $tag . '>' : '<' . $tag . ' class="' . implode(' ', $classes) . '">';
+                return $classes === [] ? '<'.$tag.'>' : '<'.$tag.' class="'.implode(' ', $classes).'">';
             },
             $html,
         );

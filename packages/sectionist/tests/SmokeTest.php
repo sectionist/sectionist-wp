@@ -11,7 +11,7 @@ use Sectionist\Plugin;
 #[CoversNothing]
 final class SmokeTest extends TestCase
 {
-    public function testPluginClassIsAutoloadable(): void
+    public function test_plugin_class_is_autoloadable(): void
     {
         $this->assertTrue(class_exists(Plugin::class));
     }

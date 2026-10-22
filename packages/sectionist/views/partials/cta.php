@@ -9,7 +9,6 @@ use Sectionist\Sections\Cta;
  *
  * @var array<string, mixed> $cta Sanitized CTA value (see Cta::sanitize()).
  */
-
 $url = Cta::url($cta);
 $label = is_string($cta['label'] ?? null) ? $cta['label'] : '';
 if (($cta['active'] ?? false) !== true || $url === '' || $label === '') {

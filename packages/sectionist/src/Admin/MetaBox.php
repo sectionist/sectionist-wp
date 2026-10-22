@@ -6,16 +6,16 @@ namespace Sectionist\Admin;
 
 use Sectionist\Rest\PreviewController;
 use Sectionist\Sections\Backgrounds;
+use Sectionist\Sections\Field;
 use Sectionist\Sections\Registry;
 use Sectionist\Storage\Repository;
 
-final class MetaBox
+final readonly class MetaBox
 {
     public function __construct(
-        private readonly Registry $registry,
-        private readonly Repository $repository,
-    ) {
-    }
+        private Registry $registry,
+        private Repository $repository,
+    ) {}
 
     /**
      * Post types that get the editor. Filter `sectionist/post_types` makes this configurable.
@@ -64,14 +64,14 @@ final class MetaBox
         $document = $this->repository->load($postId);
 
         if ($document->isNewerThanSupported()) {
-            echo '<p>' . esc_html__('These sections were saved by a newer version of Sectionist. Please update the plugin to edit them.', 'sectionist') . '</p>';
+            echo '<p>'.esc_html__('These sections were saved by a newer version of Sectionist. Please update the plugin to edit them.', 'sectionist').'</p>';
 
             return;
         }
 
         $config = wp_json_encode([
             'preview' => [
-                'url' => rest_url(PreviewController::NAMESPACE . PreviewController::ROUTE),
+                'url' => rest_url(PreviewController::NAMESPACE.PreviewController::ROUTE),
                 'nonce' => wp_create_nonce('wp_rest'),
                 'postId' => $postId,
                 'pagesUrl' => rest_url('wp/v2/pages'),
@@ -104,7 +104,7 @@ final class MetaBox
                 'icon' => $type->icon(),
                 'defaults' => $type->defaults(),
                 'fields' => array_map(
-                    static fn ($field): array => [
+                    static fn (Field $field): array => [
                         'kind' => $field->kind,
                         'name' => $field->name,
                         'label' => $field->label,
@@ -182,10 +182,10 @@ final class MetaBox
             'unavailable' => __('Unavailable', 'sectionist'),
             'unknownType' => __('This section type is not available. Its content is kept unchanged.', 'sectionist'),
             'saveError' => __('The sections could not be prepared for saving. Please reload the page.', 'sectionist'),
-                        'unsavedTitle' => __('Leave without saving?', 'sectionist'),
-                        'unsavedText' => __('You have unsaved changes to the sections. If you leave now, they will be lost.', 'sectionist'),
-                        'unsavedLeave' => __('Discard changes', 'sectionist'),
-                        'unsavedStay' => __('Stay on page', 'sectionist'),
+            'unsavedTitle' => __('Leave without saving?', 'sectionist'),
+            'unsavedText' => __('You have unsaved changes to the sections. If you leave now, they will be lost.', 'sectionist'),
+            'unsavedLeave' => __('Discard changes', 'sectionist'),
+            'unsavedStay' => __('Stay on page', 'sectionist'),
         ];
     }
 }
