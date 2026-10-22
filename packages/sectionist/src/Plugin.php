@@ -33,7 +33,7 @@ final class Plugin
         (new Assets())->register();
         $renderer = new Renderer($registry, $repository, ViewResolver::forWordPress(dirname(__DIR__)));
         new PreviewController($registry, $renderer)->register();
-        new Revisions()->register();
+        (new Revisions())->register();
         new Runner(Document::CURRENT_VERSION)->register();
     }
 }

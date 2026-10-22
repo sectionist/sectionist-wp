@@ -29,7 +29,7 @@ The user only works with building blocks the developer declares. Design decision
 - **Code-first.** Section types and their fields are declared in PHP, not clicked together in a UI.
 - **Structured content.** Content is data (JSON with a `schema_version`), not HTML.
 - **Data and presentation are separate.** The plugin delivers data and an editor. The theme decides how it looks.
-- **Modern stack.** Native PHP 8.5 in the plugin. Sage, Blade, Tailwind v4 and Vite in the parent theme.
+- **Modern stack.** Native PHP (8.3 or newer) in the plugin. Sage, Blade, Tailwind v4 and Vite in the parent theme.
 - **No lock-in.** Free and open source (GPL-3.0-or-later), no premium dependencies, a documented data format, and unknown section types are preserved instead of deleted.
 
 ## Non-goals

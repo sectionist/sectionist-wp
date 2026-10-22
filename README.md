@@ -1,6 +1,6 @@
 # Sectionist
 
-Another WordPress editor plugin: a Gutenberg-free, code-first section editor. Requires WordPress 6.4 and PHP 8.5.
+Another WordPress editor plugin: a Gutenberg-free, code-first section editor. Requires WordPress 7.0 and PHP 8.3.
 
 ## Known limitations
 

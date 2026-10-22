@@ -8,7 +8,7 @@ The plugin runs inside arbitrary WordPress installs. Heavy dependencies raise co
 
 ## Decision
 
-The plugin core is native PHP 8.5 with PSR-4 autoloading. No Laravel and no `illuminate/*`. New Composer dependencies in the plugin require a justification.
+The plugin core is native PHP (minimum 8.3, only versions that still receive security patches) with PSR-4 autoloading. No Laravel and no `illuminate/*`. New Composer dependencies in the plugin require a justification.
 
 ## Consequences
 
@@ -19,4 +19,4 @@ The plugin core is native PHP 8.5 with PSR-4 autoloading. No Laravel and no `ill
 ## Rejected alternatives
 
 - **Acorn or Laravel in the plugin:** couples the plugin to a theme stack and adds weight.
-- **Supporting older PHP versions:** PHP 8.5 is the minimum, which allows modern language features.
+- **Supporting older PHP versions:** PHP 8.3 is the minimum, because older branches no longer get security patches. Raise it when a newer language feature is used or a branch loses support.
