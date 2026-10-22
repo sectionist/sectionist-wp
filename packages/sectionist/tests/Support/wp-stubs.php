@@ -68,26 +68,20 @@ if (! function_exists('delete_transient')) {
     }
 }
 
-if (! function_exists('get_post_meta')) {
-    function get_post_meta(int $postId, string $key, bool $single = false): mixed
+if (! function_exists('get_post_field')) {
+    function get_post_field(string $field, int $postId, string $context = 'display'): string
     {
-        return WpState::$meta[$postId.':'.$key] ?? '';
-    }
-}
-
-if (! function_exists('update_post_meta')) {
-    // Like WordPress, unslashes the value before storing it.
-    function update_post_meta(int $postId, string $key, mixed $value): int|bool
-    {
-        WpState::$meta[$postId.':'.$key] = is_string($value) ? stripslashes($value) : $value;
-
-        return true;
+        return WpState::$content[$postId] ?? '';
     }
 }
 
 if (! function_exists('wp_slash')) {
     function wp_slash(mixed $value): mixed
     {
+        if (is_array($value)) {
+            return array_map('wp_slash', $value);
+        }
+
         return is_string($value) ? addslashes($value) : $value;
     }
 }
@@ -181,9 +175,13 @@ if (! function_exists('current_user_can')) {
 }
 
 if (! function_exists('wp_unslash')) {
-    function wp_unslash(string $value): string
+    function wp_unslash(mixed $value): mixed
     {
-        return stripslashes($value);
+        if (is_array($value)) {
+            return array_map('wp_unslash', $value);
+        }
+
+        return is_string($value) ? stripslashes($value) : $value;
     }
 }
 
@@ -241,10 +239,26 @@ if (! function_exists('plugins_url')) {
     }
 }
 
-if (! function_exists('get_current_screen')) {
-    function get_current_screen(): ?object
+if (! class_exists('WP_Screen')) {
+    class WP_Screen
     {
-        return null;
+        public string $base = '';
+
+        public string $post_type = '';
+    }
+}
+
+if (! function_exists('get_current_screen')) {
+    function get_current_screen(): ?WP_Screen
+    {
+        return WpState::$screen;
+    }
+}
+
+if (! function_exists('post_type_supports')) {
+    function post_type_supports(string $postType, string $feature): bool
+    {
+        return WpState::$editorSupport;
     }
 }
 
@@ -262,14 +276,7 @@ if (! function_exists('remove_post_type_support')) {
 if (! function_exists('get_stylesheet_directory')) {
     function get_stylesheet_directory(): string
     {
-        return WpState::$childDir;
-    }
-}
-
-if (! function_exists('get_template_directory')) {
-    function get_template_directory(): string
-    {
-        return WpState::$parentDir;
+        return WpState::$themeDir;
     }
 }
 
@@ -358,5 +365,12 @@ if (! function_exists('esc_url')) {
     function esc_url(string $url): string
     {
         return esc_url_raw($url);
+    }
+}
+
+if (! function_exists('get_the_ID')) {
+    function get_the_ID(): int|false
+    {
+        return false;
     }
 }

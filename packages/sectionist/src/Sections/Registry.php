@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sectionist\Sections;
 
 use InvalidArgumentException;
+use Sectionist\Storage\Section;
 
 final class Registry
 {
@@ -47,34 +48,34 @@ final class Registry
      * Container fields: `active` (missing means true) and `background` (a theme-defined key).
      *
      * @param  array<mixed>  $sections
-     * @return list<array<string, mixed>>
+     * @return list<Section>
      */
     public function sanitizeSections(array $sections): array
     {
         $clean = [];
-        foreach ($sections as $section) {
-            if (! is_array($section) || ! is_string($section['id'] ?? null) || ! is_string($section['type'] ?? null)) {
+        foreach ($sections as $raw) {
+            if (! is_array($raw) || ! is_string($raw['id'] ?? null) || ! is_string($raw['type'] ?? null)) {
                 continue;
             }
-            if ($section['id'] === '' || $section['type'] === '') {
+            if ($raw['id'] === '' || $raw['type'] === '') {
                 continue;
             }
 
-            $type = $this->get($section['type']);
+            $section = Section::fromArray($raw);
+            $type = $this->get($section->type);
             if ($type === null) {
                 $clean[] = $section;
 
                 continue;
             }
 
-            $data = is_array($section['data'] ?? null) ? $section['data'] : [];
-            $clean[] = [
-                'id' => $section['id'],
-                'type' => $section['type'],
-                'active' => ! array_key_exists('active', $section) || (bool) $section['active'],
-                'background' => is_string($section['background'] ?? null) ? sanitize_key($section['background']) : '',
-                'data' => $type->sanitize($data),
-            ];
+            $clean[] = new Section(
+                $section->id,
+                $section->type,
+                $section->active,
+                sanitize_key($section->background),
+                $type->sanitize($section->data),
+            );
         }
 
         return $clean;

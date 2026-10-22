@@ -6,6 +6,7 @@ namespace Sectionist\Render;
 
 use Sectionist\Sections\Registry;
 use Sectionist\Storage\Repository;
+use Sectionist\Storage\Section;
 
 final class Renderer
 {
@@ -28,7 +29,7 @@ final class Renderer
     /**
      * Sections of unknown types, without a view or marked inactive render as empty strings.
      *
-     * @param  list<array<string, mixed>>  $sections
+     * @param  list<Section>  $sections
      */
     public function renderSections(array $sections): string
     {
@@ -40,26 +41,21 @@ final class Renderer
         return $html;
     }
 
-    /**
-     * @param  array<string, mixed>  $section
-     */
-    public function renderSection(array $section): string
+    public function renderSection(Section $section): string
     {
-        $name = $section['type'] ?? null;
-        if (! is_string($name) || ($section['active'] ?? true) === false) {
+        if (! $section->active) {
             return '';
         }
 
-        $type = $this->registry->get($name);
-        $file = $this->resolver->resolve($name);
+        $type = $this->registry->get($section->type);
+        $file = $this->resolver->resolve($section->type);
         if ($type === null || $file === null) {
             return '';
         }
 
-        $stored = is_array($section['data'] ?? null) ? $section['data'] : [];
-        $data = array_merge($type->defaults(), $stored);
+        $data = array_merge($type->defaults(), $section->data);
 
-        return (static function (string $__file, array $data, array $section): string {
+        return (static function (string $__file, array $data, Section $section): string {
             ob_start();
             include $__file;
 

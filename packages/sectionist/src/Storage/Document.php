@@ -9,7 +9,7 @@ final readonly class Document
     public const CURRENT_VERSION = 1;
 
     /**
-     * @param  list<array<string, mixed>>  $sections
+     * @param  list<Section>  $sections
      */
     public function __construct(
         public array $sections = [],
@@ -27,7 +27,10 @@ final readonly class Document
         $sections = is_array($decoded['sections'] ?? null) ? array_values($decoded['sections']) : [];
 
         return new self(
-            array_values(array_filter($sections, 'is_array')),
+            array_values(array_map(
+                static fn (array $section): Section => Section::fromArray($section),
+                array_filter($sections, 'is_array'),
+            )),
             is_int($version) ? $version : self::CURRENT_VERSION,
         );
     }
@@ -40,13 +43,13 @@ final readonly class Document
     /**
      * Sections that are visible on the public site (`active` missing means true).
      *
-     * @return list<array<string, mixed>>
+     * @return list<Section>
      */
     public function activeSections(): array
     {
         return array_values(array_filter(
             $this->sections,
-            static fn (array $section): bool => ($section['active'] ?? true) !== false,
+            static fn (Section $section): bool => $section->active,
         ));
     }
 
@@ -55,6 +58,9 @@ final readonly class Document
      */
     public function toArray(): array
     {
-        return ['schema_version' => $this->schemaVersion, 'sections' => $this->sections];
+        return [
+            'schema_version' => $this->schemaVersion,
+            'sections' => array_map(static fn (Section $section): array => $section->toArray(), $this->sections),
+        ];
     }
 }

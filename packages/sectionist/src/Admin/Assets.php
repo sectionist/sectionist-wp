@@ -49,9 +49,8 @@ final class Assets
     private function isEditorScreen(): bool
     {
         $screen = get_current_screen();
-        $postType = is_object($screen) ? ($screen->post_type ?? '') : '';
 
-        return is_string($postType) && in_array($postType, MetaBox::postTypes(), true);
+        return $screen !== null && in_array($screen->post_type, MetaBox::postTypes(), true);
     }
 
     private function isBuilt(): bool

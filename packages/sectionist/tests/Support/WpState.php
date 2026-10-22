@@ -15,23 +15,26 @@ final class WpState
     /** @var array<string, mixed> */
     public static array $transients = [];
 
-    /** @var array<string, mixed> */
-    public static array $meta = [];
+    /** @var array<int, string> */
+    public static array $content = [];
 
     public static bool $canEdit = true;
 
-    public static string $childDir = '';
+    public static string $themeDir = '';
 
-    public static string $parentDir = '';
+    public static ?\WP_Screen $screen = null;
+
+    public static bool $editorSupport = false;
 
     public static function reset(): void
     {
         self::$actions = [];
         self::$options = [];
         self::$transients = [];
-        self::$meta = [];
+        self::$content = [];
         self::$canEdit = true;
-        self::$childDir = '';
-        self::$parentDir = '';
+        self::$themeDir = '';
+        self::$screen = null;
+        self::$editorSupport = false;
     }
 }

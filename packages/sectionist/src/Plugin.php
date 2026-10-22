@@ -14,11 +14,12 @@ use Sectionist\Rest\PreviewController;
 use Sectionist\Sections\Registry;
 use Sectionist\Sections\Types\TextType;
 use Sectionist\Storage\Document;
-use Sectionist\Storage\PostMetaRepository;
-use Sectionist\Storage\Revisions;
+use Sectionist\Storage\PostContentRepository;
 
 final class Plugin
 {
+    private static ?Renderer $renderer = null;
+
     public static function boot(): void
     {
         add_action(Registry::HOOK, static function (Registry $registry): void {
@@ -26,16 +27,25 @@ final class Plugin
         });
 
         $registry = new Registry;
-        $repository = new PostMetaRepository;
+        $repository = new PostContentRepository;
 
         new MetaBox($registry, $repository)->register();
         new SaveHandler($registry, $repository)->register();
         new Assets()->register();
 
-        $renderer = new Renderer($registry, $repository, ViewResolver::forWordPress(dirname(__DIR__)));
+        self::$renderer = $renderer = new Renderer($registry, $repository, ViewResolver::forWordPress(dirname(__DIR__)));
         new PreviewController($registry, $renderer)->register();
 
-        new Revisions()->register();
         new Runner(Document::CURRENT_VERSION)->register();
+    }
+
+    /**
+     * Renders all sections of a post in editor order. Defaults to the current post.
+     */
+    public static function render(?int $postId = null): string
+    {
+        $postId ??= (int) get_the_ID();
+
+        return self::$renderer?->renderPost($postId) ?? '';
     }
 }

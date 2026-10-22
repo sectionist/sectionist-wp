@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Sectionist\Sections\Cta;
 use Sectionist\Sections\Registry;
 use Sectionist\Sections\Types\TextType;
+use Sectionist\Storage\Section;
 use Sectionist\Tests\Support\WpState;
 
 #[CoversClass(Registry::class)]
@@ -56,8 +57,8 @@ final class RegistryTest extends TestCase
             'garbage',
         ]);
 
-        $this->assertSame(
-            [['id' => 'a', 'type' => 'text', 'active' => true, 'background' => '', 'data' => ['body' => 'H', 'cta' => Cta::defaults()]], $unknown],
+        $this->assertEquals(
+            [new Section('a', 'text', data: ['body' => 'H', 'cta' => Cta::defaults()]), new Section('u1', 'hero', data: ['x' => '<i>raw</i>'])],
             $clean,
         );
     }
@@ -72,9 +73,9 @@ final class RegistryTest extends TestCase
             ['id' => 'b', 'type' => 'text', 'data' => []],
         ]);
 
-        $this->assertFalse($clean[0]['active']);
-        $this->assertSame('darkb', $clean[0]['background']);
-        $this->assertTrue($clean[1]['active']);
-        $this->assertSame('', $clean[1]['background']);
+        $this->assertFalse($clean[0]->active);
+        $this->assertSame('darkb', $clean[0]->background);
+        $this->assertTrue($clean[1]->active);
+        $this->assertSame('', $clean[1]->background);
     }
 }

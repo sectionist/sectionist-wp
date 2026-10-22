@@ -34,6 +34,28 @@ final readonly class MetaBox
         add_action('add_meta_boxes', [$this, 'add']);
         add_action('init', [$this, 'disableDefaultEditor'], 100);
         add_filter('use_block_editor_for_post_type', [$this, 'useBlockEditor'], 100, 2);
+        add_action('admin_notices', [$this, 'warnAboutOtherEditor']);
+    }
+
+    /**
+     * Another plugin re-enabled the content editor for one of our post types.
+     * Two editors on one `post_content` field cannot work.
+     */
+    public function warnAboutOtherEditor(): void
+    {
+        $screen = get_current_screen();
+        $postType = $screen->post_type ?? '';
+        if ($screen === null || $screen->base !== 'post' || ! in_array($postType, self::postTypes(), true)) {
+            return;
+        }
+
+        if (! post_type_supports($postType, 'editor')) {
+            return;
+        }
+
+        echo '<div class="notice notice-warning"><p>'
+            .esc_html__('Sectionist: another plugin enabled the default editor for this content type. Editing with it can overwrite the sections. Only the sections are saved here, other content is ignored.', 'sectionist')
+            .'</p></div>';
     }
 
     /**
@@ -78,7 +100,7 @@ final readonly class MetaBox
             ],
             'types' => $this->typeDefinitions(),
             'backgrounds' => Backgrounds::all(),
-            'sections' => $document->sections,
+            'sections' => $document->toArray()['sections'],
             'i18n' => $this->labels(),
         ]);
 

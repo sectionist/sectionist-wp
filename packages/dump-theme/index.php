@@ -13,14 +13,7 @@ declare(strict_types=1);
 <?php wp_body_open(); ?>
 <?php while (have_posts()) : the_post(); ?>
 	<h1><?php the_title(); ?></h1>
-	<?php
-	if (! class_exists(\Sectionist\Storage\PostMetaRepository::class)) {
-		echo '<p>' . esc_html__('The Sectionist plugin is not active.', 'sectionist-dump-theme') . '</p>';
-	} else {
-		$document = (new \Sectionist\Storage\PostMetaRepository())->load(get_the_ID());
-		echo '<pre>' . esc_html((string) wp_json_encode(["schema_version" => $document->schemaVersion, "sections" => $document->activeSections()], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) . '</pre>';
-	}
-	?>
+	<?php function_exists('sectionist_render') && sectionist_render(); ?>
 <?php endwhile; ?>
 <?php wp_footer(); ?>
 </body>

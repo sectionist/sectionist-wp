@@ -14,13 +14,12 @@ final class ViewResolver
     public function __construct(private readonly array $roots) {}
 
     /**
-     * Resolution order: child theme, parent theme, plugin fallback.
+     * Resolution order: active theme, plugin fallback.
      */
     public static function forWordPress(string $pluginDir): self
     {
         $roots = [
             get_stylesheet_directory().'/'.self::THEME_DIRECTORY,
-            get_template_directory().'/'.self::THEME_DIRECTORY,
             rtrim($pluginDir, '/').'/views',
         ];
 

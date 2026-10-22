@@ -11,7 +11,7 @@ use Sectionist\Render\ViewResolver;
 use Sectionist\Rest\PreviewController;
 use Sectionist\Sections\Registry;
 use Sectionist\Sections\Types\TextType;
-use Sectionist\Storage\PostMetaRepository;
+use Sectionist\Storage\PostContentRepository;
 use Sectionist\Tests\Support\WpState;
 use WP_REST_Request;
 
@@ -25,7 +25,7 @@ final class PreviewControllerTest extends TestCase
         WpState::reset();
         $registry = new Registry;
         $registry->register(new TextType);
-        $renderer = new Renderer($registry, new PostMetaRepository, new ViewResolver([dirname(__DIR__, 2).'/views']));
+        $renderer = new Renderer($registry, new PostContentRepository, new ViewResolver([dirname(__DIR__, 2).'/views']));
         $this->controller = new PreviewController($registry, $renderer);
     }
 
