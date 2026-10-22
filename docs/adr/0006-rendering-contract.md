@@ -10,15 +10,14 @@ The plugin must not decide how content looks, but themes need a predictable way 
 
 Rendering is data in, HTML out. For each section the view is resolved in this order:
 
-1. Child theme
-2. Parent theme
-3. Plugin fallback
+1. Active theme
+2. Plugin fallback
 
-The plugin knows no Blade. The Sage parent theme provides Blade views. The plugin fallback is plain PHP and minimal. Editor previews use server-side rendering over REST.
+The plugin knows no templating engine. Starter themes provide the views in their own technology. The plugin fallback is plain PHP and minimal. Editor previews use server-side rendering over REST.
 
 ## Consequences
 
-- Child themes override any view and add their own types.
+- Themes override any view and add their own types.
 - The plugin renders something sensible without the theme.
 - The plugin fallback must be kept in sync with the contract.
 

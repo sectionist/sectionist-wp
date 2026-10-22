@@ -14,9 +14,9 @@ The plugin core is native PHP (minimum 8.3, only versions that still receive sec
 
 - A small footprint and few dependency conflicts.
 - Some utilities must be written by hand.
-- Laravel is allowed only in the theme, via Acorn.
+- Other technologies are allowed only in individual starter themes.
 
 ## Rejected alternatives
 
-- **Acorn or Laravel in the plugin:** couples the plugin to a theme stack and adds weight.
+- **A specific theme framework in the plugin:** couples the plugin to a theme stack and adds weight.
 - **Supporting older PHP versions:** PHP 8.3 is the minimum, because older branches no longer get security patches. Raise it when a newer language feature is used or a branch loses support.

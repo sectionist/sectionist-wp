@@ -1,4 +1,4 @@
-# 1. Plugin and theme as a pair
+# 1. Plugin and starter themes
 
 Status: accepted
 
@@ -8,13 +8,14 @@ Content structure must survive a theme change, but presentation needs a templati
 
 ## Decision
 
-Two packages. The plugin `sectionist/sectionist` owns types, storage, editor and the render API. A parent theme (e.g. Roots Sage with Acorn and Blade) owns the default views. Child themes override views and add types.
+The plugin `sectionist/sectionist` owns types, storage, editor and the render API. Presentation lives in starter themes: complete themes that a project copies and owns. We ship one starter theme first and add more over time to cover different technologies.
 
 ## Consequences
 
-- The plugin knows no Blade and no design.
-- Laravel (or any other technology) components exist only in the theme.
-- Two things to version and release.
+- The plugin knows no templating engine and no design.
+- Technology choices exist only in the individual starter themes.
+- Each starter theme is versioned independently of the plugin.
+- A project owns its theme after copying it; there is no update coupling.
 
 ## Rejected alternatives
 
