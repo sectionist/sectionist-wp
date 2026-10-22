@@ -1,0 +1,44 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (no tag, no release, no commit)'
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          tools: composer
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: composer install --no-interaction --prefer-dist
+      - run: composer install --no-interaction --prefer-dist --working-dir=packages/sectionist
+      - run: composer lint
+      - run: composer analyse
+      - run: composer test
+      - run: npm ci
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            npx semantic-release --dry-run
+          else
+            npx semantic-release
+          fi
