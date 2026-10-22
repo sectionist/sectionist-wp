@@ -15,6 +15,7 @@ use Sectionist\Sections\Registry;
 use Sectionist\Sections\Types\TextType;
 use Sectionist\Storage\Document;
 use Sectionist\Storage\PostMetaRepository;
+use Sectionist\Storage\Revisions;
 
 final class Plugin
 {
@@ -32,6 +33,7 @@ final class Plugin
         (new Assets())->register();
         $renderer = new Renderer($registry, $repository, ViewResolver::forWordPress(dirname(__DIR__)));
         new PreviewController($registry, $renderer)->register();
+        new Revisions()->register();
         new Runner(Document::CURRENT_VERSION)->register();
     }
 }
