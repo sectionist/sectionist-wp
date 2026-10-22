@@ -17,6 +17,12 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           tools: composer
+      - name: Forbid @tiptap-pro packages (ADR 5)
+        run: |
+          if grep -n '@tiptap-pro/' packages/sectionist/package.json packages/sectionist/package-lock.json; then
+            echo '::error::@tiptap-pro/* packages are not allowed (ADR 5).'
+            exit 1
+          fi
       - run: composer install --no-interaction --prefer-dist
       - run: composer install --no-interaction --prefer-dist --working-dir=packages/sectionist
       - run: composer lint
