@@ -1,7 +1,7 @@
 import type { Background, Preview, Section, TypeDef } from '../types';
 import { Collapsible } from './Collapsible';
 import { FieldInput } from './FieldInput';
-import { IconButton } from './Icon';
+import { Icon, IconButton } from './Icon';
 
 const HEADING = /<h([1-6])[^>]*>([\s\S]*?)<\/h\1>/i;
 
@@ -67,6 +67,12 @@ export function SectionCard(props: {
           <strong>{type?.label ?? section.type}</strong>
           {level > 0 && <span class="sectionist-badge">{`H${level}`}</span>}
           {title && <span class="sectionist-card__title">{title}</span>}
+          {!type && (
+            <span class="sectionist-badge sectionist-badge--warning" title={t.unknownType}>
+              <Icon name="warning" />
+              {t.unavailable}
+            </span>
+          )}
           {!active && <span class="sectionist-badge sectionist-badge--muted">{t.inactive}</span>}
         </>
       }

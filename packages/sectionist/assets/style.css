@@ -192,6 +192,8 @@
 
 .sectionist-field__label { display: block; font-weight: 600; margin-bottom: 4px; }
 .sectionist-badge--muted { background: var(--sx-border); color: var(--sx-text); }
+.sectionist-badge--warning { display: inline-flex; align-items: center; gap: 2px; background: #fcf9e8; color: #6e4b00; border: 1px solid #dba617; }
+.sectionist-badge--warning .dashicons { font-size: 14px; width: 14px; height: 14px; color: #996800; }
 .sectionist-swatches { display: flex; flex-wrap: wrap; gap: 8px; }
 .sectionist-swatch { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 6px; border: 1px solid var(--sx-border); border-radius: var(--sx-radius-sm); background: var(--sx-surface); cursor: pointer; }
 .sectionist-swatch.is-active { border-color: var(--sx-accent); box-shadow: 0 0 0 1px var(--sx-accent); }

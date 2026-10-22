@@ -174,6 +174,7 @@ final class MetaBox
             'moveUp' => __('Move up', 'sectionist'),
             'moveDown' => __('Move down', 'sectionist'),
             'empty' => __('No sections yet. Add the first one below.', 'sectionist'),
+            'unavailable' => __('Unavailable', 'sectionist'),
             'unknownType' => __('This section type is not available. Its content is kept unchanged.', 'sectionist'),
             'saveError' => __('The sections could not be prepared for saving. Please reload the page.', 'sectionist'),
         ];
