@@ -1,6 +1,8 @@
 import type { Editor } from '@tiptap/core';
 import { Icon } from '../Icon';
-import { normalizeUrl } from './extensions';
+import { useState } from 'preact/hooks';
+import { LinkModal } from './LinkModal';
+import { splitHref } from './extensions';
 
 function ToolButton(props: { icon: string; label: string; active?: boolean; disabled?: boolean; onClick: () => void }) {
   return (
@@ -31,11 +33,45 @@ export function Toolbar(props: { editor: Editor; labels: Record<string, string> 
     else chain().setHeading({ level: Number(value) as (typeof LEVELS)[number] }).run();
   };
 
-  const setLink = () => {
-    const url = window.prompt(t.rtLinkPrompt, String(editor.getAttributes('link').href ?? ''));
-    if (url === null) return;
-    if (url.trim() === '') chain().extendMarkRange('link').unsetLink().run();
-    else chain().extendMarkRange('link').setLink({ href: normalizeUrl(url) }).run();
+  const [link, setLinkState] = useState<{ from: number; to: number; href: string; text: string; isEdit: boolean } | null>(null);
+
+  const openLink = () => {
+    const isEdit = editor.isActive('link');
+    if (isEdit) editor.chain().focus().extendMarkRange('link').run();
+    const { from, to } = editor.state.selection;
+    setLinkState({
+      from,
+      to,
+      href: isEdit ? String(editor.getAttributes('link').href ?? '') : '',
+      text: editor.state.doc.textBetween(from, to, ' '),
+      isEdit,
+    });
+  };
+
+  const applyLink = ({ href, text }: { href: string; text: string }) => {
+    if (!link) return;
+    const { from, to } = link;
+    if (from === to || text !== link.text) {
+      editor
+        .chain()
+        .focus()
+        .insertContentAt({ from, to }, { type: 'text', text, marks: [{ type: 'link', attrs: { href } }] })
+        .run();
+    } else {
+      editor.chain().focus().setTextSelection({ from, to }).setLink({ href }).run();
+    }
+    setLinkState(null);
+  };
+
+  const removeLink = () => {
+    if (!link) return;
+    editor.chain().focus().setTextSelection({ from: link.from, to: link.to }).unsetLink().run();
+    setLinkState(null);
+  };
+
+  const closeLink = () => {
+    setLinkState(null);
+    editor.commands.focus();
   };
 
   return (
@@ -65,7 +101,20 @@ export function Toolbar(props: { editor: Editor; labels: Record<string, string> 
       <ToolButton icon="editor-alignleft" label={t.rtAlignLeft} active={editor.isActive({ textAlign: 'left' })} onClick={() => chain().toggleTextAlign('left').run()} />
       <ToolButton icon="editor-aligncenter" label={t.rtAlignCenter} active={editor.isActive({ textAlign: 'center' })} onClick={() => chain().toggleTextAlign('center').run()} />
       <ToolButton icon="editor-alignright" label={t.rtAlignRight} active={editor.isActive({ textAlign: 'right' })} onClick={() => chain().toggleTextAlign('right').run()} />
-      <ToolButton icon="admin-links" label={t.rtLink} active={editor.isActive('link')} onClick={setLink} />
+      <ToolButton icon="admin-links" label={t.rtLink} active={editor.isActive('link')} onClick={openLink} />
+      {link && (
+        <LinkModal
+          initialType={splitHref(link.href).type}
+          initialRest={splitHref(link.href).rest}
+          initialText={link.text}
+          hasSelection={link.from !== link.to}
+          isEdit={link.isEdit}
+          labels={t}
+          onApply={applyLink}
+          onRemove={removeLink}
+          onClose={closeLink}
+        />
+      )}
     </div>
   );
 }

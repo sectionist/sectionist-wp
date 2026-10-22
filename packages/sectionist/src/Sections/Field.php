@@ -41,6 +41,9 @@ final readonly class Field
     /** Classes allowed on `p` and `h1`-`h6`: text alignment without inline styles. */
     public const ALIGN_CLASSES = ['has-text-align-left', 'has-text-align-center', 'has-text-align-right'];
 
+    /** Link protocols kept by the server. Plain http is intentionally not supported. */
+    public const LINK_PROTOCOLS = ['https', 'mailto', 'tel'];
+
     /**
      * @param list<string> $options allowed values (select only)
      * @param string|array<string, mixed> $default
@@ -92,7 +95,7 @@ final readonly class Field
 
         return match ($this->kind) {
             self::TEXT => sanitize_text_field($value),
-            self::RICHTEXT => $this->filterClasses(wp_kses($value, self::ALLOWED_HTML)),
+            self::RICHTEXT => $this->filterClasses(wp_kses($value, self::ALLOWED_HTML, self::LINK_PROTOCOLS)),
             self::SELECT => in_array($value, $this->options, true) ? $value : $this->default,
             default => $this->default,
         };

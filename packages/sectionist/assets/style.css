@@ -204,3 +204,15 @@
 .sectionist-cta-field__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; }
 .sectionist-cta-field__newtab { grid-column: 1 / -1; font-weight: 400; }
 .sectionist-cta-field { background: rgba(0, 0, 0, 0.05); border-radius: var(--sx-radius-sm, 4px); padding: 12px; }
+
+.sectionist-input-group { display: flex; align-items: stretch; border: 1px solid var(--sx-border); border-radius: var(--sx-radius-sm); background: var(--sx-bg); overflow: hidden; }
+.sectionist-input-group:focus-within { border-color: var(--sx-accent); box-shadow: 0 0 0 1px var(--sx-accent); }
+.sectionist-input-group__prefix { display: inline-flex; align-items: center; padding: 0 10px; background: var(--sx-surface); color: var(--sx-muted); border-right: 1px solid var(--sx-border); user-select: none; }
+.sectionist-input-group input[type="text"] { flex: 1; border: 0; box-shadow: none; outline: 0; border-radius: 0; min-width: 0; }
+.sectionist-modal__footer--split .sectionist-modal__remove { margin-right: auto; }
+
+.sectionist-btn-group { display: inline-flex; }
+.sectionist-btn-group .button { border-radius: 0; margin-left: -1px; position: relative; }
+.sectionist-btn-group .button:first-child { border-radius: var(--sx-radius-sm) 0 0 var(--sx-radius-sm); margin-left: 0; }
+.sectionist-btn-group .button:last-child { border-radius: 0 var(--sx-radius-sm) var(--sx-radius-sm) 0; }
+.sectionist-btn-group .button.is-active { background: var(--sx-accent); border-color: var(--sx-accent); color: #fff; z-index: 1; }

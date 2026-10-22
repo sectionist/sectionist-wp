@@ -51,16 +51,42 @@ export function createExtensions() {
       codeBlock: false,
       horizontalRule: false,
       hardBreak: false,
-      link: { openOnClick: false, autolink: false, HTMLAttributes: { target: null, rel: null, class: null } },
+      link: {
+        openOnClick: false,
+        autolink: false,
+        defaultProtocol: 'https',
+        protocols: ['mailto', 'tel'],
+        HTMLAttributes: { target: null, rel: null, class: null },
+      },
     }),
     Align.configure({ types: ['heading', 'paragraph'], alignments: ALIGNMENTS }),
     ParagraphLook,
   ];
 }
 
-/** Prepend https:// to bare hosts such as `www.example.com`; keep schemes, relative paths, anchors and queries. */
-export function normalizeUrl(raw: string): string {
-  const value = raw.trim();
-  if (/^([a-z][a-z0-9+.-]*:|\/|#|\?)/i.test(value)) return value;
-  return `https://${value}`;
+/** Supported link types. Plain `http` is intentionally not offered. */
+export const LINK_TYPES = ['https', 'mailto', 'tel'] as const;
+export type LinkType = (typeof LINK_TYPES)[number];
+
+const SCHEME = /^(https?:\/\/|mailto:|tel:)/i;
+
+/** Split an href into link type and the part after the prefix. `http:` shows as https; relative links are kept raw. */
+export function splitHref(href: string): { type: LinkType; rest: string } {
+  const value = href.trim();
+  const match = SCHEME.exec(value);
+  if (!match) return { type: 'https', rest: value };
+  const scheme = match[1].toLowerCase();
+  const rest = value.slice(match[1].length);
+  if (scheme === 'mailto:') return { type: 'mailto', rest };
+  if (scheme === 'tel:') return { type: 'tel', rest };
+  return { type: 'https', rest };
+}
+
+/** Build an href from a type and the user input (a typed prefix is stripped; tel is cleaned). Empty input gives an empty string. */
+export function buildHref(type: LinkType, input: string): string {
+  let rest = input.trim().replace(SCHEME, '');
+  if (type === 'tel') rest = rest.replace(/[\s()-]/g, '');
+  if (rest === '') return '';
+  if (type === 'https') return /^[/#?]/.test(rest) ? rest : `https://${rest}`;
+  return `${type}:${rest}`;
 }

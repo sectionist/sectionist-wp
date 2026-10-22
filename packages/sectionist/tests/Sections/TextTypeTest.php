@@ -41,6 +41,19 @@ final class TextTypeTest extends TestCase
         $this->assertSame('<h3 class="has-text-align-center">T</h3><p class="has-text-align-right as-h2"><s>x</s></p>', $clean['body']);
     }
 
+    public function testKeepsOnlyHttpsMailtoAndTelLinks(): void
+    {
+        $clean = (new TextType())->sanitize([
+            'body' => '<p><a href="https://a.de">1</a><a href="mailto:a@b.de">2</a><a href="tel:+4930123">3</a>'
+                . '<a href="http://a.de">4</a><a href="javascript:alert(1)">5</a><a href="ftp://a.de">6</a></p>',
+        ]);
+
+        $this->assertSame(
+            '<p><a href="https://a.de">1</a><a href="mailto:a@b.de">2</a><a href="tel:+4930123">3</a><a>4</a><a>5</a><a>6</a></p>',
+            $clean['body'],
+        );
+    }
+
     public function testMissingOrInvalidFieldsFallBackToDefaults(): void
     {
         $clean = (new TextType())->sanitize(['body' => ['nope']]);

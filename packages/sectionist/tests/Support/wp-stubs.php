@@ -118,12 +118,13 @@ if (! function_exists('wp_kses')) {
      * Approximation of wp_kses(): drops tags and attributes that are not allowed.
      *
      * @param array<string, array<string, mixed>> $allowedHtml
+     * @param list<string> $allowedProtocols
      */
-    function wp_kses(string $value, array $allowedHtml): string
+    function wp_kses(string $value, array $allowedHtml, array $allowedProtocols = ['http', 'https', 'mailto', 'tel']): string
     {
         return (string) preg_replace_callback(
             '#<(/?)([a-z0-9]+)([^>]*)>#i',
-            static function (array $m) use ($allowedHtml): string {
+            static function (array $m) use ($allowedHtml, $allowedProtocols): string {
                 $tag = strtolower($m[2]);
                 if (! isset($allowedHtml[$tag])) {
                     return '';
@@ -134,6 +135,11 @@ if (! function_exists('wp_kses')) {
                 $attributes = '';
                 preg_match_all('/([a-z\-]+)\s*=\s*"([^"]*)"/i', $m[3], $found, PREG_SET_ORDER);
                 foreach ($found as $attribute) {
+                    if (strtolower($attribute[1]) === 'href'
+                        && preg_match('/^\s*([a-z][a-z0-9+.-]*):/i', $attribute[2], $scheme)
+                        && ! in_array(strtolower($scheme[1]), $allowedProtocols, true)) {
+                        continue;
+                    }
                     if (isset($allowedHtml[$tag][strtolower($attribute[1])])) {
                         $attributes .= ' ' . strtolower($attribute[1]) . '="' . $attribute[2] . '"';
                     }
