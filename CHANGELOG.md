@@ -1,3 +1,10 @@
+# [0.2.0](https://github.com/sectionist/sectionist-wp/compare/v0.1.1...v0.2.0) (2026-10-23)
+
+
+### Features
+
+* **plugin:** replace meta-based storage with content-based storage and clean up project ([1a52736](https://github.com/sectionist/sectionist-wp/commit/1a52736659dd7791e30cb54b0a0f97b12e81a818))
+
 ## [0.1.1](https://github.com/sectionist/sectionist-wp/compare/v0.1.0...v0.1.1) (2026-10-22)
 
 
