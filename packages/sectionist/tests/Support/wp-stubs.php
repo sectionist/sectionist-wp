@@ -378,6 +378,6 @@ if (! function_exists('esc_url')) {
 if (! function_exists('get_the_ID')) {
     function get_the_ID(): int|false
     {
-        return false;
+        return WpState::$currentPostId ?? false;
     }
 }

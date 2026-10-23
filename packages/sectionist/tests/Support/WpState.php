@@ -18,6 +18,8 @@ final class WpState
     /** @var array<int, string> */
     public static array $content = [];
 
+    public static ?int $currentPostId = null;
+
     public static bool $canEdit = true;
 
     public static string $themeDir = '';
@@ -32,6 +34,7 @@ final class WpState
         self::$options = [];
         self::$transients = [];
         self::$content = [];
+        self::$currentPostId = null;
         self::$canEdit = true;
         self::$themeDir = '';
         self::$screen = null;

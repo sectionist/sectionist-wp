@@ -83,8 +83,6 @@ Current state:
 ## Open items
 
 - TODO: Editor UX leftover: move animation when reordering sections is still open (drag & drop and open/close animation are done).
-- TODO: No test for `sectionist_render()` yet.
-- TODO: Plugin header version (`0.0.1`) and the last tag (`v0.0.0`) differ. Harmless, as the release run overwrites the header.
 - TODO: `RichTextEditor` options (toolbar, extensions) are global. Add a per-field option only when a section type needs a restricted variant.
 - TODO: `LinkModal.tsx` still uses its own label/input markup instead of the `Field` components. Low priority.
 - TODO: Badge warning colors and `#fff` in `assets/style.css` are hard-coded instead of tokens. Low priority.
