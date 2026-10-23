@@ -26,7 +26,6 @@ export interface Section {
 export interface Background {
   key: string;
   label: string;
-  color: string;
 }
 
 export interface Preview {

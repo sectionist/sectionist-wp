@@ -66,6 +66,7 @@ Current state:
 - Work in small steps. Answer briefly, one step at a time.
 - Question naming and structure decisions (slug, namespace, package name, folders) before implementing them. State the cost of reversing. No decisions on stock without a concrete reason.
 - No abstractions for hypothetical future cases.
+- Starter themes are plain, standard WordPress themes: theme bootstrap (supports, menus, assets, template hierarchy) lives directly in `functions.php`. No `inc/`, `setup.php` or similar split files. Keep it simple, do not reinvent the wheel.
 - No commits, pushes or Packagist actions without explicit instruction. Commit messages in Conventional Commits style (`feat(scope): ...`).
 - When changing code, immediately remove anything it makes unused.
 - Only state what is true in the repo; do not invent.

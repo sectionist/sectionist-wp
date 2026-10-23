@@ -28,3 +28,6 @@ img {
 	overflow: visible;
 	clip-path: none;
 }
+.section--bg-light-gray {
+	background-color: #f3f4f6;
+}

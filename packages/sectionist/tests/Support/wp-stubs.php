@@ -229,7 +229,7 @@ if (! function_exists('wp_enqueue_script')) {
 }
 
 if (! function_exists('wp_enqueue_style')) {
-    function wp_enqueue_style(string $handle, string $src, array $deps = [], string $ver = ''): void {}
+    function wp_enqueue_style(string $handle, string $src, array $deps = [], string|bool|null $ver = false): void {}
 }
 
 if (! function_exists('plugins_url')) {
@@ -277,6 +277,13 @@ if (! function_exists('get_stylesheet_directory')) {
     function get_stylesheet_directory(): string
     {
         return WpState::$themeDir;
+    }
+}
+
+if (! function_exists('get_stylesheet_directory_uri')) {
+    function get_stylesheet_directory_uri(): string
+    {
+        return 'https://example.test/theme';
     }
 }
 

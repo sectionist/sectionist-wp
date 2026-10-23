@@ -1,0 +1,7 @@
+{
+	"version": 1,
+	"editor_styles": ["resources/css/theme.css"],
+	"backgrounds": [
+		{ "key": "light-gray", "label": "Light gray" }
+	]
+}

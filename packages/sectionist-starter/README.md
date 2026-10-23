@@ -4,20 +4,20 @@ Minimal classic theme for the [Sectionist](../sectionist) plugin. Copy it, renam
 
 ## What it does
 
-- `page.php` and `single.php` output only `sectionist_render()` and `comments_template()`. Everything visible in the body comes from sections.
+- `templates/page.php` and `templates/single.php` output only `sectionist_render()` and `comments_template()`. Everything visible in the body comes from sections.
 - Header, footer, navigation, comments, archives, search and 404 are classic WordPress.
 
 ## Structure
 
 ```
-style.css  functions.php  index.php  page.php  single.php  archive.php  search.php  404.php
-inc/       setup.php  assets.php
-assets/css/main.css
-parts/     header.php  footer.php  comments.php  content-excerpt.php
-sections/  text.php  partials/cta.php
+style.css  functions.php  index.php  sectionist.json   (required root files)
+templates/  index.php  page.php  single.php  archive.php  search.php  404.php
+layouts/    header.php  footer.php  comments.php  content-excerpt.php
+sections/   text.php  partials/cta.php
+resources/  css/theme.css
 ```
 
-Only files WordPress looks up in the theme root stay there. Everything else is loaded via `get_template_part()` and `comments_template()`.
+`functions.php` makes WordPress look up the template hierarchy in `templates/`. The hierarchy itself is unchanged (`page-{slug}.php`, `single-{type}.php`, ...), so add new templates there.
 
 ## What it does not do (on purpose)
 

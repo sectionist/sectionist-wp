@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-get_template_part('parts/header');
+get_template_part('layouts/header');
 ?>
 <main id="content">
-	<?php the_archive_title('<h1>', '</h1>'); ?>
+	<h1><?php printf(esc_html__('Search results for: %s', 'sectionist-starter'), esc_html(get_search_query())); ?></h1>
+	<?php get_search_form(); ?>
 <?php if (have_posts()) { ?>
 <?php while (have_posts()) {
 	    the_post();
-	    get_template_part('parts/content-excerpt');
+	    get_template_part('layouts/content-excerpt');
 	} ?>
 <?php the_posts_pagination(); ?>
 <?php } else { ?>
@@ -17,4 +18,4 @@ get_template_part('parts/header');
 <?php } ?>
 </main>
 <?php
-	get_template_part('parts/footer');
+	get_template_part('layouts/footer');

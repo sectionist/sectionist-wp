@@ -99,7 +99,7 @@ export function SectionCard(props: {
         <div class="sectionist-field">
           <span class="sectionist-field__label">{t.background}</span>
           <div class="sectionist-swatches" role="radiogroup" aria-label={t.background}>
-            {[{ key: '', label: t.backgroundNone, color: '' }, ...props.backgrounds].map((bg) => (
+            {[{ key: '', label: t.backgroundNone }, ...props.backgrounds].map((bg) => (
               <button
                 type="button"
                 role="radio"
@@ -108,7 +108,7 @@ export function SectionCard(props: {
                 title={bg.label}
                 onClick={() => props.onBackground(bg.key)}
               >
-                <span class="sectionist-swatch__color" style={bg.color ? { background: bg.color } : undefined} />
+                <span class={'sectionist-swatch__color' + (bg.key ? ' section--bg-' + bg.key : '')} />
                 {bg.label}
               </button>
             ))}

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Sectionist\Admin;
 
+use Sectionist\Sections\Backgrounds;
+
 final class Assets
 {
     private const SCRIPT = 'dist/editor.js';
@@ -31,6 +33,10 @@ final class Assets
         wp_enqueue_script('sectionist-editor', $this->url(self::SCRIPT), [], (string) filemtime($this->path(self::SCRIPT)), true);
         if (is_file($this->path(self::STYLE))) {
             wp_enqueue_style('sectionist-editor', $this->url(self::STYLE), [], (string) filemtime($this->path(self::STYLE)));
+        }
+
+        foreach (Backgrounds::editorStyles() as $index => $style) {
+            wp_enqueue_style('sectionist-theme-'.$index, $style['url'], [], $style['version']);
         }
     }
 
