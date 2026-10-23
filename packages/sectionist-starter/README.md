@@ -23,6 +23,21 @@ resources/  css/theme.css
 
 - No page title, no post thumbnail, no `the_content()`. The editor places the `h1` in a section.
 
+## sectionist.json
+
+The theme manifest, comparable to `theme.json`. The plugin reads it from the active theme root.
+
+```json
+{
+	"version": 1,
+	"editor_styles": ["resources/css/theme.css"],
+	"backgrounds": [{ "key": "light-gray", "label": "Light gray" }]
+}
+```
+
+- `backgrounds`: choices offered per section. Only the key is stored. The theme styles `.section--bg-<key>` in its own CSS; the plugin knows no colors.
+- `editor_styles`: stylesheets (theme-relative paths or absolute URLs) the editor loads to show those colors. For hashed build output, use the filter `sectionist/editor_styles`.
+
 ## Section views
 
 Views are resolved in this order: `sections/<type>.php` in the active theme, then the plugin fallback.

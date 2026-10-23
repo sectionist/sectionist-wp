@@ -22,9 +22,9 @@ Current state:
 - `packages/sectionist/`: the plugin.
   - Composer name `sectionist/sectionist`, type `wordpress-plugin`, slug `sectionist`.
   - Main file `sectionist.php`, text domain `sectionist`, PSR-4 `Sectionist\` -> `src/`.
-  - Currently only `src/Plugin.php` (`Plugin::boot()` is an empty stub).
-
-`packages/dump-theme` is the interim theme. Planned: starter themes under `packages/` (one first, more later for other technologies), `docs/` (`vision.md`, `adr/`), `.github/workflows/`.
+- `packages/sectionist-starter/`: the first starter theme (classic, native PHP). `packages/dump-theme` is an interim theme.
+- `docs/` (`vision.md`, `adr/`), `.github/workflows/` (CI, release via semantic-release).
+- Planned: more starter themes under `packages/` for other technologies.
 
 - No `-core` suffix while there is only one plugin.
 - Split repos for Packagist (`git subtree split` or splitsh-lite): planned, only on real Composer need. Packagist vendor `sectionist` is not registered yet.
@@ -39,18 +39,19 @@ Current state:
 - i18n: source strings in English via WordPress i18n functions, text domain `sectionist`.
 - Null-safety: fallbacks for optional values; preserve unknown section types instead of deleting them.
 - Language: talk to the maintainer in German. Code, identifiers, comments and docs in the repo in English.
-- Planned:
-  - Storage: JSON with `schema_version` in `post_content` (ADR 0004) and a migration runner. Implemented by `PostContentRepository`.
-  - Rendering contract: data in, HTML out. Resolution order: active theme, plugin fallback. The plugin knows no templating engine.
-  - Starter themes: complete themes a project copies and owns. One first, more over time for different technologies. Technology choices live only in the individual starter theme.
-  - Admin UI: declarative field schema in PHP, generic renderer, slim JS editor (Preact or Alpine with Vite). Preview via server-side rendering over REST.
+- Implemented:
+  - Storage: JSON with `schema_version` in `post_content` (ADR 0004), migration runner, `PostContentRepository`.
+  - Rendering contract: data in, HTML out (ADR 0006, 0008). Resolution order: active theme, plugin fallback. The plugin knows no templating engine.
+  - Starter themes: complete themes a project copies and owns. Technology choices live only in the individual starter theme.
+  - Admin UI: declarative field schema in PHP, generic renderer, slim Preact editor (Vite). Preview via server-side rendering over REST.
+  - Theme manifest `sectionist.json` (ADR 0008).
 
 ## Tooling
 
 - Root dev tools: PHPUnit ^13.4 (needs PHP >= 8.4), PHPStan ^2.3, Laravel Pint ^1.32.
 - Root Composer scripts: `test` (`phpunit`), `lint` (`pint --test`), `lint:fix` (`lint`), `analyse` (`phpstan analyse`).
 - `composer.lock` is committed. `vendor/` and `node_modules/` are never committed.
-- Planned: GitHub Actions with a PHP matrix. PHPUnit 13 does not run on PHP 8.3.
+- GitHub Actions: `ci.yml`, `release.yml`. Planned: PHP matrix. PHPUnit 13 does not run on PHP 8.3.
 
 ## Dev environment
 
@@ -73,20 +74,16 @@ Current state:
 
 ## Roadmap
 
-1. Vision and ADRs (planned): `docs/vision.md`; ADRs for the plugin + starter themes, data format with `schema_version`, declarative field schema, rendering contract, "WordPress-only", "native PHP in core".
-2. Tooling and CI (planned).
-3. Core without UI (planned): `SectionType` interface, registry, repository, tests.
-4. Vertical slice (planned): type `text` through to rendering in the first starter theme, including a theme-override test.
-5. Expansion (planned): field types, more section types, preview, revisions.
+1. Vision and ADRs (done).
+2. Tooling and CI (done).
+3. Core without UI (done).
+4. Vertical slice (done): type `text` through to rendering in the starter theme.
+5. Expansion (planned): field types, more section types (hero, image), full-page editor layout, search and feeds over JSON in `post_content`, a second starter theme.
 
 ## Open items
 
-- TODO: `packages/sectionist-starter/README.md` shows the `sectionist_render()` call in the old multi-line form. The theme templates use the one-liner `function_exists('sectionist_render') && sectionist_render();`. Align the README.
-- TODO: Starter theme `page.php`/`single.php` must be reduced to the minimum: no `the_title`, thumbnail or `the_content()`, no design classes; `comments_template()` without own condition. Sectionist replaces the editor.
 - TODO: Editor UX leftover: move animation when reordering sections is still open (drag & drop and open/close animation are done).
-- TODO: Outdated state in this file: `Plugin.php` is no longer an empty stub (Repo layout), and roadmap steps 2 and 3 (tooling, core without UI) are largely done but still marked "planned". `.github/workflows/` exists already.
-- TODO: `scripts/package.sh` runs `composer install --no-dev` in `packages/sectionist`, which removes the dev autoload (`Sectionist\Tests\`) and breaks tests afterwards. Restore it at the end of the script or document `composer dump-autoload --dev`.
-- TODO: Release workflow: `dry_run` does not exercise `scripts/package.sh`, and the ZIP is not uploaded as a workflow artifact. Add a package step plus `actions/upload-artifact`.
+- TODO: No test for `sectionist_render()` yet.
 - TODO: Plugin header version (`0.0.1`) and the last tag (`v0.0.0`) differ. Harmless, as the release run overwrites the header.
 - TODO: `RichTextEditor` options (toolbar, extensions) are global. Add a per-field option only when a section type needs a restricted variant.
 - TODO: `LinkModal.tsx` still uses its own label/input markup instead of the `Field` components. Low priority.

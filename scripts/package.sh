@@ -23,3 +23,6 @@ mkdir -p "$root/build"
 rm -f "$root/build/sectionist-${version}.zip"
 (cd "$stage" && zip -qr "$root/build/sectionist-${version}.zip" sectionist)
 echo "Built build/sectionist-${version}.zip"
+
+# Restore the dev autoload (Sectionist\Tests\) that --no-dev removed, so tests keep working.
+(cd "$plugin" && composer install --no-interaction --quiet)
