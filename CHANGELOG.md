@@ -1,3 +1,11 @@
+# [0.3.0](https://github.com/sectionist/sectionist-wp/compare/v0.2.0...v0.3.0) (2026-10-23)
+
+
+### Features
+
+* **theme:** add php native Sectionist Starter theme with core templates, assets, and structure ([f4ece36](https://github.com/sectionist/sectionist-wp/commit/f4ece366d3d0b2346fe4a936ce441ca717801a0e))
+* **theme:** add sectionist-starter theme and theme-owned editor styles ([2a6a89e](https://github.com/sectionist/sectionist-wp/commit/2a6a89eee005aebfec19464794040d882c127102))
+
 # [0.2.0](https://github.com/sectionist/sectionist-wp/compare/v0.1.1...v0.2.0) (2026-10-23)
 
 
