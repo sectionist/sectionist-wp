@@ -19,18 +19,18 @@ final class ViewResolverTest extends TestCase
         WpState::reset();
         $this->base = sys_get_temp_dir().'/sectionist-'.uniqid();
         foreach (['theme', 'plugin'] as $dir) {
-            mkdir($this->base.'/'.$dir.'/sectionist', 0777, true);
+            mkdir($this->base.'/'.$dir.'/sections', 0777, true);
         }
         WpState::$themeDir = $this->base.'/theme';
     }
 
     protected function tearDown(): void
     {
-        foreach (glob($this->base.'/*/sectionist/*.php') ?: [] as $file) {
+        foreach (glob($this->base.'/*/sections/*.php') ?: [] as $file) {
             unlink($file);
         }
         foreach (['theme', 'plugin'] as $dir) {
-            rmdir($this->base.'/'.$dir.'/sectionist');
+            rmdir($this->base.'/'.$dir.'/sections');
             rmdir($this->base.'/'.$dir);
         }
         rmdir($this->base);
@@ -38,7 +38,7 @@ final class ViewResolverTest extends TestCase
 
     private function view(string $root, string $type): string
     {
-        $file = $this->base.'/'.$root.'/sectionist/'.$type.'.php';
+        $file = $this->base.'/'.$root.'/sections/'.$type.'.php';
         file_put_contents($file, '<?php');
 
         return $file;
@@ -48,8 +48,8 @@ final class ViewResolverTest extends TestCase
     {
         // The plugin fallback lives in "views/"; reuse the temp dir layout for it.
         return new ViewResolver([
-            $this->base.'/theme/sectionist',
-            $this->base.'/plugin/sectionist',
+            $this->base.'/theme/sections',
+            $this->base.'/plugin/sections',
         ]);
     }
 

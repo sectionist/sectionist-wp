@@ -6,7 +6,7 @@ namespace Sectionist\Render;
 
 final class ViewResolver
 {
-    public const THEME_DIRECTORY = 'sectionist';
+    public const THEME_DIRECTORY = 'sections';
 
     /**
      * @param  list<string>  $roots  Directories searched in order, first match wins.
