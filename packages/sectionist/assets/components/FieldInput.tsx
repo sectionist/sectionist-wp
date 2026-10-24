@@ -1,4 +1,5 @@
 import type { FieldDef, Preview } from '../types';
+import { ButtonGroup } from './ButtonGroup';
 import { CtaField } from './CtaField';
 import { Field, Select, TextInput } from './Field';
 import { ImageField } from './ImageField';
@@ -41,13 +42,7 @@ export function FieldInput(props: {
       {field.kind === 'richtext' ? (
         <RichTextEditor id={id} value={value} labels={props.labels} onInput={onInput} />
       ) : field.kind === 'choice' ? (
-        <div class="sectionist-btn-group" role="group" aria-label={field.label}>
-          {field.options.map((o) => (
-            <button type="button" class={'button' + (o.value === value ? ' is-active' : '')} aria-pressed={o.value === value} onClick={() => onInput(o.value)}>
-              {o.label}
-            </button>
-          ))}
-        </div>
+        <ButtonGroup options={field.options} value={value} label={field.label} onInput={onInput} />
       ) : field.kind === 'select' ? (
         <Select id={id} value={value} options={field.options} onInput={onInput} />
       ) : (

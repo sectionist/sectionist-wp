@@ -70,6 +70,7 @@ Current state:
 - Starter themes are plain, standard WordPress themes: theme bootstrap (supports, menus, assets, template hierarchy) lives directly in `functions.php`. No `inc/`, `setup.php` or similar split files. Keep it simple, do not reinvent the wheel.
 - No commits, pushes or Packagist actions without explicit instruction. Commit messages in Conventional Commits style (`feat(scope): ...`).
 - When changing code, immediately remove anything it makes unused.
+- UI elements used in at least two places live as a component in `packages/sectionist/assets/components/`. Before writing new UI markup, check the existing components there (e.g. `ButtonGroup`, `Field`, `ImageField`, `CtaField`, `MediaField`) and reuse them. Never copy markup.
 - Only state what is true in the repo; do not invent.
 
 ## Roadmap

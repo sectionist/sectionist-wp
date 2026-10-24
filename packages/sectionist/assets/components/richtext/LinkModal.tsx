@@ -1,4 +1,5 @@
 import { useState } from 'preact/hooks';
+import { ButtonGroup } from '../ButtonGroup';
 import { Modal } from '../Modal';
 import { LINK_TYPES, buildHref, splitHref, type LinkType } from './extensions';
 
@@ -49,13 +50,7 @@ export function LinkModal(props: {
         <div class="sectionist-modal__body">
           <div class="sectionist-field">
             <span class="sectionist-field__label" id="sectionist-link-type">{t.rtLinkType}</span>
-            <div class="sectionist-btn-group" role="group" aria-labelledby="sectionist-link-type">
-              {LINK_TYPES.map((l) => (
-                <button type="button" class={'button' + (l === type ? ' is-active' : '')} aria-pressed={l === type} onClick={() => setType(l)}>
-                  {l}
-                </button>
-              ))}
-            </div>
+            <ButtonGroup options={LINK_TYPES.map((l) => ({ value: l, label: l }))} value={type} labelledBy="sectionist-link-type" onInput={(l) => setType(l as LinkType)} />
           </div>
           <div class="sectionist-field">
             <label for="sectionist-link-address">{t.rtLinkAddress}</label>

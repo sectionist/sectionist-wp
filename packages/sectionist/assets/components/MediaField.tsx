@@ -1,3 +1,4 @@
+import { ButtonGroup } from './ButtonGroup';
 import { Checkbox, Field } from './Field';
 import { ImageField } from './ImageField';
 
@@ -23,13 +24,12 @@ export function MediaField(props: { value: unknown; labels: Record<string, strin
         <div class="sectionist-media-field__grid">
           <ImageField value={Number(v.id) || 0} labels={t} onInput={(imageId) => set({ id: imageId })} />
           <Field label={t.mediaPosition}>
-            <div class="sectionist-btn-group" role="group" aria-label={t.mediaPosition}>
-              {POSITIONS.map((p) => (
-                <button type="button" class={'button' + (p === v.position ? ' is-active' : '')} aria-pressed={p === v.position} onClick={() => set({ position: p })}>
-                  {t['media' + p[0].toUpperCase() + p.slice(1)]}
-                </button>
-              ))}
-            </div>
+            <ButtonGroup
+              options={POSITIONS.map((p) => ({ value: p, label: t['media' + p[0].toUpperCase() + p.slice(1)] }))}
+              value={v.position}
+              label={t.mediaPosition}
+              onInput={(position) => set({ position: position as MediaValue['position'] })}
+            />
           </Field>
         </div>
       )}
