@@ -17,11 +17,11 @@ final class Backdrop
             'background' => __('Color', 'sectionist'),
         ];
         if (! $withImage) {
-            return [Field::choice('media', __('Backdrop', 'sectionist'), $options, 'none')];
+            return [Field::choice('media', __('Backdrop', 'sectionist'), $options, 'none')->panel()];
         }
 
         return [
-            Field::choice('media', __('Backdrop', 'sectionist'), $options + ['image' => __('Image', 'sectionist')], 'none'),
+            Field::choice('media', __('Backdrop', 'sectionist'), $options + ['image' => __('Image', 'sectionist')], 'none')->panel(),
             Field::image('backdrop', __('Image', 'sectionist'))->showIf('media', 'image'),
         ];
     }

@@ -1,9 +1,8 @@
 import type { Background, FieldDef, Preview, Section, TypeDef } from '../types';
-import { ButtonGroup } from './ButtonGroup';
+import { BackdropPanel } from './BackdropPanel';
 import { Collapsible } from './Collapsible';
 import { FieldInput } from './FieldInput';
 import { Icon, IconButton } from './Icon';
-import { Panel } from './Panel';
 
 const HEADING = /<h([1-6])[^>]*>([\s\S]*?)<\/h\1>/i;
 
@@ -60,37 +59,12 @@ export function SectionCard(props: {
   const { title, level } = sectionSummary(type, section);
   const active = section.active !== false;
   const background = section.background ?? '';
-  const colorBackdrop = (section.data.media ?? 'none') === 'background';
-  const swatches =
-    props.backgrounds.length > 0 && (
-        <div class="sectionist-field">
-          <span class="sectionist-field__label">{t.background}</span>
-          <div class="sectionist-swatches" role="radiogroup" aria-label={t.background}>
-            {[{ key: '', label: t.backgroundNone }, ...props.backgrounds].map((bg) => (
-              <button
-                type="button"
-                role="radio"
-                aria-checked={background === bg.key}
-                class={'sectionist-swatch' + (background === bg.key ? ' is-active' : '')}
-                title={bg.label}
-                onClick={() => props.onBackground(bg.key)}
-              >
-                <span class={'sectionist-swatch__color' + (bg.key ? ' section--bg-' + bg.key : '')} />
-                {bg.label}
-              </button>
-            ))}
-          </div>
-        </div>
-    );
   const fields = type?.fields ?? [];
-  const isController = (field: FieldDef) =>
-    (field.kind === 'choice' && field.options.some((o) => o.value === 'none')) || fields.some((other) => other.showIf?.field === field.name);
   const isVisible = (field: FieldDef) => !field.showIf || String(section.data[field.showIf.field] ?? '') === field.showIf.value;
   const content = fields.filter((field) => field.kind === 'richtext');
   const options = fields.filter((field) => field.kind !== 'richtext');
-  const isPanel = (field: FieldDef) => !field.showIf && (isController(field) || field.kind === 'media' || (field.kind === 'cta' && !field.required));
-  const loose = options.filter((field) => !field.showIf && !isPanel(field));
-  const panels = options.filter(isPanel).sort((a, b) => a.label.localeCompare(b.label));
+  const loose = options.filter((field) => !field.showIf && !field.panel);
+  const panels = options.filter((field) => field.panel).sort((a, b) => a.label.localeCompare(b.label));
   const renderField = (field: FieldDef) => (
     <FieldInput
       id={`sectionist-${section.id}-${field.name}`}
@@ -147,32 +121,22 @@ export function SectionCard(props: {
         <>
           {content.map(renderField)}
           {loose.map(renderField)}
-          {panels.map((controller) => {
-            if (!isController(controller)) return renderField(controller);
-            const choices = controller.kind === 'choice' ? controller.options.filter((o) => o.value !== 'none') : [];
-            const current = String(section.data[controller.name] ?? 'none');
-            const on = current !== 'none';
-            const dependents = options.filter((field) => field.showIf?.field === controller.name && isVisible(field));
-            const single = choices.length <= 1 && dependents.length === 0 && props.backgrounds.length <= 1;
-            const only = props.backgrounds[0]?.key ?? '';
+          {panels.map((panel) => {
+            if (panel.kind !== 'choice') return renderField(panel);
+            const dependents = options.filter((field) => field.showIf?.field === panel.name);
             return (
-              <Panel
-                title={controller.label}
-                toggleLabel={t.toggle}
-                active={on}
-                headerOnly={single}
-                activeLabel={`${t.toggleActive} (${on ? t.active : t.inactive})`}
-                onActive={(value) => {
-                  props.onUpdate(controller.name, value ? (choices[0]?.value ?? 'none') : 'none');
-                  if (single && choices[0]?.value === 'background') props.onBackground(value ? only : '');
-                }}
+              <BackdropPanel
+                field={panel}
+                value={String(section.data[panel.name] ?? 'none')}
+                background={background}
+                backgrounds={props.backgrounds}
+                labels={t}
+                hasDependents={dependents.length > 0}
+                onValue={(value) => props.onUpdate(panel.name, value)}
+                onBackground={props.onBackground}
               >
-                {choices.length > 1 && (
-                  <ButtonGroup options={choices} value={current} label={controller.label} onInput={(value) => props.onUpdate(controller.name, value)} />
-                )}
-                {colorBackdrop && swatches}
-                {dependents.map(renderField)}
-              </Panel>
+                {dependents.filter(isVisible).map(renderField)}
+              </BackdropPanel>
             );
           })}
         </>

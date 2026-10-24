@@ -63,12 +63,19 @@ final readonly class Field
         public string|int|array $default = '',
         public ?array $showIf = null,
         public bool $required = false,
+        public bool $panel = false,
     ) {}
 
     /** Show this field in the editor only while another field of the same section has the given value. */
     public function showIf(string $field, string $value): self
     {
-        return new self($this->kind, $this->name, $this->label, $this->options, $this->default, ['field' => $field, 'value' => $value], $this->required);
+        return new self($this->kind, $this->name, $this->label, $this->options, $this->default, ['field' => $field, 'value' => $value], $this->required, $this->panel);
+    }
+
+    /** Render this field in the editor as an optional, collapsible panel (switched on and off in its header). */
+    public function panel(): self
+    {
+        return new self($this->kind, $this->name, $this->label, $this->options, $this->default, $this->showIf, $this->required, true);
     }
 
     /**
@@ -116,7 +123,7 @@ final readonly class Field
     /** @param  bool  $required  always active, no switch in the editor (dedicated CTA section) */
     public static function cta(string $name, string $label, bool $required = false): self
     {
-        return new self(self::CTA, $name, $label, [], $required ? [...Cta::defaults(), 'active' => true] : Cta::defaults(), null, $required);
+        return new self(self::CTA, $name, $label, [], $required ? [...Cta::defaults(), 'active' => true] : Cta::defaults(), null, $required, ! $required);
     }
 
     /** Media library image, stored as attachment ID (0 = none). */
@@ -128,7 +135,7 @@ final readonly class Field
     /** Optional image with position, switchable like the call to action. */
     public static function media(string $name, string $label): self
     {
-        return new self(self::MEDIA, $name, $label, [], Media::defaults());
+        return new self(self::MEDIA, $name, $label, [], Media::defaults(), null, false, true);
     }
 
     /**
