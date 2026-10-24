@@ -1,3 +1,21 @@
+# [0.5.0](https://github.com/sectionist/sectionist-wp/compare/v0.4.0...v0.5.0) (2026-10-24)
+
+
+### Bug Fixes
+
+* **plugin:** section title handling for richtext fields ([f479367](https://github.com/sectionist/sectionist-wp/commit/f479367ca9207b7e9b71adb09ffe766342462d16))
+
+
+### Features
+
+* **plugin:** add BackdropPanel component and integrate collapsible panels for media fields ([d7992a9](https://github.com/sectionist/sectionist-wp/commit/d7992a922700eba73601c3039d625a3e197f21a2))
+* **plugin:** add CTA section type with plugin and theme views, editor support, and tests ([34adc2d](https://github.com/sectionist/sectionist-wp/commit/34adc2d01352b223cb4513d29e63543f0e2dee6d))
+* **plugin:** add JSON modal for viewing and copying current section state ([d3969d7](https://github.com/sectionist/sectionist-wp/commit/d3969d777a80a461e8b04d8188aa7c485da34e66))
+* **plugin:** add reusable Media field with support for toggle, position, and rendering ([0a561c3](https://github.com/sectionist/sectionist-wp/commit/0a561c3f3fcc4d02d361d439dd58b45dbcb15454))
+* **plugin:** add reusable Panel component with toggle and active state ([385473a](https://github.com/sectionist/sectionist-wp/commit/385473a2d14e64525ca9a782a1b7e89b5197b226))
+* **plugin:** introduce reusable Backdrop class with field integration across sections ([5affcd6](https://github.com/sectionist/sectionist-wp/commit/5affcd61dcdaada2a7723b714a473c862d685dee))
+* **plugin:** pin Hero sections and disable drag/move actions for pinned items ([473182a](https://github.com/sectionist/sectionist-wp/commit/473182aa0175d8532f6e4ca0fb75bfe2bb47bece))
+
 # [0.4.0](https://github.com/sectionist/sectionist-wp/compare/v0.3.0...v0.4.0) (2026-10-24)
 
 

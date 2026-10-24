@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Sectionist
  * Description: Structured section editor for WordPress.
- * Version: 0.4.0
+ * Version: 0.5.0
  * Requires at least: 7.0
  * Requires PHP: 8.3
  * License: GPL-3.0-or-later
