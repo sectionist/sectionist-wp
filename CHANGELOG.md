@@ -1,3 +1,10 @@
+# [0.4.0](https://github.com/sectionist/sectionist-wp/compare/v0.3.0...v0.4.0) (2026-10-24)
+
+
+### Features
+
+* **plugin:** add Hero section type with plugin & theme views, editor support, and tests ([19c88d5](https://github.com/sectionist/sectionist-wp/commit/19c88d5e70014729ea09df289b7eb0e50fbde8be))
+
 # [0.3.0](https://github.com/sectionist/sectionist-wp/compare/v0.2.0...v0.3.0) (2026-10-23)
 
 
