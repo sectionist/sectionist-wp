@@ -4,6 +4,7 @@ import { isPinned, isPinnedEnd, isPinnedStart, pinEdges, reducer } from './state
 import type { Config, TypeDef } from './types';
 import { ConfirmModal } from './components/ConfirmModal';
 import { IconButton } from './components/Icon';
+import { JsonModal } from './components/JsonModal';
 import { Preview } from './components/Preview';
 import { SectionCard } from './components/SectionCard';
 import { Tabs } from './components/Tabs';
@@ -20,6 +21,7 @@ function App({ config }: { config: Config }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [removeId, setRemoveId] = useState('');
   const [leaveUrl, setLeaveUrl] = useState('');
+  const [jsonOpen, setJsonOpen] = useState(false);
   const [backdropIds, setBackdropIds] = useState<string[]>([]);
   const t = config.i18n;
   const listRef = useFlip(sections.map((s) => s.id).join(','));
@@ -118,14 +120,17 @@ function App({ config }: { config: Config }) {
         active={tab}
         onChange={setTab}
         actions={
-          tab === 'sections' && (
-            <IconButton
-              icon={allClosed ? 'arrow-down-alt2' : 'arrow-up-alt2'}
-              label={allClosed ? t.expandAll : t.closeAll}
-              disabled={sections.length === 0}
-              onClick={toggleAll}
-            />
-          )
+          <>
+            <IconButton icon="editor-code" label={t.showJson} onClick={() => setJsonOpen(true)} />
+            {tab === 'sections' && (
+              <IconButton
+                icon={allClosed ? 'arrow-down-alt2' : 'arrow-up-alt2'}
+                label={allClosed ? t.expandAll : t.closeAll}
+                disabled={sections.length === 0}
+                onClick={toggleAll}
+              />
+            )}
+          </>
         }
       >
         {tab === 'preview' ? (
@@ -191,6 +196,16 @@ function App({ config }: { config: Config }) {
           </>
         )}
       </Tabs>
+      {jsonOpen && (
+        <JsonModal
+          title={t.jsonTitle}
+          json={JSON.stringify({ sections }, null, 2)}
+          copyLabel={t.jsonCopy}
+          copiedLabel={t.jsonCopied}
+          closeLabel={t.close}
+          onClose={() => setJsonOpen(false)}
+        />
+      )}
       {backdropIds.length > 0 && (
         <ConfirmModal
           title={t.backdropTitle}
