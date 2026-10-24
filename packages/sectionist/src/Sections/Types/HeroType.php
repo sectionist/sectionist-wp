@@ -32,13 +32,13 @@ final class HeroType extends AbstractSectionType
     public function fields(): array
     {
         return [
+            Field::richtext('body', __('Content', 'sectionist')),
             Field::choice('media', __('Hero backdrop', 'sectionist'), [
                 'none' => __('None', 'sectionist'),
                 'background' => __('Color', 'sectionist'),
                 'image' => __('Image', 'sectionist'),
             ], 'none'),
             Field::image('image', __('Image', 'sectionist'))->showIf('media', 'image'),
-            Field::richtext('body', __('Content', 'sectionist')),
             Field::cta('cta', __('Call to action', 'sectionist')),
         ];
     }

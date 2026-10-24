@@ -4,6 +4,7 @@ import { CtaField } from './CtaField';
 import { Field, Select, TextInput } from './Field';
 import { ImageField } from './ImageField';
 import { MediaField } from './MediaField';
+import { Panel } from './Panel';
 import { RichTextEditor } from './richtext/RichTextEditor';
 
 export function FieldInput(props: {
@@ -15,18 +16,29 @@ export function FieldInput(props: {
   onInput: (v: unknown) => void;
 }) {
   const { id, field, onInput } = props;
+  const t = props.labels;
+  const toggleable = field.kind === 'cta' || field.kind === 'media';
+  const object = toggleable ? ((props.value as { active?: boolean } | null) ?? {}) : {};
+  const active = Boolean((object as { active?: boolean }).active);
+  const panel = {
+    title: field.label,
+    toggleLabel: t.toggle,
+    active,
+    activeLabel: `${t.toggleActive} (${active ? t.active : t.inactive})`,
+    onActive: (value: boolean) => onInput({ ...object, active: value }),
+  };
   if (field.kind === 'cta') {
     return (
-      <Field label={field.label}>
+      <Panel {...panel}>
         <CtaField id={id} value={props.value} rest={props.rest} labels={props.labels} onInput={onInput} />
-      </Field>
+      </Panel>
     );
   }
   if (field.kind === 'media') {
     return (
-      <Field label={field.label}>
+      <Panel {...panel}>
         <MediaField value={props.value} labels={props.labels} onInput={onInput} />
-      </Field>
+      </Panel>
     );
   }
   if (field.kind === 'image') {

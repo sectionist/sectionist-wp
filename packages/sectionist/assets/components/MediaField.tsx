@@ -1,5 +1,5 @@
 import { ButtonGroup } from './ButtonGroup';
-import { Checkbox, Field } from './Field';
+import { Field } from './Field';
 import { ImageField } from './ImageField';
 
 export interface MediaValue {
@@ -19,20 +19,15 @@ export function MediaField(props: { value: unknown; labels: Record<string, strin
 
   return (
     <div class="sectionist-media-field">
-      <Checkbox class="sectionist-media-field__toggle" checked={v.active} label={t.mediaActive} onInput={(active) => set({ active })} />
-      {v.active && (
-        <div class="sectionist-media-field__grid">
-          <ImageField value={Number(v.id) || 0} labels={t} onInput={(imageId) => set({ id: imageId })} />
-          <Field label={t.mediaPosition}>
-            <ButtonGroup
-              options={POSITIONS.map((p) => ({ value: p, label: t['media' + p[0].toUpperCase() + p.slice(1)] }))}
-              value={v.position}
-              label={t.mediaPosition}
-              onInput={(position) => set({ position: position as MediaValue['position'] })}
-            />
-          </Field>
-        </div>
-      )}
+      <ImageField value={Number(v.id) || 0} labels={t} onInput={(imageId) => set({ id: imageId })} />
+      <Field label={t.mediaPosition}>
+        <ButtonGroup
+          options={POSITIONS.map((p) => ({ value: p, label: t['media' + p[0].toUpperCase() + p.slice(1)] }))}
+          value={v.position}
+          label={t.mediaPosition}
+          onInput={(position) => set({ position: position as MediaValue['position'] })}
+        />
+      </Field>
     </div>
   );
 }

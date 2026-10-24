@@ -202,14 +202,20 @@
 [class*="section--bg-"].sectionist-swatch__color { background-image: none; }
 .sectionist-swatch__color { width: 16px; height: 16px; border-radius: 50%; border: 1px solid var(--sx-border); background: repeating-linear-gradient(45deg, #fff, #fff 3px, #e5e5e5 3px, #e5e5e5 6px); }
 
-.sectionist-cta-field { display: grid; gap: 10px; padding: 12px; border: 1px solid var(--sx-border); border-radius: var(--sx-radius-sm); background: rgb(0 0 0 / 5%); }
+.sectionist-panel { margin-bottom: 12px; border: 1px solid var(--sx-border); border-radius: var(--sx-radius-sm); background: rgb(0 0 0 / 5%); }
+.sectionist-panel__header { display: flex; align-items: center; gap: 4px; padding: 4px 8px 4px 12px; cursor: pointer; }
+.sectionist-panel__title { flex: 1; min-width: 0; font-weight: 600; }
+.sectionist-panel.is-inactive .sectionist-panel__title { color: var(--sx-muted); }
+.sectionist-panel__body { padding: 0 12px 12px; }
+.sectionist-panel__body[hidden] { display: none; }
+.sectionist-panel__body > .sectionist-field:last-child { margin-bottom: 0; }
+
+.sectionist-cta-field { display: grid; gap: 10px; }
 .sectionist-cta-field__toggle { display: flex; align-items: center; gap: 6px; font-weight: 600; }
 .sectionist-cta-field__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; }
 .sectionist-cta-field__newtab { grid-column: 1 / -1; font-weight: 400; }
 
-.sectionist-media-field { display: grid; gap: 10px; padding: 12px; border: 1px solid var(--sx-border); border-radius: var(--sx-radius-sm); background: rgb(0 0 0 / 5%); }
-.sectionist-media-field__toggle { display: flex; align-items: center; gap: 6px; font-weight: 600; }
-.sectionist-media-field__grid { display: grid; gap: 10px; }
+.sectionist-media-field { display: grid; gap: 10px; }
 
 .sectionist-input-group { display: flex; align-items: stretch; border: 1px solid var(--sx-border); border-radius: var(--sx-radius-sm); background: var(--sx-bg); overflow: hidden; }
 .sectionist-input-group:focus-within { border-color: var(--sx-accent); box-shadow: var(--sx-ring); }

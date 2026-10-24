@@ -43,9 +43,7 @@ export function CtaField(props: { id: string; value: unknown; rest: Preview; lab
 
   return (
     <div class="sectionist-cta-field">
-      <Checkbox class="sectionist-cta-field__toggle" checked={v.active} label={t.ctaActive} onInput={(active) => set({ active })} />
-      {v.active && (
-        <div class="sectionist-cta-field__grid">
+      <div class="sectionist-cta-field__grid">
           <Field id={`${id}-style`} label={t.ctaStyle}>
             <Select
               id={`${id}-style`}
@@ -72,8 +70,7 @@ export function CtaField(props: { id: string; value: unknown; rest: Preview; lab
             <TextInput id={`${id}-url`} placeholder="https://… / /offer" value={v.url} onInput={(url) => set({ url })} />
           </Field>
           <Checkbox class="sectionist-cta-field__toggle sectionist-cta-field__newtab" checked={v.new_tab} label={t.ctaNewTab} onInput={(new_tab) => set({ new_tab })} />
-        </div>
-      )}
+      </div>
     </div>
   );
 }

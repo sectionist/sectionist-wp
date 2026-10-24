@@ -1,7 +1,9 @@
 import type { Background, FieldDef, Preview, Section, TypeDef } from '../types';
+import { ButtonGroup } from './ButtonGroup';
 import { Collapsible } from './Collapsible';
 import { FieldInput } from './FieldInput';
 import { Icon, IconButton } from './Icon';
+import { Panel } from './Panel';
 
 const HEADING = /<h([1-6])[^>]*>([\s\S]*?)<\/h\1>/i;
 
@@ -78,7 +80,11 @@ export function SectionCard(props: {
           </div>
         </div>
     );
-  const isController = (field: FieldDef) => (type?.fields ?? []).some((other) => other.showIf?.field === field.name);
+  const fields = type?.fields ?? [];
+  const isController = (field: FieldDef) => fields.some((other) => other.showIf?.field === field.name);
+  const isVisible = (field: FieldDef) => !field.showIf || String(section.data[field.showIf.field] ?? '') === field.showIf.value;
+  const content = fields.filter((field) => field.kind === 'richtext');
+  const options = fields.filter((field) => field.kind !== 'richtext');
   const renderField = (field: FieldDef) => (
     <FieldInput
       id={`sectionist-${section.id}-${field.name}`}
@@ -130,12 +136,26 @@ export function SectionCard(props: {
     >
       {type ? (
         <>
-          {type.fields.filter(isController).map(renderField)}
-          {colorBackdrop && swatches}
-          {type.fields
-            .filter((field) => !isController(field))
-            .filter((field) => !field.showIf || String(section.data[field.showIf.field] ?? '') === field.showIf.value)
-            .map(renderField)}
+          {content.map(renderField)}
+          {options.filter(isController).map((controller) => {
+            const choices = controller.kind === 'choice' ? controller.options.filter((o) => o.value !== 'none') : [];
+            const current = String(section.data[controller.name] ?? 'none');
+            const on = current !== 'none';
+            return (
+              <Panel
+                title={controller.label}
+                toggleLabel={t.toggle}
+                active={on}
+                activeLabel={`${t.toggleActive} (${on ? t.active : t.inactive})`}
+                onActive={(value) => props.onUpdate(controller.name, value ? (choices[0]?.value ?? 'none') : 'none')}
+              >
+                <ButtonGroup options={choices} value={current} label={controller.label} onInput={(value) => props.onUpdate(controller.name, value)} />
+                {colorBackdrop && swatches}
+                {options.filter((field) => field.showIf?.field === controller.name && isVisible(field)).map(renderField)}
+              </Panel>
+            );
+          })}
+          {options.filter((field) => !isController(field) && !field.showIf).map(renderField)}
         </>
       ) : (
         <p class="sectionist-note">{t.unknownType}</p>
