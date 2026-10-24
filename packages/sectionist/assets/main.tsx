@@ -20,6 +20,7 @@ function App({ config }: { config: Config }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [removeId, setRemoveId] = useState('');
   const [leaveUrl, setLeaveUrl] = useState('');
+  const [backdropIds, setBackdropIds] = useState<string[]>([]);
   const t = config.i18n;
   const listRef = useFlip(sections.map((s) => s.id).join(','));
   const drag = useDragReorder((id, before) => dispatch({ kind: 'reorder', id, before }));
@@ -36,10 +37,30 @@ function App({ config }: { config: Config }) {
   const initial = useRef(JSON.stringify({ sections: config.sections }));
   const dirty = useRef(false);
   const saving = useRef(false);
+  const sectionsRef = useRef(sections);
+  sectionsRef.current = sections;
+  const resubmit = useRef<HTMLElement | null | undefined>(undefined);
+  const hasBackgrounds = (config.backgrounds ?? []).length > 0;
+  const unsetBackdrops = (list: typeof sections) =>
+    list
+      .filter((s) => {
+        if (s.type !== 'hero') return false;
+        if (s.data.media === 'image') return !Number(s.data.image);
+        return s.data.media === 'background' && hasBackgrounds && !s.background;
+      })
+      .map((s) => s.id);
 
   useEffect(() => {
     const form = document.getElementById('post');
-    const onSubmit = () => {
+    const onSubmit = (e: Event) => {
+      const ids = unsetBackdrops(sectionsRef.current);
+      if (ids.length > 0) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        resubmit.current = (e as SubmitEvent).submitter;
+        setBackdropIds(ids);
+        return;
+      }
       saving.current = true;
     };
     const onUnload = (e: BeforeUnloadEvent) => {
@@ -58,12 +79,12 @@ function App({ config }: { config: Config }) {
       e.preventDefault();
       setLeaveUrl(url.href);
     };
-    form?.addEventListener('submit', onSubmit);
+    form?.addEventListener('submit', onSubmit, true);
     window.addEventListener('beforeunload', onUnload);
     document.addEventListener('click', onClick, true);
     return () => {
       document.removeEventListener('click', onClick, true);
-      form?.removeEventListener('submit', onSubmit);
+      form?.removeEventListener('submit', onSubmit, true);
       window.removeEventListener('beforeunload', onUnload);
     };
   }, []);
@@ -77,6 +98,11 @@ function App({ config }: { config: Config }) {
       setError('');
     } catch {
       setError(t.saveError);
+    }
+    if (resubmit.current !== undefined && backdropIds.length === 0) {
+      const submitter = resubmit.current;
+      resubmit.current = undefined;
+      (document.getElementById('post') as HTMLFormElement | null)?.requestSubmit(submitter as HTMLElement | null);
     }
   }, [sections]);
 
@@ -164,6 +190,22 @@ function App({ config }: { config: Config }) {
           </>
         )}
       </Tabs>
+      {backdropIds.length > 0 && (
+        <ConfirmModal
+          title={t.backdropTitle}
+          text={t.backdropText}
+          confirmLabel={t.backdropConfirm}
+          cancelLabel={t.cancel}
+          onCancel={() => {
+            resubmit.current = undefined;
+            setBackdropIds([]);
+          }}
+          onConfirm={() => {
+            backdropIds.forEach((id) => dispatch({ kind: 'update', id, field: 'media', value: 'none' }));
+            setBackdropIds([]);
+          }}
+        />
+      )}
       {leaveUrl && (
         <ConfirmModal
           title={t.unsavedTitle}

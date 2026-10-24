@@ -218,3 +218,7 @@
 .sectionist-btn-group .button:first-child { border-radius: var(--sx-radius-sm) 0 0 var(--sx-radius-sm); margin-left: 0; }
 .sectionist-btn-group .button:last-child { border-radius: 0 var(--sx-radius-sm) var(--sx-radius-sm) 0; }
 .sectionist-btn-group .button.is-active { background: var(--sx-accent); border-color: var(--sx-accent); color: #fff; z-index: 1; }
+
+.sectionist-image-field { display: grid; gap: 8px; justify-items: start; }
+.sectionist-image-field__preview { max-width: 240px; height: auto; border: 1px solid var(--sx-border); border-radius: var(--sx-radius-sm); }
+.sectionist-image-field__actions { display: flex; align-items: center; gap: 12px; }

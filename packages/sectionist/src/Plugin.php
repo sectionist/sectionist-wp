@@ -12,6 +12,7 @@ use Sectionist\Render\Renderer;
 use Sectionist\Render\ViewResolver;
 use Sectionist\Rest\PreviewController;
 use Sectionist\Sections\Registry;
+use Sectionist\Sections\Types\HeroType;
 use Sectionist\Sections\Types\TextType;
 use Sectionist\Storage\Document;
 use Sectionist\Storage\PostContentRepository;
@@ -24,6 +25,7 @@ final class Plugin
     {
         add_action(Registry::HOOK, static function (Registry $registry): void {
             $registry->register(new TextType);
+            $registry->register(new HeroType);
         });
 
         $registry = new Registry;

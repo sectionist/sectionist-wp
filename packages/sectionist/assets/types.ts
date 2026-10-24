@@ -1,8 +1,9 @@
 export interface FieldDef {
-  kind: 'text' | 'richtext' | 'select' | 'cta';
+  kind: 'text' | 'richtext' | 'select' | 'choice' | 'cta' | 'image';
   name: string;
   label: string;
-  options: string[];
+  options: { value: string; label: string }[];
+  showIf: { field: string; value: string } | null;
 }
 
 export interface TypeDef {

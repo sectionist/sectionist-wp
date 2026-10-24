@@ -30,6 +30,7 @@ final class Assets
             return;
         }
 
+        wp_enqueue_media();
         wp_enqueue_script('sectionist-editor', $this->url(self::SCRIPT), [], (string) filemtime($this->path(self::SCRIPT)), true);
         if (is_file($this->path(self::STYLE))) {
             wp_enqueue_style('sectionist-editor', $this->url(self::STYLE), [], (string) filemtime($this->path(self::STYLE)));

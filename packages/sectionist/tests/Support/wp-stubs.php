@@ -381,3 +381,21 @@ if (! function_exists('get_the_ID')) {
         return WpState::$currentPostId ?? false;
     }
 }
+
+if (! function_exists('wp_attachment_is_image')) {
+    function wp_attachment_is_image(int $id): bool
+    {
+        return in_array($id, $GLOBALS['sectionist_test_images'] ?? [], true);
+    }
+}
+
+if (! function_exists('wp_get_attachment_image')) {
+    function wp_get_attachment_image(int $id, string $size = 'full'): string
+    {
+        return '<img src="https://example.test/img-'.$id.'.jpg" alt="">';
+    }
+}
+
+if (! function_exists('wp_enqueue_media')) {
+    function wp_enqueue_media(): void {}
+}

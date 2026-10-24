@@ -12,7 +12,11 @@ final readonly class Field
 
     public const SELECT = 'select';
 
+    public const CHOICE = 'choice';
+
     public const CTA = 'cta';
+
+    public const IMAGE = 'image';
 
     /** Whitelist for rich-text fields. No inline styles, no font information. */
     public const ALLOWED_HTML = [
@@ -45,16 +49,38 @@ final readonly class Field
     public const LINK_PROTOCOLS = ['https', 'mailto', 'tel'];
 
     /**
-     * @param  list<string>  $options  allowed values (select only)
-     * @param  string|array<string, mixed>  $default
+     * @param  array<array-key, string>  $options  allowed values (select: list, choice: value => label)
+     * @param  string|int|array<string, mixed>  $default
+     * @param  array{field: string, value: string}|null  $showIf  editor-only visibility condition
      */
     private function __construct(
         public string $kind,
         public string $name,
         public string $label,
         public array $options = [],
-        public string|array $default = '',
+        public string|int|array $default = '',
+        public ?array $showIf = null,
     ) {}
+
+    /** Show this field in the editor only while another field of the same section has the given value. */
+    public function showIf(string $field, string $value): self
+    {
+        return new self($this->kind, $this->name, $this->label, $this->options, $this->default, ['field' => $field, 'value' => $value]);
+    }
+
+    /**
+     * @return list<array{value: string, label: string}>
+     */
+    public function optionList(): array
+    {
+        $list = [];
+        foreach ($this->options as $value => $label) {
+            $value = $this->kind === self::CHOICE ? (string) $value : $label;
+            $list[] = ['value' => $value, 'label' => $label];
+        }
+
+        return $list;
+    }
 
     public static function text(string $name, string $label, string $default = ''): self
     {
@@ -74,18 +100,40 @@ final readonly class Field
         return new self(self::SELECT, $name, $label, $options, $default);
     }
 
+    /**
+     * Button group for a few options (preferred over a select).
+     *
+     * @param  array<string, string>  $choices  value => label
+     */
+    public static function choice(string $name, string $label, array $choices, string $default = ''): self
+    {
+        return new self(self::CHOICE, $name, $label, $choices, $default);
+    }
+
     public static function cta(string $name, string $label): self
     {
         return new self(self::CTA, $name, $label, [], Cta::defaults());
     }
 
+    /** Media library image, stored as attachment ID (0 = none). */
+    public static function image(string $name, string $label): self
+    {
+        return new self(self::IMAGE, $name, $label, [], 0);
+    }
+
     /**
-     * @return string|array<string, mixed>
+     * @return string|int|array<string, mixed>
      */
-    public function sanitize(mixed $value): string|array
+    public function sanitize(mixed $value): string|int|array
     {
         if ($this->kind === self::CTA) {
             return Cta::sanitize($value);
+        }
+
+        if ($this->kind === self::IMAGE) {
+            $id = is_int($value) || is_string($value) ? absint($value) : 0;
+
+            return $id > 0 && wp_attachment_is_image($id) ? $id : 0;
         }
 
         if (! is_string($value)) {
@@ -95,6 +143,7 @@ final readonly class Field
         return match ($this->kind) {
             self::TEXT => sanitize_text_field($value),
             self::RICHTEXT => $this->filterClasses(wp_kses($value, self::ALLOWED_HTML, self::LINK_PROTOCOLS)),
+            self::CHOICE => array_key_exists($value, $this->options) ? $value : $this->default,
             self::SELECT => in_array($value, $this->options, true) ? $value : $this->default,
             default => $this->default,
         };

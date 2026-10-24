@@ -1,4 +1,4 @@
-import type { Background, Preview, Section, TypeDef } from '../types';
+import type { Background, FieldDef, Preview, Section, TypeDef } from '../types';
 import { Collapsible } from './Collapsible';
 import { FieldInput } from './FieldInput';
 import { Icon, IconButton } from './Icon';
@@ -56,6 +56,39 @@ export function SectionCard(props: {
   const { title, level } = sectionSummary(type, section);
   const active = section.active !== false;
   const background = section.background ?? '';
+  const colorBackdrop = (section.data.media ?? 'none') === 'background';
+  const swatches =
+    props.backgrounds.length > 0 && (
+        <div class="sectionist-field">
+          <span class="sectionist-field__label">{t.background}</span>
+          <div class="sectionist-swatches" role="radiogroup" aria-label={t.background}>
+            {[{ key: '', label: t.backgroundNone }, ...props.backgrounds].map((bg) => (
+              <button
+                type="button"
+                role="radio"
+                aria-checked={background === bg.key}
+                class={'sectionist-swatch' + (background === bg.key ? ' is-active' : '')}
+                title={bg.label}
+                onClick={() => props.onBackground(bg.key)}
+              >
+                <span class={'sectionist-swatch__color' + (bg.key ? ' section--bg-' + bg.key : '')} />
+                {bg.label}
+              </button>
+            ))}
+          </div>
+        </div>
+    );
+  const isController = (field: FieldDef) => (type?.fields ?? []).some((other) => other.showIf?.field === field.name);
+  const renderField = (field: FieldDef) => (
+    <FieldInput
+      id={`sectionist-${section.id}-${field.name}`}
+      field={field}
+      labels={t}
+      value={section.data[field.name]}
+      rest={props.rest}
+      onInput={(value) => props.onUpdate(field.name, value)}
+    />
+  );
   return (
     <Collapsible
       id={section.id}
@@ -95,37 +128,15 @@ export function SectionCard(props: {
         </>
       }
     >
-      {props.backgrounds.length > 0 && (
-        <div class="sectionist-field">
-          <span class="sectionist-field__label">{t.background}</span>
-          <div class="sectionist-swatches" role="radiogroup" aria-label={t.background}>
-            {[{ key: '', label: t.backgroundNone }, ...props.backgrounds].map((bg) => (
-              <button
-                type="button"
-                role="radio"
-                aria-checked={background === bg.key}
-                class={'sectionist-swatch' + (background === bg.key ? ' is-active' : '')}
-                title={bg.label}
-                onClick={() => props.onBackground(bg.key)}
-              >
-                <span class={'sectionist-swatch__color' + (bg.key ? ' section--bg-' + bg.key : '')} />
-                {bg.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
       {type ? (
-        type.fields.map((field) => (
-          <FieldInput
-            id={`sectionist-${section.id}-${field.name}`}
-            field={field}
-            labels={t}
-            value={section.data[field.name]}
-            rest={props.rest}
-            onInput={(value) => props.onUpdate(field.name, value)}
-          />
-        ))
+        <>
+          {type.fields.filter(isController).map(renderField)}
+          {colorBackdrop && swatches}
+          {type.fields
+            .filter((field) => !isController(field))
+            .filter((field) => !field.showIf || String(section.data[field.showIf.field] ?? '') === field.showIf.value)
+            .map(renderField)}
+        </>
       ) : (
         <p class="sectionist-note">{t.unknownType}</p>
       )}

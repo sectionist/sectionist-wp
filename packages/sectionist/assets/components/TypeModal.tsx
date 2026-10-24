@@ -6,7 +6,7 @@ export function TypeModal(props: { title: string; closeLabel: string; types: Typ
   return (
     <Modal title={props.title} closeLabel={props.closeLabel} onClose={props.onClose}>
       <ul class="sectionist-modal__list">
-        {props.types.map((type) => (
+        {[...props.types].sort((a, b) => Number(b.name === 'hero') - Number(a.name === 'hero')).map((type) => (
           <li>
             <button type="button" class="sectionist-type-card" onClick={() => props.onPick(type)}>
               <Icon name={type.icon} />

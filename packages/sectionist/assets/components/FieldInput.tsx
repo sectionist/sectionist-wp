@@ -1,6 +1,7 @@
 import type { FieldDef, Preview } from '../types';
 import { CtaField } from './CtaField';
 import { Field, Select, TextInput } from './Field';
+import { ImageField } from './ImageField';
 import { RichTextEditor } from './richtext/RichTextEditor';
 
 export function FieldInput(props: {
@@ -19,13 +20,28 @@ export function FieldInput(props: {
       </Field>
     );
   }
+  if (field.kind === 'image') {
+    return (
+      <Field label={field.label}>
+        <ImageField value={Number(props.value) || 0} labels={props.labels} onInput={onInput} />
+      </Field>
+    );
+  }
   const value = String(props.value ?? '');
   return (
-    <Field id={id} label={field.label}>
+    <Field id={field.kind === 'choice' ? undefined : id} label={field.label}>
       {field.kind === 'richtext' ? (
         <RichTextEditor id={id} value={value} labels={props.labels} onInput={onInput} />
+      ) : field.kind === 'choice' ? (
+        <div class="sectionist-btn-group" role="group" aria-label={field.label}>
+          {field.options.map((o) => (
+            <button type="button" class={'button' + (o.value === value ? ' is-active' : '')} aria-pressed={o.value === value} onClick={() => onInput(o.value)}>
+              {o.label}
+            </button>
+          ))}
+        </div>
       ) : field.kind === 'select' ? (
-        <Select id={id} value={value} options={field.options.map((o) => ({ value: o, label: o }))} onInput={onInput} />
+        <Select id={id} value={value} options={field.options} onInput={onInput} />
       ) : (
         <TextInput id={id} value={value} onInput={onInput} />
       )}
