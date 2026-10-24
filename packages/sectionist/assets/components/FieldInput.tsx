@@ -2,6 +2,7 @@ import type { FieldDef, Preview } from '../types';
 import { CtaField } from './CtaField';
 import { Field, Select, TextInput } from './Field';
 import { ImageField } from './ImageField';
+import { MediaField } from './MediaField';
 import { RichTextEditor } from './richtext/RichTextEditor';
 
 export function FieldInput(props: {
@@ -17,6 +18,13 @@ export function FieldInput(props: {
     return (
       <Field label={field.label}>
         <CtaField id={id} value={props.value} rest={props.rest} labels={props.labels} onInput={onInput} />
+      </Field>
+    );
+  }
+  if (field.kind === 'media') {
+    return (
+      <Field label={field.label}>
+        <MediaField value={props.value} labels={props.labels} onInput={onInput} />
       </Field>
     );
   }

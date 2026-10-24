@@ -32,6 +32,23 @@ img {
 	background-color: #f3f4f6;
 }
 
+.section--image {
+	display: grid;
+	gap: 1.5rem;
+}
+
+.section__media {
+	margin: 0;
+}
+
+@media (min-width: 48rem) {
+	.section--image-left,
+	.section--image-right {
+		grid-template-columns: 1fr 1fr;
+		align-items: center;
+	}
+}
+
 .section--hero {
 	position: relative;
 	isolation: isolate;

@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Sectionist\Sections\Cta;
+use Sectionist\Sections\Media;
 use Sectionist\Sections\Registry;
 use Sectionist\Sections\Types\TextType;
 use Sectionist\Storage\Section;
@@ -58,7 +59,7 @@ final class RegistryTest extends TestCase
         ]);
 
         $this->assertEquals(
-            [new Section('a', 'text', data: ['body' => 'H', 'cta' => Cta::defaults()]), new Section('u1', 'hero', data: ['x' => '<i>raw</i>'])],
+            [new Section('a', 'text', data: ['body' => 'H', 'image' => Media::defaults(), 'cta' => Cta::defaults()]), new Section('u1', 'hero', data: ['x' => '<i>raw</i>'])],
             $clean,
         );
     }

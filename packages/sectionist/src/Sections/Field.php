@@ -18,6 +18,8 @@ final readonly class Field
 
     public const IMAGE = 'image';
 
+    public const MEDIA = 'media';
+
     /** Whitelist for rich-text fields. No inline styles, no font information. */
     public const ALLOWED_HTML = [
         'a' => ['href' => true, 'title' => true],
@@ -121,6 +123,12 @@ final readonly class Field
         return new self(self::IMAGE, $name, $label, [], 0);
     }
 
+    /** Optional image with position, switchable like the call to action. */
+    public static function media(string $name, string $label): self
+    {
+        return new self(self::MEDIA, $name, $label, [], Media::defaults());
+    }
+
     /**
      * @return string|int|array<string, mixed>
      */
@@ -128,6 +136,10 @@ final readonly class Field
     {
         if ($this->kind === self::CTA) {
             return Cta::sanitize($value);
+        }
+
+        if ($this->kind === self::MEDIA) {
+            return Media::sanitize($value);
         }
 
         if ($this->kind === self::IMAGE) {

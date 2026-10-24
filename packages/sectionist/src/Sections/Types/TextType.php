@@ -33,6 +33,7 @@ final class TextType extends AbstractSectionType
     {
         return [
             Field::richtext('body', __('Content', 'sectionist')),
+            Field::media('image', __('Image', 'sectionist')),
             Field::cta('cta', __('Call to action', 'sectionist')),
         ];
     }

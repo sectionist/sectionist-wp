@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Sectionist\Sections\Cta;
 use Sectionist\Sections\Field;
+use Sectionist\Sections\Media;
 use Sectionist\Sections\Types\TextType;
 
 #[CoversClass(TextType::class)]
@@ -58,12 +59,12 @@ final class TextTypeTest extends TestCase
     {
         $clean = (new TextType)->sanitize(['body' => ['nope']]);
 
-        $this->assertSame(['body' => '', 'cta' => Cta::defaults()], $clean);
+        $this->assertSame(['body' => '', 'image' => Media::defaults(), 'cta' => Cta::defaults()], $clean);
     }
 
     public function test_defaults_match_fields(): void
     {
-        $this->assertSame(['body' => '', 'cta' => Cta::defaults()], (new TextType)->defaults());
+        $this->assertSame(['body' => '', 'image' => Media::defaults(), 'cta' => Cta::defaults()], (new TextType)->defaults());
     }
 
     public function test_select_rejects_values_outside_options(): void
