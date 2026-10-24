@@ -16,9 +16,10 @@ function sectionSummary(type: TypeDef | undefined, section: Section): { title: s
   let title = '';
   let level = 0;
   for (const field of type?.fields ?? []) {
-    if (field.kind === 'select') continue;
-    const html = String(section.data[field.name] ?? '');
-    const heading = field.kind === 'richtext' ? HEADING.exec(html) : null;
+    const value = section.data[field.name];
+    if (field.kind !== 'richtext' || typeof value !== 'string') continue;
+    const html = value;
+    const heading = HEADING.exec(html);
     if (heading && !level) {
       level = Number(heading[1]);
       title = plain(heading[2]);
