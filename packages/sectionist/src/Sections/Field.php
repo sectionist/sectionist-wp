@@ -62,12 +62,13 @@ final readonly class Field
         public array $options = [],
         public string|int|array $default = '',
         public ?array $showIf = null,
+        public bool $required = false,
     ) {}
 
     /** Show this field in the editor only while another field of the same section has the given value. */
     public function showIf(string $field, string $value): self
     {
-        return new self($this->kind, $this->name, $this->label, $this->options, $this->default, ['field' => $field, 'value' => $value]);
+        return new self($this->kind, $this->name, $this->label, $this->options, $this->default, ['field' => $field, 'value' => $value], $this->required);
     }
 
     /**
@@ -112,9 +113,10 @@ final readonly class Field
         return new self(self::CHOICE, $name, $label, $choices, $default);
     }
 
-    public static function cta(string $name, string $label): self
+    /** @param  bool  $required  always active, no switch in the editor (dedicated CTA section) */
+    public static function cta(string $name, string $label, bool $required = false): self
     {
-        return new self(self::CTA, $name, $label, [], Cta::defaults());
+        return new self(self::CTA, $name, $label, [], $required ? [...Cta::defaults(), 'active' => true] : Cta::defaults(), null, $required);
     }
 
     /** Media library image, stored as attachment ID (0 = none). */
@@ -135,7 +137,9 @@ final readonly class Field
     public function sanitize(mixed $value): string|int|array
     {
         if ($this->kind === self::CTA) {
-            return Cta::sanitize($value);
+            $cta = Cta::sanitize($value);
+
+            return $this->required ? [...$cta, 'active' => true] : $cta;
         }
 
         if ($this->kind === self::MEDIA) {

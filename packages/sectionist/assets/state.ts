@@ -11,16 +11,17 @@ export type Action =
 
 const newId = (): string => Math.random().toString(36).slice(2, 10);
 
-/** The hero always comes first. */
-export const isPinned = (section: Section): boolean => section.type === 'hero';
+/** The hero always comes first, the call to action always last. */
+export const isPinnedStart = (section: Section): boolean => section.type === 'hero';
+export const isPinnedEnd = (section: Section): boolean => section.type === 'cta';
+export const isPinned = (section: Section): boolean => isPinnedStart(section) || isPinnedEnd(section);
 
-export function pinHero(sections: Section[]): Section[] {
-  const pinned = sections.filter(isPinned);
-  return pinned.length === 0 ? sections : [...pinned, ...sections.filter((s) => !isPinned(s))];
+export function pinEdges(sections: Section[]): Section[] {
+  return [...sections.filter(isPinnedStart), ...sections.filter((s) => !isPinned(s)), ...sections.filter(isPinnedEnd)];
 }
 
 export function reducer(sections: Section[], action: Action): Section[] {
-  return pinHero(apply(sections, action));
+  return pinEdges(apply(sections, action));
 }
 
 function apply(sections: Section[], action: Action): Section[] {

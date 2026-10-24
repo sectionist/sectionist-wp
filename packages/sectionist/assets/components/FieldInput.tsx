@@ -27,6 +27,9 @@ export function FieldInput(props: {
     activeLabel: `${t.toggleActive} (${active ? t.active : t.inactive})`,
     onActive: (value: boolean) => onInput({ ...object, active: value }),
   };
+  if (field.kind === 'cta' && field.required) {
+    return <CtaField id={id} value={props.value} rest={props.rest} labels={props.labels} onInput={onInput} />;
+  }
   if (field.kind === 'cta') {
     return (
       <Panel {...panel}>

@@ -87,6 +87,9 @@ export function SectionCard(props: {
   const isVisible = (field: FieldDef) => !field.showIf || String(section.data[field.showIf.field] ?? '') === field.showIf.value;
   const content = fields.filter((field) => field.kind === 'richtext');
   const options = fields.filter((field) => field.kind !== 'richtext');
+  const isPanel = (field: FieldDef) => !field.showIf && (isController(field) || field.kind === 'media' || (field.kind === 'cta' && !field.required));
+  const loose = options.filter((field) => !field.showIf && !isPanel(field));
+  const panels = options.filter(isPanel).sort((a, b) => a.label.localeCompare(b.label));
   const renderField = (field: FieldDef) => (
     <FieldInput
       id={`sectionist-${section.id}-${field.name}`}
@@ -142,7 +145,9 @@ export function SectionCard(props: {
       {type ? (
         <>
           {content.map(renderField)}
-          {options.filter(isController).map((controller) => {
+          {loose.map(renderField)}
+          {panels.map((controller) => {
+            if (!isController(controller)) return renderField(controller);
             const choices = controller.kind === 'choice' ? controller.options.filter((o) => o.value !== 'none') : [];
             const current = String(section.data[controller.name] ?? 'none');
             const on = current !== 'none';
@@ -169,7 +174,6 @@ export function SectionCard(props: {
               </Panel>
             );
           })}
-          {options.filter((field) => !isController(field) && !field.showIf).map(renderField)}
         </>
       ) : (
         <p class="sectionist-note">{t.unknownType}</p>

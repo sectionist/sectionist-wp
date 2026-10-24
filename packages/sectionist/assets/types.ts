@@ -4,6 +4,7 @@ export interface FieldDef {
   label: string;
   options: { value: string; label: string }[];
   showIf: { field: string; value: string } | null;
+  required?: boolean;
 }
 
 export interface TypeDef {

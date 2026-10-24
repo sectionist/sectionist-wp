@@ -5,14 +5,13 @@ import { IconButton } from './Icon';
 export function Panel(props: {
   title: string;
   toggleLabel: string;
-  defaultOpen?: boolean;
   active?: boolean;
   headerOnly?: boolean;
   activeLabel?: string;
   onActive?: (value: boolean) => void;
   children: ComponentChildren;
 }) {
-  const [open, setOpen] = useState((props.defaultOpen ?? true) && (props.active ?? true));
+  const [open, setOpen] = useState(false);
   const active = props.active ?? true;
   const expanded = open && active && !props.headerOnly;
   const toggle = () => active && !props.headerOnly && setOpen(!open);

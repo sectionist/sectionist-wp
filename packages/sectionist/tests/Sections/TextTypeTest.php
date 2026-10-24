@@ -59,12 +59,12 @@ final class TextTypeTest extends TestCase
     {
         $clean = (new TextType)->sanitize(['body' => ['nope']]);
 
-        $this->assertSame(['body' => '', 'media' => 'none', 'image' => Media::defaults(), 'cta' => Cta::defaults()], $clean);
+        $this->assertSame(['body' => '', 'media' => 'none', 'cta' => Cta::defaults(), 'image' => Media::defaults()], $clean);
     }
 
     public function test_defaults_match_fields(): void
     {
-        $this->assertSame(['body' => '', 'media' => 'none', 'image' => Media::defaults(), 'cta' => Cta::defaults()], (new TextType)->defaults());
+        $this->assertSame(['body' => '', 'media' => 'none', 'cta' => Cta::defaults(), 'image' => Media::defaults()], (new TextType)->defaults());
     }
 
     public function test_select_rejects_values_outside_options(): void

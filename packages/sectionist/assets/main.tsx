@@ -1,6 +1,6 @@
 import { render } from 'preact';
 import { useEffect, useReducer, useRef, useState } from 'preact/hooks';
-import { isPinned, pinHero, reducer } from './state';
+import { isPinned, isPinnedEnd, isPinnedStart, pinEdges, reducer } from './state';
 import type { Config, TypeDef } from './types';
 import { ConfirmModal } from './components/ConfirmModal';
 import { IconButton } from './components/Icon';
@@ -13,7 +13,7 @@ import { useFlip } from './components/useFlip';
 import './style.css';
 
 function App({ config }: { config: Config }) {
-  const [sections, dispatch] = useReducer(reducer, config.sections, pinHero);
+  const [sections, dispatch] = useReducer(reducer, config.sections, pinEdges);
   const [error, setError] = useState('');
   const [tab, setTab] = useState('sections');
   const [closed, setClosed] = useState<Set<string>>(() => new Set(config.sections.map((s) => s.id)));
@@ -143,8 +143,8 @@ function App({ config }: { config: Config }) {
                   type={typeOf(section.type)}
                   open={!closed.has(section.id)}
                   pinned={isPinned(section)}
-                  first={index === sections.filter(isPinned).length}
-                  last={index === sections.length - 1}
+                  first={index === sections.filter(isPinnedStart).length}
+                  last={index === sections.length - 1 - sections.filter(isPinnedEnd).length}
                   labels={t}
                   backgrounds={config.backgrounds ?? []}
                   rest={config.preview}

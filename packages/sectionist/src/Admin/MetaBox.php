@@ -132,6 +132,7 @@ final readonly class MetaBox
                         'label' => $field->label,
                         'options' => $field->optionList(),
                         'showIf' => $field->showIf,
+                        'required' => $field->required,
                     ],
                     $type->fields(),
                 ),

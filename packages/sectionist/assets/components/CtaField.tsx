@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 import type { Preview } from '../types';
+import { ButtonGroup } from './ButtonGroup';
 import { Checkbox, Field, Select, TextInput } from './Field';
 
 export interface CtaValue {
@@ -44,9 +45,9 @@ export function CtaField(props: { id: string; value: unknown; rest: Preview; lab
   return (
     <div class="sectionist-cta-field">
       <div class="sectionist-cta-field__grid">
-          <Field id={`${id}-style`} label={t.ctaStyle}>
-            <Select
-              id={`${id}-style`}
+          <Field label={t.ctaStyle}>
+            <ButtonGroup
+              label={t.ctaStyle}
               value={v.style}
               options={[
                 { value: 'button', label: t.ctaButton },
