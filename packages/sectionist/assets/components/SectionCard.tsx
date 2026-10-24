@@ -81,7 +81,8 @@ export function SectionCard(props: {
         </div>
     );
   const fields = type?.fields ?? [];
-  const isController = (field: FieldDef) => fields.some((other) => other.showIf?.field === field.name);
+  const isController = (field: FieldDef) =>
+    (field.kind === 'choice' && field.options.some((o) => o.value === 'none')) || fields.some((other) => other.showIf?.field === field.name);
   const isVisible = (field: FieldDef) => !field.showIf || String(section.data[field.showIf.field] ?? '') === field.showIf.value;
   const content = fields.filter((field) => field.kind === 'richtext');
   const options = fields.filter((field) => field.kind !== 'richtext');
@@ -141,17 +142,26 @@ export function SectionCard(props: {
             const choices = controller.kind === 'choice' ? controller.options.filter((o) => o.value !== 'none') : [];
             const current = String(section.data[controller.name] ?? 'none');
             const on = current !== 'none';
+            const dependents = options.filter((field) => field.showIf?.field === controller.name && isVisible(field));
+            const single = choices.length <= 1 && dependents.length === 0 && props.backgrounds.length <= 1;
+            const only = props.backgrounds[0]?.key ?? '';
             return (
               <Panel
                 title={controller.label}
                 toggleLabel={t.toggle}
                 active={on}
+                headerOnly={single}
                 activeLabel={`${t.toggleActive} (${on ? t.active : t.inactive})`}
-                onActive={(value) => props.onUpdate(controller.name, value ? (choices[0]?.value ?? 'none') : 'none')}
+                onActive={(value) => {
+                  props.onUpdate(controller.name, value ? (choices[0]?.value ?? 'none') : 'none');
+                  if (single && choices[0]?.value === 'background') props.onBackground(value ? only : '');
+                }}
               >
-                <ButtonGroup options={choices} value={current} label={controller.label} onInput={(value) => props.onUpdate(controller.name, value)} />
+                {choices.length > 1 && (
+                  <ButtonGroup options={choices} value={current} label={controller.label} onInput={(value) => props.onUpdate(controller.name, value)} />
+                )}
                 {colorBackdrop && swatches}
-                {options.filter((field) => field.showIf?.field === controller.name && isVisible(field)).map(renderField)}
+                {dependents.map(renderField)}
               </Panel>
             );
           })}

@@ -9,7 +9,7 @@ use Sectionist\Storage\Section;
  * @var array<string, mixed> $data Sanitized section data.
  * @var Section $section The whole section (id, type, active, background, data).
  */
-$image = ($data['media'] ?? 'none') === 'image' && is_int($data['image'] ?? null) ? $data['image'] : 0;
+$image = ($data['media'] ?? 'none') === 'image' && is_int($data['backdrop'] ?? null) ? $data['backdrop'] : 0;
 $body = is_string($data['body'] ?? null) ? $data['body'] : '';
 $cta = is_array($data['cta'] ?? null) ? $data['cta'] : [];
 ?>

@@ -44,8 +44,8 @@ function App({ config }: { config: Config }) {
   const unsetBackdrops = (list: typeof sections) =>
     list
       .filter((s) => {
-        if (s.type !== 'hero') return false;
-        if (s.data.media === 'image') return !Number(s.data.image);
+        if (!('media' in s.data)) return false;
+        if (s.data.media === 'image') return !Number(s.data.backdrop);
         return s.data.media === 'background' && hasBackgrounds && !s.background;
       })
       .map((s) => s.id);

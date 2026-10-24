@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sectionist\Sections\Types;
 
 use Sectionist\Sections\AbstractSectionType;
+use Sectionist\Sections\Backdrop;
 use Sectionist\Sections\Field;
 
 final class HeroType extends AbstractSectionType
@@ -33,12 +34,7 @@ final class HeroType extends AbstractSectionType
     {
         return [
             Field::richtext('body', __('Content', 'sectionist')),
-            Field::choice('media', __('Hero backdrop', 'sectionist'), [
-                'none' => __('None', 'sectionist'),
-                'background' => __('Color', 'sectionist'),
-                'image' => __('Image', 'sectionist'),
-            ], 'none'),
-            Field::image('image', __('Image', 'sectionist'))->showIf('media', 'image'),
+            ...Backdrop::fields(),
             Field::cta('cta', __('Call to action', 'sectionist')),
         ];
     }

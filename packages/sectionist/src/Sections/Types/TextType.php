@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sectionist\Sections\Types;
 
 use Sectionist\Sections\AbstractSectionType;
+use Sectionist\Sections\Backdrop;
 use Sectionist\Sections\Field;
 
 final class TextType extends AbstractSectionType
@@ -33,6 +34,7 @@ final class TextType extends AbstractSectionType
     {
         return [
             Field::richtext('body', __('Content', 'sectionist')),
+            ...Backdrop::fields(false),
             Field::media('image', __('Image', 'sectionist')),
             Field::cta('cta', __('Call to action', 'sectionist')),
         ];

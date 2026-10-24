@@ -59,7 +59,7 @@ final class RegistryTest extends TestCase
         ]);
 
         $this->assertEquals(
-            [new Section('a', 'text', data: ['body' => 'H', 'image' => Media::defaults(), 'cta' => Cta::defaults()]), new Section('u1', 'hero', data: ['x' => '<i>raw</i>'])],
+            [new Section('a', 'text', data: ['body' => 'H', 'media' => 'none', 'image' => Media::defaults(), 'cta' => Cta::defaults()]), new Section('u1', 'hero', data: ['x' => '<i>raw</i>'])],
             $clean,
         );
     }

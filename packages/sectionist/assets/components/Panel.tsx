@@ -7,14 +7,15 @@ export function Panel(props: {
   toggleLabel: string;
   defaultOpen?: boolean;
   active?: boolean;
+  headerOnly?: boolean;
   activeLabel?: string;
   onActive?: (value: boolean) => void;
   children: ComponentChildren;
 }) {
   const [open, setOpen] = useState((props.defaultOpen ?? true) && (props.active ?? true));
   const active = props.active ?? true;
-  const expanded = open && active;
-  const toggle = () => active && setOpen(!open);
+  const expanded = open && active && !props.headerOnly;
+  const toggle = () => active && !props.headerOnly && setOpen(!open);
   return (
     <div class={'sectionist-panel' + (expanded ? ' is-open' : '') + (active ? '' : ' is-inactive')}>
       <div
@@ -34,11 +35,15 @@ export function Panel(props: {
             }}
           />
         )}
-        <IconButton icon={expanded ? 'arrow-up-alt2' : 'arrow-down-alt2'} label={props.toggleLabel} expanded={expanded} disabled={!active} onClick={toggle} />
+        {!props.headerOnly && (
+          <IconButton icon={expanded ? 'arrow-up-alt2' : 'arrow-down-alt2'} label={props.toggleLabel} expanded={expanded} disabled={!active} onClick={toggle} />
+        )}
       </div>
-      <div class="sectionist-panel__body" hidden={!expanded}>
-        {active && props.children}
-      </div>
+      {!props.headerOnly && (
+        <div class="sectionist-panel__body" hidden={!expanded}>
+          {active && props.children}
+        </div>
+      )}
     </div>
   );
 }

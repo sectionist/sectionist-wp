@@ -25,7 +25,7 @@ final class HeroTypeTest extends TestCase
 
     public function test_keeps_valid_image_id(): void
     {
-        $this->assertSame(7, (new HeroType)->sanitize(['image' => '7'])['image']);
+        $this->assertSame(7, (new HeroType)->sanitize(['backdrop' => '7'])['backdrop']);
     }
 
     public function test_media_mode_defaults_to_none_and_rejects_unknown(): void
@@ -40,19 +40,19 @@ final class HeroTypeTest extends TestCase
     {
         $fields = array_column((new HeroType)->fields(), null, 'name');
 
-        $this->assertSame(['field' => 'media', 'value' => 'image'], $fields['image']->showIf);
+        $this->assertSame(['field' => 'media', 'value' => 'image'], $fields['backdrop']->showIf);
         $this->assertNull($fields['media']->showIf);
     }
 
     public function test_drops_unknown_or_invalid_image(): void
     {
-        $this->assertSame(0, (new HeroType)->sanitize(['image' => 8])['image']);
-        $this->assertSame(0, (new HeroType)->sanitize(['image' => ['x']])['image']);
-        $this->assertSame(0, (new HeroType)->sanitize([])['image']);
+        $this->assertSame(0, (new HeroType)->sanitize(['backdrop' => 8])['backdrop']);
+        $this->assertSame(0, (new HeroType)->sanitize(['backdrop' => ['x']])['backdrop']);
+        $this->assertSame(0, (new HeroType)->sanitize([])['backdrop']);
     }
 
     public function test_defaults_have_no_image(): void
     {
-        $this->assertSame(0, (new HeroType)->defaults()['image']);
+        $this->assertSame(0, (new HeroType)->defaults()['backdrop']);
     }
 }
