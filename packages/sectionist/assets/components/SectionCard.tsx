@@ -41,6 +41,7 @@ export function SectionCard(props: {
   section: Section;
   type: TypeDef | undefined;
   open: boolean;
+  pinned: boolean;
   first: boolean;
   last: boolean;
   labels: Record<string, string>;
@@ -118,11 +119,14 @@ export function SectionCard(props: {
       }
       dragLabel={t.drag}
       {...props.drag}
+      dragDisabled={props.pinned}
       moveActions={
-        <>
-          <IconButton icon="arrow-up-alt2" label={t.moveUp} disabled={props.first} onClick={() => props.onMove(-1)} />
-          <IconButton icon="arrow-down-alt2" label={t.moveDown} disabled={props.last} onClick={() => props.onMove(1)} />
-        </>
+        props.pinned ? undefined : (
+          <>
+            <IconButton icon="arrow-up-alt2" label={t.moveUp} disabled={props.first} onClick={() => props.onMove(-1)} />
+            <IconButton icon="arrow-down-alt2" label={t.moveDown} disabled={props.last} onClick={() => props.onMove(1)} />
+          </>
+        )
       }
       actions={
         <>

@@ -11,12 +11,23 @@ export type Action =
 
 const newId = (): string => Math.random().toString(36).slice(2, 10);
 
+/** The hero always comes first. */
+export const isPinned = (section: Section): boolean => section.type === 'hero';
+
+export function pinHero(sections: Section[]): Section[] {
+  const pinned = sections.filter(isPinned);
+  return pinned.length === 0 ? sections : [...pinned, ...sections.filter((s) => !isPinned(s))];
+}
+
 export function reducer(sections: Section[], action: Action): Section[] {
+  return pinHero(apply(sections, action));
+}
+
+function apply(sections: Section[], action: Action): Section[] {
   switch (action.kind) {
     case 'add': {
       const added = { id: newId(), type: action.type.name, active: true, background: '', data: { ...action.type.defaults } };
-      // A new hero starts at position 1; it stays movable like any other section.
-      return action.type.name === 'hero' ? [added, ...sections] : [...sections, added];
+      return [...sections, added];
     }
     case 'remove':
       return sections.filter((s) => s.id !== action.id);

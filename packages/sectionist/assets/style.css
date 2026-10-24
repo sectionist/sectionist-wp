@@ -144,6 +144,8 @@
 .sectionist-icon-button:disabled { opacity: .3; cursor: default; }
 .sectionist-icon-button.sectionist-card__handle { background: none; border-color: transparent; }
 .sectionist-icon-button.sectionist-card__handle:hover { background: var(--sx-border); }
+.sectionist-icon-button.sectionist-card__handle.is-disabled { cursor: not-allowed; opacity: .4; }
+.sectionist-icon-button.sectionist-card__handle.is-disabled:hover { background: none; }
 .sectionist-card__body { display: flex; flex-direction: column; gap: 12px; padding: 12px 16px 16px; border-top: 1px solid var(--sx-border); animation: sectionist-open .15s ease-out; }
 .sectionist-card__body[hidden] { display: none; }
 .sectionist-card__body > *, .sectionist-panel__body > * { margin: 0; }

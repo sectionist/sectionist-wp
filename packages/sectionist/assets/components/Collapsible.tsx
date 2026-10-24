@@ -11,6 +11,7 @@ export function Collapsible(props: {
   toggleLabel: string;
   dragLabel: string;
   dragging?: boolean;
+  dragDisabled?: boolean;
   dropTarget?: boolean;
   onDragStart: (e: DragEvent) => void;
   onDragOver: (e: DragEvent) => void;
@@ -18,9 +19,10 @@ export function Collapsible(props: {
   onDragEnd: () => void;
   children: ComponentChildren;
 }) {
+  const locked = props.dragDisabled;
   const cls = 'sectionist-card' + (props.open ? ' is-open' : '') + (props.dragging ? ' is-dragging' : '') + (props.dropTarget ? ' is-drop-target' : '');
   return (
-    <div class={cls} data-flip-id={props.id} onDragOver={props.onDragOver} onDrop={props.onDrop}>
+    <div class={cls} data-flip-id={props.id} onDragOver={locked ? undefined : props.onDragOver} onDrop={locked ? undefined : props.onDrop}>
       <div
         class="sectionist-card__header"
         onClick={(e) => {
@@ -28,12 +30,13 @@ export function Collapsible(props: {
         }}
       >
         <span
-          class="sectionist-icon-button sectionist-card__handle"
-          draggable
+          class={'sectionist-icon-button sectionist-card__handle' + (locked ? ' is-disabled' : '')}
+          draggable={!locked}
           title={props.dragLabel}
           aria-label={props.dragLabel}
-          onDragStart={props.onDragStart}
-          onDragEnd={props.onDragEnd}
+          aria-disabled={locked}
+          onDragStart={locked ? undefined : props.onDragStart}
+          onDragEnd={locked ? undefined : props.onDragEnd}
         >
           <Icon name="menu" />
         </span>
