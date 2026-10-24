@@ -20,6 +20,11 @@ final readonly class Field
 
     public const MEDIA = 'media';
 
+    public const LIST = 'list';
+
+    /** Maximum number of entries kept in a list field. */
+    public const LIST_LIMIT = 50;
+
     /** Whitelist for rich-text fields. No inline styles, no font information. */
     public const ALLOWED_HTML = [
         'a' => ['href' => true, 'title' => true],
@@ -40,7 +45,6 @@ final readonly class Field
 
     /**
      * Classes allowed on `p`: a paragraph that looks like a heading without being one.
-     * The theme decides how each class looks.
      */
     public const PARAGRAPH_CLASSES = ['as-h1', 'as-h2', 'as-h3', 'as-h4', 'as-h5', 'as-h6'];
 
@@ -138,11 +142,44 @@ final readonly class Field
         return new self(self::MEDIA, $name, $label, [], Media::defaults(), null, false, true);
     }
 
+    /** Dynamic list of entries, each with a `title` and a `text`. */
+    public static function list(string $name, string $label): self
+    {
+        return new self(self::LIST, $name, $label, [], []);
+    }
+
     /**
-     * @return string|int|array<string, mixed>
+     * @return list<array{title: string, text: string}>
+     */
+    private function sanitizeList(mixed $value): array
+    {
+        $items = [];
+        foreach (is_array($value) ? $value : [] as $entry) {
+            if (! is_array($entry)) {
+                continue;
+            }
+            $title = is_string($entry['title'] ?? null) ? sanitize_text_field($entry['title']) : '';
+            $text = is_string($entry['text'] ?? null) ? sanitize_textarea_field($entry['text']) : '';
+            if ($title === '' && $text === '') {
+                continue;
+            }
+            $items[] = ['title' => $title, 'text' => $text];
+            if (count($items) >= self::LIST_LIMIT) {
+                break;
+            }
+        }
+
+        return $items;
+    }
+
+    /**
+     * @return string|int|array<array-key, mixed>
      */
     public function sanitize(mixed $value): string|int|array
     {
+        if ($this->kind === self::LIST) {
+            return $this->sanitizeList($value);
+        }
         if ($this->kind === self::CTA) {
             $cta = Cta::sanitize($value);
 

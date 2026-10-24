@@ -100,6 +100,13 @@ if (! function_exists('sanitize_key')) {
     }
 }
 
+if (! function_exists('sanitize_textarea_field')) {
+    function sanitize_textarea_field(string $value): string
+    {
+        return trim(strip_tags($value));
+    }
+}
+
 if (! function_exists('sanitize_text_field')) {
     function sanitize_text_field(string $value): string
     {

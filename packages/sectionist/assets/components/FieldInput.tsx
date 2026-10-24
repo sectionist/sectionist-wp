@@ -3,6 +3,7 @@ import { ButtonGroup } from './ButtonGroup';
 import { CtaField } from './CtaField';
 import { Field, Select, TextInput } from './Field';
 import { ImageField } from './ImageField';
+import { ListField } from './ListField';
 import { MediaField } from './MediaField';
 import { Panel } from './Panel';
 import { RichTextEditor } from './richtext/RichTextEditor';
@@ -41,6 +42,13 @@ export function FieldInput(props: {
     return (
       <Panel {...panel}>
         <MediaField value={props.value} labels={props.labels} onInput={onInput} />
+      </Panel>
+    );
+  }
+  if (field.kind === 'list') {
+    return (
+      <Panel title={field.label} toggleLabel={t.toggle}>
+        <ListField id={id} value={props.value} labels={props.labels} onInput={onInput} />
       </Panel>
     );
   }

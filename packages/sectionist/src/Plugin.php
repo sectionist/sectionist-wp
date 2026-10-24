@@ -14,6 +14,7 @@ use Sectionist\Rest\PreviewController;
 use Sectionist\Sections\Registry;
 use Sectionist\Sections\Types\CtaType;
 use Sectionist\Sections\Types\HeroType;
+use Sectionist\Sections\Types\ListType;
 use Sectionist\Sections\Types\TextType;
 use Sectionist\Storage\Document;
 use Sectionist\Storage\PostContentRepository;
@@ -27,6 +28,7 @@ final class Plugin
         add_action(Registry::HOOK, static function (Registry $registry): void {
             $registry->register(new TextType);
             $registry->register(new HeroType);
+            $registry->register(new ListType);
             $registry->register(new CtaType);
         });
 

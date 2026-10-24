@@ -14,6 +14,10 @@ export function TextInput(props: { id: string; value: string; placeholder?: stri
   return <input id={props.id} type="text" value={props.value} placeholder={props.placeholder} onInput={(e) => props.onInput(e.currentTarget.value)} />;
 }
 
+export function Textarea(props: { id: string; value: string; rows?: number; onInput: (v: string) => void }) {
+  return <textarea id={props.id} rows={props.rows ?? 3} value={props.value} onInput={(e) => props.onInput(e.currentTarget.value)} />;
+}
+
 export function Select(props: { id: string; value: string; options: { value: string; label: string }[]; onInput: (v: string) => void }) {
   return (
     <select id={props.id} value={props.value} onChange={(e) => props.onInput(e.currentTarget.value)}>
