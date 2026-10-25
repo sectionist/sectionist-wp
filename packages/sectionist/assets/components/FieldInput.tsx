@@ -3,6 +3,7 @@ import { ButtonGroup } from './ButtonGroup';
 import { CtaField } from './CtaField';
 import { FaqField } from './FaqField';
 import { Field, Select, TextInput } from './Field';
+import { GalleryField } from './GalleryField';
 import { ImageField } from './ImageField';
 import { ListField } from './ListField';
 import { MediaField } from './MediaField';
@@ -50,6 +51,13 @@ export function FieldInput(props: {
     return (
       <Panel title={field.label} toggleLabel={t.toggle}>
         <ListField id={id} value={props.value} labels={props.labels} onInput={onInput} />
+      </Panel>
+    );
+  }
+  if (field.kind === 'gallery') {
+    return (
+      <Panel title={field.label} toggleLabel={t.toggle}>
+        <GalleryField id={id} value={props.value} labels={props.labels} onInput={onInput} />
       </Panel>
     );
   }

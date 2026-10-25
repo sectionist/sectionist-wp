@@ -25,9 +25,9 @@ final readonly class MetaBox
      */
     public static function postTypes(): array
     {
-        $types = apply_filters('sectionist/post_types', ['page']);
+        $types = apply_filters('sectionist/post_types', ['page', 'post']);
 
-        return is_array($types) ? array_values(array_filter($types, 'is_string')) : ['page'];
+        return is_array($types) ? array_values(array_filter($types, 'is_string')) : ['page', 'post'];
     }
 
     public function register(): void
@@ -239,6 +239,10 @@ final readonly class MetaBox
             'listAdd' => __('Add entry', 'sectionist'),
             'listRemove' => __('Remove entry', 'sectionist'),
             'listEntry' => __('Entry', 'sectionist'),
+            'galleryAdd' => __('Add images', 'sectionist'),
+            'galleryRemove' => __('Remove image', 'sectionist'),
+            'galleryCaption' => __('Caption', 'sectionist'),
+            'galleryImage' => __('Image', 'sectionist'),
             'faqMode' => __('Show', 'sectionist'),
             'faqModeTopics' => __('By topic', 'sectionist'),
             'faqModeSelected' => __('Hand-picked', 'sectionist'),

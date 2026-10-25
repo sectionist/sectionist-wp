@@ -26,6 +26,8 @@ final readonly class Field
 
     public const FAQ = 'faq';
 
+    public const GALLERY = 'gallery';
+
     /** Maximum number of entries kept in a list field. */
     public const LIST_LIMIT = 50;
 
@@ -152,6 +154,12 @@ final readonly class Field
         return new self(self::LIST, $name, $label, [], []);
     }
 
+    /** Gallery images from the media library: list of `{id, caption}`. */
+    public static function gallery(string $name, string $label): self
+    {
+        return new self(self::GALLERY, $name, $label, [], []);
+    }
+
     /** Selection of central FAQ entries: by topics or hand-picked. */
     public static function faq(string $name, string $label): self
     {
@@ -183,10 +191,37 @@ final readonly class Field
     }
 
     /**
+     * @return list<array{id: int, caption: string}>
+     */
+    private function sanitizeGallery(mixed $value): array
+    {
+        $images = [];
+        foreach (is_array($value) ? $value : [] as $entry) {
+            if (! is_array($entry)) {
+                continue;
+            }
+            $id = is_int($entry['id'] ?? null) || is_string($entry['id'] ?? null) ? absint($entry['id']) : 0;
+            if ($id === 0 || ! wp_attachment_is_image($id)) {
+                continue;
+            }
+            $caption = is_string($entry['caption'] ?? null) ? sanitize_text_field($entry['caption']) : '';
+            $images[] = ['id' => $id, 'caption' => $caption];
+            if (count($images) >= self::LIST_LIMIT) {
+                break;
+            }
+        }
+
+        return $images;
+    }
+
+    /**
      * @return string|int|array<array-key, mixed>
      */
     public function sanitize(mixed $value): string|int|array
     {
+        if ($this->kind === self::GALLERY) {
+            return $this->sanitizeGallery($value);
+        }
         if ($this->kind === self::LIST) {
             return $this->sanitizeList($value);
         }

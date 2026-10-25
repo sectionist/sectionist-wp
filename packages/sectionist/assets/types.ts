@@ -1,5 +1,5 @@
 export interface FieldDef {
-  kind: 'text' | 'richtext' | 'select' | 'choice' | 'cta' | 'image' | 'media' | 'list' | 'faq';
+  kind: 'text' | 'richtext' | 'select' | 'choice' | 'cta' | 'image' | 'media' | 'list' | 'faq' | 'gallery';
   name: string;
   label: string;
   options: { value: string; label: string }[];

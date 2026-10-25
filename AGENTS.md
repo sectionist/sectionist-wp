@@ -79,7 +79,12 @@ Current state:
 2. Tooling and CI (done).
 3. Core without UI (done).
 4. Vertical slice (done): type `text` through to rendering in the starter theme.
-5. Expansion (planned): field types, more section types (hero, image), full-page editor layout, search and feeds over JSON in `post_content`, a second starter theme.
+5. Expansion (planned): field types, more section types (hero, image), full-page editor layout, a second starter theme.
+6. Before v1.0.0 (planned): one sweep for plain-text access to section content, once the set of section types is stable:
+   - Search: it runs on the raw JSON in `post_content`.
+   - Feeds: RSS probably outputs the JSON (unchecked).
+   - Excerpt: `Excerpt` only uses the `body` field, not lists or FAQ.
+   - Open design question: plain-text source (renderer with plugin fallback vs. theme) and an index (e.g. post meta `_sectionist_text`), including reindex of existing pages and updates when a central FAQ changes.
 
 ## Open items
 

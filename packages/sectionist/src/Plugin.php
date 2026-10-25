@@ -9,12 +9,14 @@ use Sectionist\Admin\MetaBox;
 use Sectionist\Admin\SaveHandler;
 use Sectionist\Faq\Faq;
 use Sectionist\Migration\Runner;
+use Sectionist\Render\Excerpt;
 use Sectionist\Render\Renderer;
 use Sectionist\Render\ViewResolver;
 use Sectionist\Rest\PreviewController;
 use Sectionist\Sections\Registry;
 use Sectionist\Sections\Types\CtaType;
 use Sectionist\Sections\Types\FaqType;
+use Sectionist\Sections\Types\GalleryType;
 use Sectionist\Sections\Types\HeroType;
 use Sectionist\Sections\Types\ListType;
 use Sectionist\Sections\Types\TextType;
@@ -31,6 +33,7 @@ final class Plugin
             $registry->register(new TextType);
             $registry->register(new HeroType);
             $registry->register(new ListType);
+            $registry->register(new GalleryType);
             $registry->register(new FaqType);
             $registry->register(new CtaType);
         });
@@ -43,6 +46,7 @@ final class Plugin
         new MetaBox($registry, $repository)->register();
         new SaveHandler($registry, $repository)->register();
         new Assets()->register();
+        new Excerpt($repository)->register();
 
         self::$renderer = $renderer = new Renderer($registry, $repository, ViewResolver::forWordPress(dirname(__DIR__)));
         new PreviewController($registry, $renderer)->register();

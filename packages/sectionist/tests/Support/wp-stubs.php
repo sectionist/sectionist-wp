@@ -301,6 +301,22 @@ if (! function_exists('wp_kses_post')) {
     }
 }
 
+if (! function_exists('wp_strip_all_tags')) {
+    function wp_strip_all_tags(string $text): string
+    {
+        return trim(strip_tags($text));
+    }
+}
+
+if (! function_exists('wp_trim_words')) {
+    function wp_trim_words(string $text, int $numWords = 55, ?string $more = null): string
+    {
+        $words = preg_split('/\s+/', trim($text), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+
+        return count($words) > $numWords ? implode(' ', array_slice($words, 0, $numWords)).($more ?? '&hellip;') : implode(' ', $words);
+    }
+}
+
 if (! function_exists('register_rest_route')) {
     /**
      * @param  array<string, mixed>  $args
