@@ -1,4 +1,5 @@
 import type { ComponentChildren } from 'preact';
+import { useId } from 'preact/hooks';
 import { Icon, IconButton } from './Icon';
 
 export function Collapsible(props: {
@@ -6,6 +7,8 @@ export function Collapsible(props: {
   open: boolean;
   onToggle: () => void;
   title: ComponentChildren;
+  /** Plain-text name, appended to the toggle label so repeated buttons are distinguishable. */
+  name?: string;
   actions?: ComponentChildren;
   moveActions?: ComponentChildren;
   toggleLabel: string;
@@ -19,6 +22,7 @@ export function Collapsible(props: {
   onDragEnd: () => void;
   children: ComponentChildren;
 }) {
+  const bodyId = useId();
   const locked = props.dragDisabled;
   const cls = 'sectionist-card' + (props.open ? ' is-open' : '') + (props.dragging ? ' is-dragging' : '') + (props.dropTarget ? ' is-drop-target' : '');
   return (
@@ -33,8 +37,7 @@ export function Collapsible(props: {
           class={'sectionist-icon-button sectionist-card__handle' + (locked ? ' is-disabled' : '')}
           draggable={!locked}
           title={props.dragLabel}
-          aria-label={props.dragLabel}
-          aria-disabled={locked}
+          aria-hidden="true"
           onDragStart={locked ? undefined : props.onDragStart}
           onDragEnd={locked ? undefined : props.onDragEnd}
         >
@@ -45,12 +48,13 @@ export function Collapsible(props: {
         {props.actions && <span class="sectionist-card__actions">{props.actions}</span>}
         <IconButton
           icon={props.open ? 'arrow-up-alt2' : 'arrow-down-alt2'}
-          label={props.toggleLabel}
+          label={props.name ? `${props.toggleLabel}: ${props.name}` : props.toggleLabel}
           expanded={props.open}
+          controls={bodyId}
           onClick={props.onToggle}
         />
       </div>
-      <div class="sectionist-card__body" hidden={!props.open}>
+      <div class="sectionist-card__body" id={bodyId} hidden={!props.open}>
         {props.children}
       </div>
     </div>

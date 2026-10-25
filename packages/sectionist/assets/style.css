@@ -111,6 +111,7 @@
 .sectionist { font-family: var(--sx-font); background: var(--sx-surface); border: 1px solid var(--sx-border); border-radius: var(--sx-radius); box-shadow: var(--sx-shadow); padding: 16px; }
 .sectionist > .notice { margin: 8px; }
 .sectionist-tabs__nav { display: flex; gap: 6px; padding: 0 0 12px; }
+.sectionist-tabs__list { display: flex; gap: 6px; }
 .sectionist-tabs__tab { display: flex; align-items: center; gap: 6px; background: var(--sx-surface); border: 1px solid var(--sx-border); padding: 8px 14px; color: var(--sx-muted); font-size: 13px; cursor: pointer; border-radius: var(--sx-radius-sm); transition: color .15s, border-color .15s; }
 .sectionist-tabs__tab:hover { color: var(--sx-text); border-color: var(--sx-muted); }
 .sectionist-tabs__tab.is-active { color: var(--sx-accent-dark); border-color: var(--sx-accent); box-shadow: var(--sx-ring); font-weight: 600; }
@@ -247,3 +248,16 @@
 .sectionist-faq-field { display: grid; gap: 12px; }
 .sectionist-faq-field__topics, .sectionist-faq-field__selected { display: grid; gap: 6px; }
 .sectionist-faq-field__bulk { display: flex; gap: 12px; }
+
+.sectionist-screen .sectionist-icon-button:focus-visible,
+.sectionist-screen .sectionist-tabs__tab:focus-visible,
+.sectionist-screen .button:focus-visible,
+.sectionist-screen .sectionist-rt__content:focus-visible { outline: 2px solid var(--sx-accent); outline-offset: 2px; box-shadow: var(--sx-ring); }
+
+@media (prefers-reduced-motion: reduce) {
+	.sectionist-screen *, .sectionist-screen *::before, .sectionist-screen *::after {
+		animation-duration: .01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: .01ms !important;
+	}
+}

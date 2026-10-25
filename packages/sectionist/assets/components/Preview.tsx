@@ -26,8 +26,8 @@ export function Preview(props: { sections: Section[]; config: PreviewConfig; loa
     return () => controller.abort();
   }, []);
 
-  if (status === 'loading') return <p class="sectionist-note">{props.loading}</p>;
-  if (status === 'error') return <div class="notice notice-error inline"><p>{props.error}</p></div>;
+  if (status === 'loading') return <p class="sectionist-note" role="status">{props.loading}</p>;
+  if (status === 'error') return <div class="notice notice-error inline" role="alert"><p>{props.error}</p></div>;
   if (!html.trim()) return <p class="sectionist-note">{props.empty}</p>;
   return <div class="sectionist-preview" dangerouslySetInnerHTML={{ __html: html }} />;
 }

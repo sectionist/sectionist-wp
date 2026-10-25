@@ -3,6 +3,7 @@ import { BackdropPanel } from './BackdropPanel';
 import { Collapsible } from './Collapsible';
 import { FieldInput } from './FieldInput';
 import { Icon, IconButton } from './Icon';
+import { MoveButtons } from './MoveButtons';
 
 const HEADING = /<h([1-6])[^>]*>([\s\S]*?)<\/h\1>/i;
 
@@ -58,6 +59,7 @@ export function SectionCard(props: {
   const { section, type, labels: t } = props;
   const { title, level } = sectionSummary(type, section);
   const active = section.active !== false;
+  const name = [type?.label ?? section.type, title].filter(Boolean).join(' – ');
   const background = section.background ?? '';
   const fields = type?.fields ?? [];
   const isVisible = (field: FieldDef) => !field.showIf || String(section.data[field.showIf.field] ?? '') === field.showIf.value;
@@ -81,6 +83,7 @@ export function SectionCard(props: {
       open={props.open}
       onToggle={props.onToggle}
       toggleLabel={t.toggle}
+      name={name}
       title={
         <>
           <strong>{type?.label ?? section.type}</strong>
@@ -100,20 +103,18 @@ export function SectionCard(props: {
       dragDisabled={props.pinned}
       moveActions={
         props.pinned ? undefined : (
-          <>
-            <IconButton icon="arrow-up-alt2" label={t.moveUp} disabled={props.first} onClick={() => props.onMove(-1)} />
-            <IconButton icon="arrow-down-alt2" label={t.moveDown} disabled={props.last} onClick={() => props.onMove(1)} />
-          </>
+          <MoveButtons id={section.id} upLabel={t.moveUp} downLabel={t.moveDown} first={props.first} last={props.last} onMove={props.onMove} />
         )
       }
       actions={
         <>
           <IconButton
             icon={active ? 'visibility' : 'hidden'}
-            label={`${t.toggleActive} (${active ? t.active : t.inactive})`}
+            label={`${t.toggleActive}: ${name}`}
+            pressed={active}
             onClick={() => props.onActive(!active)}
           />
-          <IconButton icon="trash" label={t.remove} danger onClick={props.onRemove} />
+          <IconButton icon="trash" label={`${t.remove}: ${name}`} danger onClick={props.onRemove} />
         </>
       }
     >

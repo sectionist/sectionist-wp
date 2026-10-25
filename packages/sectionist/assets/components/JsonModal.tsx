@@ -21,7 +21,8 @@ export function JsonModal(props: {
     <Modal title={props.title} closeLabel={props.closeLabel} onClose={props.onClose}>
       <pre class="sectionist-json" tabIndex={0}>{props.json}</pre>
       <div class="sectionist-modal__footer">
-        <button type="button" class="button" onClick={copy}>{copied ? props.copiedLabel : props.copyLabel}</button>
+        <button type="button" class="button" onClick={copy}>{props.copyLabel}</button>
+        <span class="screen-reader-text" role="status">{copied ? props.copiedLabel : ''}</span>
         <button type="button" class="button button-primary" autofocus onClick={props.onClose}>{props.closeLabel}</button>
       </div>
     </Modal>

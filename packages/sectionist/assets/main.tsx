@@ -3,6 +3,7 @@ import { useEffect, useReducer, useRef, useState } from 'preact/hooks';
 import { isPinned, isPinnedEnd, isPinnedStart, pinEdges, reducer } from './state';
 import type { Config, TypeDef } from './types';
 import { ConfirmModal } from './components/ConfirmModal';
+import { focusAfterRemove } from './components/focus';
 import { IconButton } from './components/Icon';
 import { JsonModal } from './components/JsonModal';
 import { Preview } from './components/Preview';
@@ -177,6 +178,7 @@ function App({ config }: { config: Config }) {
                 cancelLabel={t.cancel}
                 onCancel={() => setRemoveId('')}
                 onConfirm={() => {
+                  focusAfterRemove(listRef.current, sections.findIndex((s) => s.id === removeId), () => document.querySelector<HTMLElement>('.sectionist-add button'));
                   dispatch({ kind: 'remove', id: removeId });
                   setRemoveId('');
                 }}

@@ -1,5 +1,5 @@
 import type { ComponentChildren } from 'preact';
-import { useState } from 'preact/hooks';
+import { useId, useState } from 'preact/hooks';
 import { IconButton } from './Icon';
 
 export function Panel(props: {
@@ -12,6 +12,7 @@ export function Panel(props: {
   children: ComponentChildren;
 }) {
   const [open, setOpen] = useState(false);
+  const bodyId = useId();
   const active = props.active ?? true;
   const expanded = open && active && !props.headerOnly;
   const toggle = () => active && !props.headerOnly && setOpen(!open);
@@ -27,7 +28,8 @@ export function Panel(props: {
         {props.onActive && (
           <IconButton
             icon={active ? 'visibility' : 'hidden'}
-            label={props.activeLabel ?? props.title}
+            label={`${props.activeLabel ?? props.title}: ${props.title}`}
+            pressed={active}
             onClick={() => {
               setOpen(false);
               props.onActive?.(!active);
@@ -35,11 +37,18 @@ export function Panel(props: {
           />
         )}
         {!props.headerOnly && (
-          <IconButton icon={expanded ? 'arrow-up-alt2' : 'arrow-down-alt2'} label={props.toggleLabel} expanded={expanded} disabled={!active} onClick={toggle} />
+          <IconButton
+            icon={expanded ? 'arrow-up-alt2' : 'arrow-down-alt2'}
+            label={`${props.toggleLabel}: ${props.title}`}
+            expanded={expanded}
+            controls={bodyId}
+            disabled={!active}
+            onClick={toggle}
+          />
         )}
       </div>
       {!props.headerOnly && (
-        <div class="sectionist-panel__body" hidden={!expanded}>
+        <div class="sectionist-panel__body" id={bodyId} hidden={!expanded}>
           {active && props.children}
         </div>
       )}

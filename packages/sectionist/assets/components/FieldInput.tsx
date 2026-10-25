@@ -79,7 +79,7 @@ export function FieldInput(props: {
   return (
     <Field id={field.kind === 'choice' ? undefined : id} label={field.label}>
       {field.kind === 'richtext' ? (
-        <RichTextEditor id={id} value={value} labels={props.labels} onInput={onInput} />
+        <RichTextEditor id={id} label={field.label} value={value} labels={props.labels} onInput={onInput} />
       ) : field.kind === 'choice' ? (
         <ButtonGroup options={field.options} value={value} label={field.label} onInput={onInput} />
       ) : field.kind === 'select' ? (

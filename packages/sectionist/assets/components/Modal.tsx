@@ -1,5 +1,5 @@
 import type { ComponentChildren } from 'preact';
-import { useEffect, useRef } from 'preact/hooks';
+import { useEffect, useId, useRef } from 'preact/hooks';
 import { IconButton } from './Icon';
 
 const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [contenteditable="true"], [tabindex]:not([tabindex="-1"])';
@@ -13,13 +13,17 @@ export function Modal(props: {
   children: ComponentChildren;
 }) {
   const dialog = useRef<HTMLDivElement>(null);
+  const titleId = useId();
 
   useEffect(() => {
     const previous = document.activeElement as HTMLElement | null;
     if (dialog.current && !dialog.current.contains(document.activeElement)) {
       dialog.current.focus();
     }
-    return () => previous?.focus?.();
+    return () => {
+      if (previous?.isConnected) previous.focus();
+      else document.querySelector<HTMLElement>('.sectionist .sectionist-add button, .sectionist button')?.focus();
+    };
   }, []);
 
   const onKeyDown = (e: KeyboardEvent) => {
@@ -55,10 +59,10 @@ export function Modal(props: {
         class={'sectionist-modal__dialog' + (props.small ? ' sectionist-modal__dialog--small' : '')}
         role={props.alert ? 'alertdialog' : 'dialog'}
         aria-modal="true"
-        aria-label={props.title}
+        aria-labelledby={titleId}
       >
         <div class="sectionist-modal__head">
-          <strong>{props.title}</strong>
+          <strong id={titleId}>{props.title}</strong>
           <IconButton icon="no-alt" label={props.closeLabel} onClick={props.onClose} />
         </div>
         {props.children}
