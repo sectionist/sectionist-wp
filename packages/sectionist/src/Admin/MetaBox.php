@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sectionist\Admin;
 
+use Sectionist\Faq\Faq;
 use Sectionist\Rest\PreviewController;
 use Sectionist\Sections\Backgrounds;
 use Sectionist\Sections\Field;
@@ -78,6 +79,22 @@ final readonly class MetaBox
         foreach (self::postTypes() as $postType) {
             add_meta_box('sectionist', __('Sections', 'sectionist'), [$this, 'render'], $postType, 'normal', 'high');
         }
+        add_filter('postbox_classes_'.Faq::POST_TYPE.'_sectionist-faq-answer', static fn (array $classes): array => array_values(array_diff($classes, ['closed'])));
+        add_meta_box('sectionist-faq-answer', __('Answer', 'sectionist'), [$this, 'renderFaqAnswer'], Faq::POST_TYPE, 'normal', 'high');
+    }
+
+    public function renderFaqAnswer(mixed $post): void
+    {
+        $content = is_object($post) && isset($post->post_content) && is_string($post->post_content) ? $post->post_content : '';
+        $config = wp_json_encode(['value' => $content, 'i18n' => $this->labels()]);
+
+        wp_nonce_field(Faq::NONCE_ACTION, Faq::NONCE_FIELD);
+        printf(
+            '<div id="sectionist-rte" data-config="%s"></div><input type="hidden" id="sectionist-faq-answer-input" name="%s" value="%s">',
+            esc_attr($config === false ? '{}' : $config),
+            esc_attr(Faq::ANSWER_FIELD),
+            esc_attr($content),
+        );
     }
 
     public function render(mixed $post): void
@@ -97,6 +114,8 @@ final readonly class MetaBox
                 'nonce' => wp_create_nonce('wp_rest'),
                 'postId' => $postId,
                 'pagesUrl' => rest_url('wp/v2/pages'),
+                'faqUrl' => rest_url('wp/v2/'.Faq::POST_TYPE),
+                'topicsUrl' => rest_url('wp/v2/'.Faq::TAXONOMY),
             ],
             'types' => $this->typeDefinitions(),
             'backgrounds' => Backgrounds::all(),
@@ -220,6 +239,20 @@ final readonly class MetaBox
             'listAdd' => __('Add entry', 'sectionist'),
             'listRemove' => __('Remove entry', 'sectionist'),
             'listEntry' => __('Entry', 'sectionist'),
+            'faqMode' => __('Show', 'sectionist'),
+            'faqModeTopics' => __('By topic', 'sectionist'),
+            'faqModeSelected' => __('Hand-picked', 'sectionist'),
+            'faqSemantic' => __('Heading levels', 'sectionist'),
+            'faqSemanticLabel' => __('Semantic structure', 'sectionist'),
+            'faqSemanticHint' => __('On: the first heading of the section content is used and the questions become one level below it (h2 → h3). Without a heading: questions are h2. Off: questions have no heading tag.', 'sectionist'),
+            'faqTopics' => __('Topics', 'sectionist'),
+            'faqTopicsHint' => __('No topic selected: all questions are shown.', 'sectionist'),
+            'faqNoTopics' => __('No topics yet. Create them under FAQ → Topics.', 'sectionist'),
+            'faqQuestions' => __('Questions', 'sectionist'),
+            'faqNoQuestions' => __('No questions yet. Create them under FAQ → Add question.', 'sectionist'),
+            'faqSelectAll' => __('Select all', 'sectionist'),
+            'faqSelectNone' => __('Select none', 'sectionist'),
+            'faqOrderHint' => __('The order is set in the central FAQ.', 'sectionist'),
             'empty' => __('No sections yet. Add the first one below.', 'sectionist'),
             'unavailable' => __('Unavailable', 'sectionist'),
             'unknownType' => __('This section type is not available. Its content is kept unchanged.', 'sectionist'),

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Sectionist\Sections;
 
+use Sectionist\Faq\Faq;
+
 final readonly class Field
 {
     public const TEXT = 'text';
@@ -21,6 +23,8 @@ final readonly class Field
     public const MEDIA = 'media';
 
     public const LIST = 'list';
+
+    public const FAQ = 'faq';
 
     /** Maximum number of entries kept in a list field. */
     public const LIST_LIMIT = 50;
@@ -148,6 +152,12 @@ final readonly class Field
         return new self(self::LIST, $name, $label, [], []);
     }
 
+    /** Selection of central FAQ entries: by topics or hand-picked. */
+    public static function faq(string $name, string $label): self
+    {
+        return new self(self::FAQ, $name, $label, [], Faq::defaults());
+    }
+
     /**
      * @return list<array{title: string, text: string}>
      */
@@ -179,6 +189,9 @@ final readonly class Field
     {
         if ($this->kind === self::LIST) {
             return $this->sanitizeList($value);
+        }
+        if ($this->kind === self::FAQ) {
+            return Faq::sanitize($value);
         }
         if ($this->kind === self::CTA) {
             $cta = Cta::sanitize($value);

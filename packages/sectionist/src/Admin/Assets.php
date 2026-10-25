@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sectionist\Admin;
 
+use Sectionist\Faq\Faq;
 use Sectionist\Sections\Backgrounds;
 
 final class Assets
@@ -57,7 +58,7 @@ final class Assets
     {
         $screen = get_current_screen();
 
-        return $screen !== null && in_array($screen->post_type, MetaBox::postTypes(), true);
+        return $screen !== null && in_array($screen->post_type, [...MetaBox::postTypes(), Faq::POST_TYPE], true);
     }
 
     private function isBuilt(): bool

@@ -406,3 +406,63 @@ if (! function_exists('wp_get_attachment_image')) {
 if (! function_exists('wp_enqueue_media')) {
     function wp_enqueue_media(): void {}
 }
+
+if (! function_exists('get_post_type')) {
+    function get_post_type(int $postId): string|false
+    {
+        return WpState::$postTypes[$postId] ?? false;
+    }
+}
+
+if (! function_exists('term_exists')) {
+    function term_exists(int $term, string $taxonomy = ''): mixed
+    {
+        return in_array($term, WpState::$terms, true) ? ['term_id' => $term] : null;
+    }
+}
+
+if (! function_exists('register_post_type')) {
+    /** @param array<string, mixed> $args */
+    function register_post_type(string $postType, array $args = []): void {}
+}
+
+if (! function_exists('register_taxonomy')) {
+    /**
+     * @param  string|list<string>  $objectType
+     * @param  array<string, mixed>  $args
+     */
+    function register_taxonomy(string $taxonomy, string|array $objectType, array $args = []): void {}
+}
+
+if (! function_exists('get_posts')) {
+    /**
+     * @param  array<string, mixed>  $args
+     * @return list<WP_Post>
+     */
+    function get_posts(array $args = []): array
+    {
+        return [];
+    }
+}
+
+if (! function_exists('get_post')) {
+    function get_post(int $postId): ?WP_Post
+    {
+        return null;
+    }
+}
+
+if (! class_exists('WP_Post')) {
+    class WP_Post
+    {
+        public int $ID = 0;
+
+        public string $post_title = '';
+
+        public string $post_content = '';
+
+        public string $post_status = 'publish';
+
+        public string $post_type = '';
+    }
+}

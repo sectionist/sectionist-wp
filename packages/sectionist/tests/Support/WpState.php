@@ -28,6 +28,12 @@ final class WpState
 
     public static bool $editorSupport = false;
 
+    /** @var array<int, string> post ID => post type */
+    public static array $postTypes = [];
+
+    /** @var list<int> existing topic term IDs */
+    public static array $terms = [];
+
     public static function reset(): void
     {
         self::$actions = [];
@@ -39,5 +45,7 @@ final class WpState
         self::$themeDir = '';
         self::$screen = null;
         self::$editorSupport = false;
+        self::$postTypes = [];
+        self::$terms = [];
     }
 }

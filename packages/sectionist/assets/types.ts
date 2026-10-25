@@ -1,5 +1,5 @@
 export interface FieldDef {
-  kind: 'text' | 'richtext' | 'select' | 'choice' | 'cta' | 'image' | 'media' | 'list';
+  kind: 'text' | 'richtext' | 'select' | 'choice' | 'cta' | 'image' | 'media' | 'list' | 'faq';
   name: string;
   label: string;
   options: { value: string; label: string }[];
@@ -36,6 +36,8 @@ export interface Preview {
   nonce: string;
   postId: number;
   pagesUrl: string;
+  faqUrl: string;
+  topicsUrl: string;
 }
 
 export interface Config {

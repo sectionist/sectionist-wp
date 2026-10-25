@@ -1,6 +1,7 @@
 import type { FieldDef, Preview } from '../types';
 import { ButtonGroup } from './ButtonGroup';
 import { CtaField } from './CtaField';
+import { FaqField } from './FaqField';
 import { Field, Select, TextInput } from './Field';
 import { ImageField } from './ImageField';
 import { ListField } from './ListField';
@@ -49,6 +50,13 @@ export function FieldInput(props: {
     return (
       <Panel title={field.label} toggleLabel={t.toggle}>
         <ListField id={id} value={props.value} labels={props.labels} onInput={onInput} />
+      </Panel>
+    );
+  }
+  if (field.kind === 'faq') {
+    return (
+      <Panel title={field.label} toggleLabel={t.toggle}>
+        <FaqField id={id} value={props.value} rest={props.rest} labels={props.labels} onInput={onInput} />
       </Panel>
     );
   }

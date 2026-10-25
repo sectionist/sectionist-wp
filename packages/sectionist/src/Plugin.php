@@ -7,12 +7,14 @@ namespace Sectionist;
 use Sectionist\Admin\Assets;
 use Sectionist\Admin\MetaBox;
 use Sectionist\Admin\SaveHandler;
+use Sectionist\Faq\Faq;
 use Sectionist\Migration\Runner;
 use Sectionist\Render\Renderer;
 use Sectionist\Render\ViewResolver;
 use Sectionist\Rest\PreviewController;
 use Sectionist\Sections\Registry;
 use Sectionist\Sections\Types\CtaType;
+use Sectionist\Sections\Types\FaqType;
 use Sectionist\Sections\Types\HeroType;
 use Sectionist\Sections\Types\ListType;
 use Sectionist\Sections\Types\TextType;
@@ -29,8 +31,11 @@ final class Plugin
             $registry->register(new TextType);
             $registry->register(new HeroType);
             $registry->register(new ListType);
+            $registry->register(new FaqType);
             $registry->register(new CtaType);
         });
+
+        Faq::register();
 
         $registry = new Registry;
         $repository = new PostContentRepository;

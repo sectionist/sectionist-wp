@@ -6,6 +6,7 @@ import { ConfirmModal } from './components/ConfirmModal';
 import { IconButton } from './components/Icon';
 import { JsonModal } from './components/JsonModal';
 import { Preview } from './components/Preview';
+import { RichTextEditor } from './components/richtext/RichTextEditor';
 import { SectionCard } from './components/SectionCard';
 import { Tabs } from './components/Tabs';
 import { TypeModal } from './components/TypeModal';
@@ -239,7 +240,21 @@ function App({ config }: { config: Config }) {
   );
 }
 
+function FaqAnswer({ config }: { config: { value: string; i18n: Record<string, string> } }) {
+  const [value, setValue] = useState(config.value);
+  useEffect(() => {
+    const input = document.getElementById('sectionist-faq-answer-input') as HTMLInputElement | null;
+    if (input) input.value = value;
+  }, [value]);
+  return <RichTextEditor id="sectionist-faq-answer-editor" value={config.value} labels={config.i18n} onInput={setValue} />;
+}
+
 const root = document.getElementById('sectionist-editor');
 if (root) {
   render(<App config={JSON.parse(root.dataset.config ?? '{}') as Config} />, root);
+}
+
+const answerRoot = document.getElementById('sectionist-rte');
+if (answerRoot) {
+  render(<FaqAnswer config={JSON.parse(answerRoot.dataset.config ?? '{}')} />, answerRoot);
 }
