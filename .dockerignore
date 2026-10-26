@@ -1,0 +1,18 @@
+# Git und IDEs
+.git
+.gitignore
+.idea/
+.github/
+
+# Credentials
+.env
+
+# Abhängigkeiten und temporäre Ordner
+node_modules/
+vendor/
+*.log
+.DS_Store
+
+# Docker
+docker-compose.yml
+.dockerignore

@@ -1,5 +1,5 @@
 .idea
-
+.env
 wordpress/
 dev/
 node_modules/
