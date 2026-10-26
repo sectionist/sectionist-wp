@@ -1,0 +1,10 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  // Standard-Agent für die normale interaktive Entwicklung
+  "default_agent": "architect",
+
+  // Globale Projektanleitung für alle Agenten aus dem Root laden
+  "instructions": [
+    "AGENTS.md"
+  ]
+}
