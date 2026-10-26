@@ -93,6 +93,4 @@ Current state:
 - TODO: `LinkModal.tsx` still uses its own label/input markup instead of the `Field` components. Low priority.
 - TODO: Badge warning colors and `#fff` in `assets/style.css` are hard-coded instead of tokens. Low priority.
 - TODO: Add option for links to open in a new tab.
-- TODO (blocker before v1.0.0): Editor accessibility. Start with an audit (keyboard, screen reader), then fix the findings. Known gaps: keyboard alternative for drag & drop (`list`, `gallery`, sections), `aria-expanded` on panels, the eye toggle, focus trap in modals, the RTE. No new section type until the audit is done.
-- TODO (awaiting acceptance, then remove): Section type `shortcode` is built: a list of shortcodes, each exactly one registered shortcode checked with `shortcode_exists`, rendered via `do_shortcode()` (e.g. Contact Form 7).
 - TODO (to be discussed, lower priority): `columns` as a structuring element (changes the data format, needs an ADR first), `embed` (oEmbed, consent in the theme), `html`/code (only with `unfiltered_html`), uninstall and export (what happens to the JSON when the plugin is deactivated; related to the plain-text sweep before v1.0.0).
