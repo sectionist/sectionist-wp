@@ -20,6 +20,7 @@ use Sectionist\Sections\Types\FaqType;
 use Sectionist\Sections\Types\GalleryType;
 use Sectionist\Sections\Types\HeroType;
 use Sectionist\Sections\Types\ListType;
+use Sectionist\Sections\Types\ShortcodeType;
 use Sectionist\Sections\Types\TextType;
 use Sectionist\Storage\Document;
 use Sectionist\Storage\PostContentRepository;
@@ -36,6 +37,7 @@ final class Plugin
             $registry->register(new ListType);
             $registry->register(new GalleryType);
             $registry->register(new FaqType);
+            $registry->register(new ShortcodeType);
             $registry->register(new CtaType);
         });
 

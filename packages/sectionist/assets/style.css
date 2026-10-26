@@ -243,6 +243,11 @@
 
 .sectionist-list { display: grid; gap: 8px; justify-items: start; }
 .sectionist-list > .sectionist-card { width: 100%; margin-bottom: 0; box-sizing: border-box; }
+.sectionist-shortcodes { display: grid; gap: 8px; justify-items: start; }
+.sectionist-shortcodes__row { display: flex; align-items: center; gap: 4px; width: 100%; }
+.sectionist-shortcodes__row input { flex: 1; min-width: 0; }
+.sectionist-shortcodes__row.is-dragging { opacity: .4; }
+.sectionist-shortcodes__row.is-drop-target { box-shadow: 0 -3px 0 var(--sx-accent); }
 .sectionist-image-field__preview { max-width: 240px; height: auto; border: 1px solid var(--sx-border); border-radius: var(--sx-radius-sm); }
 .sectionist-image-field__actions { display: flex; align-items: center; gap: 12px; }
 

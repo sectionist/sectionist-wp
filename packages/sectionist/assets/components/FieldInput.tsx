@@ -9,6 +9,7 @@ import { ListField } from './ListField';
 import { MediaField } from './MediaField';
 import { Panel } from './Panel';
 import { RichTextEditor } from './richtext/RichTextEditor';
+import { ShortcodesField } from './ShortcodesField';
 
 export function FieldInput(props: {
   id: string;
@@ -51,6 +52,13 @@ export function FieldInput(props: {
     return (
       <Panel title={field.label} toggleLabel={t.toggle}>
         <ListField id={id} value={props.value} labels={props.labels} onInput={onInput} />
+      </Panel>
+    );
+  }
+  if (field.kind === 'shortcodes') {
+    return (
+      <Panel title={field.label} toggleLabel={t.toggle}>
+        <ShortcodesField id={id} value={props.value} labels={props.labels} onInput={onInput} />
       </Panel>
     );
   }

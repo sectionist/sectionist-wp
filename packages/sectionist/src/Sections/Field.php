@@ -28,6 +28,8 @@ final readonly class Field
 
     public const GALLERY = 'gallery';
 
+    public const SHORTCODES = 'shortcodes';
+
     /** Maximum number of entries kept in a list field. */
     public const LIST_LIMIT = 50;
 
@@ -160,6 +162,12 @@ final readonly class Field
         return new self(self::GALLERY, $name, $label, [], []);
     }
 
+    /** List of single, registered shortcodes: `{code}` each. */
+    public static function shortcodes(string $name, string $label): self
+    {
+        return new self(self::SHORTCODES, $name, $label, [], []);
+    }
+
     /** Selection of central FAQ entries: by topics or hand-picked. */
     public static function faq(string $name, string $label): self
     {
@@ -182,6 +190,28 @@ final readonly class Field
                 continue;
             }
             $items[] = ['title' => $title, 'text' => $text];
+            if (count($items) >= self::LIST_LIMIT) {
+                break;
+            }
+        }
+
+        return $items;
+    }
+
+    /**
+     * Each entry is exactly one self-closing shortcode of a registered tag, nothing around it.
+     *
+     * @return list<array{code: string}>
+     */
+    private function sanitizeShortcodes(mixed $value): array
+    {
+        $items = [];
+        foreach (is_array($value) ? $value : [] as $entry) {
+            $code = is_array($entry) && is_string($entry['code'] ?? null) ? trim(sanitize_text_field($entry['code'])) : '';
+            if (preg_match('/^\[([A-Za-z0-9_-]+)(?:\s[^\[\]]*)?\]$/', $code, $match) !== 1 || ! shortcode_exists($match[1])) {
+                continue;
+            }
+            $items[] = ['code' => $code];
             if (count($items) >= self::LIST_LIMIT) {
                 break;
             }
@@ -224,6 +254,9 @@ final readonly class Field
         }
         if ($this->kind === self::LIST) {
             return $this->sanitizeList($value);
+        }
+        if ($this->kind === self::SHORTCODES) {
+            return $this->sanitizeShortcodes($value);
         }
         if ($this->kind === self::FAQ) {
             return Faq::sanitize($value);

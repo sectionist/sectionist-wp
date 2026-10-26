@@ -459,6 +459,20 @@ if (! function_exists('wp_get_attachment_image')) {
     }
 }
 
+if (! function_exists('shortcode_exists')) {
+    function shortcode_exists(string $tag): bool
+    {
+        return in_array($tag, $GLOBALS['sectionist_test_shortcodes'] ?? [], true);
+    }
+}
+
+if (! function_exists('do_shortcode')) {
+    function do_shortcode(string $content): string
+    {
+        return $content;
+    }
+}
+
 if (! function_exists('wp_enqueue_media')) {
     function wp_enqueue_media(): void {}
 }

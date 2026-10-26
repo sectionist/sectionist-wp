@@ -15,7 +15,7 @@ export function useDragReorder(onReorder: (id: string, before: string) => void) 
     handlers: (id: string) => ({
       onDragStart: (e: DragEvent) => {
         setDragId(id);
-        const card = (e.currentTarget as HTMLElement).closest('.sectionist-card');
+        const card = (e.currentTarget as HTMLElement).closest('.sectionist-card, [data-drag-item]');
         if (card && e.dataTransfer) {
           e.dataTransfer.effectAllowed = 'move';
           e.dataTransfer.setData('text/plain', id);
