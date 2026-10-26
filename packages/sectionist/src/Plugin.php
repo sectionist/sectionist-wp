@@ -7,6 +7,7 @@ namespace Sectionist;
 use Sectionist\Admin\Assets;
 use Sectionist\Admin\MetaBox;
 use Sectionist\Admin\SaveHandler;
+use Sectionist\Admin\Settings;
 use Sectionist\Faq\Faq;
 use Sectionist\Migration\Runner;
 use Sectionist\Render\Excerpt;
@@ -46,6 +47,7 @@ final class Plugin
         new MetaBox($registry, $repository)->register();
         new SaveHandler($registry, $repository)->register();
         new Assets()->register();
+        new Settings($registry)->register();
         new Excerpt($repository)->register();
 
         self::$renderer = $renderer = new Renderer($registry, $repository, ViewResolver::forWordPress(dirname(__DIR__)));

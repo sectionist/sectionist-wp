@@ -100,6 +100,7 @@ final readonly class MetaBox
     public function render(mixed $post): void
     {
         $postId = is_object($post) && isset($post->ID) ? (int) $post->ID : 0;
+        $postType = is_object($post) && isset($post->post_type) && is_string($post->post_type) ? $post->post_type : '';
         $document = $this->repository->load($postId);
 
         if ($document->isNewerThanSupported()) {
@@ -118,6 +119,10 @@ final readonly class MetaBox
                 'topicsUrl' => rest_url('wp/v2/'.Faq::TAXONOMY),
             ],
             'types' => $this->typeDefinitions(),
+            'allowedTypes' => array_values(array_filter(
+                array_keys($this->registry->all()),
+                static fn (string $type): bool => Settings::isAllowed($postType, $type),
+            )),
             'backgrounds' => Backgrounds::all(),
             'sections' => $document->toArray()['sections'],
             'i18n' => $this->labels(),

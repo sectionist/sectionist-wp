@@ -188,7 +188,7 @@ function App({ config }: { config: Config }) {
               <TypeModal
                 title={t.chooseType}
                 closeLabel={t.cancel}
-                types={config.types}
+                types={config.types.filter((x) => config.allowedTypes.includes(x.name))}
                 onClose={() => setModalOpen(false)}
                 onPick={(type) => {
                   dispatch({ kind: 'add', type });

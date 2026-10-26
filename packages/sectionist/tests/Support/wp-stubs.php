@@ -276,6 +276,46 @@ if (! function_exists('add_filter')) {
     }
 }
 
+if (! function_exists('add_options_page')) {
+    function add_options_page(string $pageTitle, string $menuTitle, string $capability, string $menuSlug, callable $callback): string|false
+    {
+        return $menuSlug;
+    }
+}
+
+if (! function_exists('register_setting')) {
+    function register_setting(string $group, string $name, array $args = []): void {}
+}
+
+if (! function_exists('settings_fields')) {
+    function settings_fields(string $group): void {}
+}
+
+if (! function_exists('get_post_type_object')) {
+    function get_post_type_object(string $postType): ?object
+    {
+        return null;
+    }
+}
+
+if (! function_exists('plugin_basename')) {
+    function plugin_basename(string $file): string
+    {
+        return basename(dirname($file)).'/'.basename($file);
+    }
+}
+
+if (! function_exists('admin_url')) {
+    function admin_url(string $path = ''): string
+    {
+        return 'http://example.test/wp-admin/'.$path;
+    }
+}
+
+if (! function_exists('submit_button')) {
+    function submit_button(): void {}
+}
+
 if (! function_exists('remove_post_type_support')) {
     function remove_post_type_support(string $postType, string $feature): void {}
 }

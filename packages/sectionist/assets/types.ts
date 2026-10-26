@@ -43,6 +43,7 @@ export interface Preview {
 export interface Config {
   preview: Preview;
   types: TypeDef[];
+  allowedTypes: string[];
   backgrounds: Background[];
   sections: Section[];
   i18n: Record<string, string>;

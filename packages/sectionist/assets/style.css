@@ -107,6 +107,7 @@
 .sectionist-screen #sectionist-faq-answer .postbox-header { pointer-events: none; }
 .sectionist-screen #sectionist-faq-answer.closed .inside { display: block; }
 
+
 /* ---------- Editor ---------- */
 .sectionist { font-family: var(--sx-font); background: var(--sx-surface); border: 1px solid var(--sx-border); border-radius: var(--sx-radius); box-shadow: var(--sx-shadow); padding: 16px; }
 .sectionist > .notice { margin: 8px; }
