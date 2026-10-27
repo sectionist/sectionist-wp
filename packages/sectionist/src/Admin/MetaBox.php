@@ -215,6 +215,7 @@ final readonly class MetaBox
             'ctaPage' => __('Select a page', 'sectionist'),
             'ctaPageNone' => __('— No page —', 'sectionist'),
             'ctaUrl' => __('Or custom URL', 'sectionist'),
+            'urlPlaceholder' => __('https://…', 'sectionist'),
             'ctaNewTab' => __('Open link in a new tab', 'sectionist'),
             'active' => __('Active', 'sectionist'),
             'inactive' => __('Inactive', 'sectionist'),

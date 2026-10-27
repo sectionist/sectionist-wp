@@ -10,8 +10,8 @@ export function Field(props: { label: string; id?: string; children: ComponentCh
   );
 }
 
-export function TextInput(props: { id: string; value: string; placeholder?: string; onInput: (v: string) => void }) {
-  return <input id={props.id} type="text" value={props.value} placeholder={props.placeholder} onInput={(e) => props.onInput(e.currentTarget.value)} />;
+export function TextInput(props: { id: string; value: string; placeholder?: string; inputMode?: 'url'; onInput: (v: string) => void }) {
+  return <input id={props.id} type="text" inputMode={props.inputMode} value={props.value} placeholder={props.placeholder} onInput={(e) => props.onInput(e.currentTarget.value)} />;
 }
 
 export function Textarea(props: { id: string; value: string; rows?: number; onInput: (v: string) => void }) {

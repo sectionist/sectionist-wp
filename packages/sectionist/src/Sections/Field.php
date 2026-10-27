@@ -10,6 +10,8 @@ final readonly class Field
 {
     public const TEXT = 'text';
 
+    public const URL = 'url';
+
     public const RICHTEXT = 'richtext';
 
     public const SELECT = 'select';
@@ -107,6 +109,12 @@ final readonly class Field
     public static function text(string $name, string $label, string $default = ''): self
     {
         return new self(self::TEXT, $name, $label, [], $default);
+    }
+
+    /** Absolute HTTPS URL, stored as a string. */
+    public static function url(string $name, string $label): self
+    {
+        return new self(self::URL, $name, $label);
     }
 
     public static function richtext(string $name, string $label, string $default = ''): self
@@ -249,6 +257,18 @@ final readonly class Field
      */
     public function sanitize(mixed $value): string|int|array
     {
+        if ($this->kind === self::URL) {
+            if (! is_string($value)) {
+                return '';
+            }
+
+            $url = esc_url_raw(trim($value), ['https']);
+            $scheme = parse_url($url, PHP_URL_SCHEME);
+            $host = parse_url($url, PHP_URL_HOST);
+
+            return is_string($scheme) && strtolower($scheme) === 'https' && is_string($host) && $host !== '' ? $url : '';
+        }
+
         if ($this->kind === self::GALLERY) {
             return $this->sanitizeGallery($value);
         }

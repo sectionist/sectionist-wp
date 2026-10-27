@@ -411,9 +411,41 @@ if (! function_exists('absint')) {
 }
 
 if (! function_exists('esc_url_raw')) {
-    function esc_url_raw(string $url): string
+    /**
+     * @param  list<string>|null  $protocols
+     */
+    function esc_url_raw(string $url, ?array $protocols = null): string
     {
-        return preg_match('#^(https?://|mailto:|tel:|/|\#)#i', trim($url)) === 1 ? trim($url) : '';
+        if ($protocols === null) {
+            return preg_match('#^(https?://|mailto:|tel:|/|\#)#i', trim($url)) === 1 ? trim($url) : '';
+        }
+
+        // Mirrors the protocol handling of esc_url(), not its full behavior.
+        $url = str_replace(' ', '%20', ltrim($url));
+        $url = preg_replace('|[^a-z0-9-~+_.?#=!&;,/:%@$\|*\'()\[\]\\x80-\\xff]|i', '', $url);
+        if (! is_string($url) || $url === '') {
+            return '';
+        }
+
+        $url = str_replace(';//', '://', $url);
+
+        if (! str_contains($url, ':')
+            && ! in_array($url[0], ['/', '#', '?'], true)
+            && preg_match('/^[a-z0-9-]+?\.php/i', $url) !== 1
+        ) {
+            $first = array_values($protocols)[0] ?? '';
+            $url = (strtolower($first) === 'https' ? 'https://' : 'http://').$url;
+        }
+
+        $colon = strpos($url, ':');
+        if ($colon !== false) {
+            $scheme = strtolower(substr($url, 0, $colon));
+            if (! in_array($scheme, array_map('strtolower', $protocols), true)) {
+                return '';
+            }
+        }
+
+        return $url;
     }
 }
 

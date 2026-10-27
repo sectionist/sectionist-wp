@@ -16,6 +16,7 @@ use Sectionist\Render\ViewResolver;
 use Sectionist\Rest\PreviewController;
 use Sectionist\Sections\Registry;
 use Sectionist\Sections\Types\CtaType;
+use Sectionist\Sections\Types\EmbedType;
 use Sectionist\Sections\Types\FaqType;
 use Sectionist\Sections\Types\GalleryType;
 use Sectionist\Sections\Types\HeroType;
@@ -39,6 +40,7 @@ final class Plugin
             $registry->register(new FaqType);
             $registry->register(new ShortcodeType);
             $registry->register(new CtaType);
+            $registry->register(new EmbedType);
         });
 
         Faq::register();

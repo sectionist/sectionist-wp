@@ -13,8 +13,8 @@ Minimal classic theme for the [Sectionist](../sectionist) plugin. Copy it, renam
 style.css  functions.php  index.php  sectionist.json   (required root files)
 templates/  index.php  page.php  single.php  archive.php  search.php  404.php
 layouts/    header.php  footer.php  comments.php  content-excerpt.php
-sections/   text.php  partials/cta.php
-resources/  css/theme.css
+sections/   <type>.php per section type (e.g. text.php, embed.php), partials/cta.php
+resources/  css/theme.css  js/embed.js
 ```
 
 `functions.php` makes WordPress look up the template hierarchy in `templates/`. The hierarchy itself is unchanged (`page-{slug}.php`, `single-{type}.php`, ...), so add new templates there.
@@ -44,3 +44,7 @@ Views are resolved in this order: `sections/<type>.php` in the active theme, the
 
 - `sections/text.php` overrides the `text` view. It receives `$data` and `$section`.
 - `sections/partials/cta.php` is included by the theme's `text.php`. It renders the CTA field of that section.
+
+## Embeds and consent
+
+The plugin stores only an embed URL and a caption. `sections/embed.php` resolves the URL through WordPress oEmbed (cached by WordPress on the front end), keeps the provider iframe inert inside a `<template>`, and `resources/js/embed.js` inserts it after the visitor clicks "Load embed". Without JavaScript the consent gate links to the provider. Provider output that does not contain an iframe is rendered as a link. No consent state is stored.

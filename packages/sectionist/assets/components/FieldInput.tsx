@@ -93,7 +93,7 @@ export function FieldInput(props: {
       ) : field.kind === 'select' ? (
         <Select id={id} value={value} options={field.options} onInput={onInput} />
       ) : (
-        <TextInput id={id} value={value} onInput={onInput} />
+        <TextInput id={id} inputMode={field.kind === 'url' ? 'url' : undefined} placeholder={field.kind === 'url' ? t.urlPlaceholder : undefined} value={value} onInput={onInput} />
       )}
     </Field>
   );

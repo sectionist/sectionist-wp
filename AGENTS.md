@@ -42,6 +42,7 @@ Current state:
 - Implemented:
   - Storage: JSON with `schema_version` in `post_content` (ADR 0004), migration runner, `PostContentRepository`.
   - Rendering contract: data in, HTML out (ADR 0006, 0008). Resolution order: active theme, plugin fallback. The plugin knows no templating engine.
+  - Embeds: the core stores an HTTPS URL and a caption only; oEmbed and consent live in the theme (ADR 0009). The starter theme keeps the provider iframe inert until a click, and the plugin fallback renders a plain link.
   - Starter themes: complete themes a project copies and owns. Technology choices live only in the individual starter theme.
   - Admin UI: declarative field schema in PHP, generic renderer, slim Preact editor (Vite). Preview via server-side rendering over REST.
   - Theme manifest `sectionist.json` (ADR 0008).
@@ -93,4 +94,4 @@ Current state:
 - TODO: `LinkModal.tsx` still uses its own label/input markup instead of the `Field` components. Low priority.
 - TODO: Badge warning colors and `#fff` in `assets/style.css` are hard-coded instead of tokens. Low priority.
 - TODO: Add option for links to open in a new tab.
-- TODO (to be discussed, lower priority): `columns` as a structuring element (changes the data format, needs an ADR first), `embed` (oEmbed, consent in the theme), `html`/code (only with `unfiltered_html`), uninstall and export (what happens to the JSON when the plugin is deactivated; related to the plain-text sweep before v1.0.0).
+- TODO (to be discussed, lower priority): `columns` as a structuring element (changes the data format, needs an ADR first), `html`/code (only with `unfiltered_html`), uninstall and export (what happens to the JSON when the plugin is deactivated; related to the plain-text sweep before v1.0.0).

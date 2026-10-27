@@ -21,6 +21,14 @@ add_action('wp_enqueue_scripts', static function (): void {
         [],
         wp_get_theme()->get('Version'),
     );
+
+    wp_enqueue_script(
+        'sectionist-starter-embed',
+        get_theme_file_uri('resources/js/embed.js'),
+        [],
+        wp_get_theme()->get('Version'),
+        true,
+    );
 });
 
 /**
