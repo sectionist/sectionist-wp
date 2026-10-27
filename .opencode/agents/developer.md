@@ -1,6 +1,6 @@
 ---
 description: Full-stack feature implementation in PHP 8.5 and TypeScript/Preact
-mode: primary
+mode: subagent
 model: opencode/deepseek-v4.1-flash-free
 ---
 
