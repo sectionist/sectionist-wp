@@ -9,11 +9,12 @@ use Sectionist\Sections\Cta;
  *
  * @var array<string, mixed> $cta Sanitized CTA value (see Cta::sanitize()).
  */
-$url = Cta::url($cta);
-$label = is_string($cta['label'] ?? null) ? $cta['label'] : '';
-if (($cta['active'] ?? false) !== true || $url === '' || $label === '') {
+if (! Cta::renders($cta)) {
     return;
 }
+
+$url = Cta::url($cta);
+$label = is_string($cta['label'] ?? null) ? $cta['label'] : '';
 $style = ($cta['style'] ?? 'button') === 'link' ? 'link' : 'button';
 ?>
 <div class="section-cta">

@@ -43,8 +43,8 @@ The theme manifest, comparable to `theme.json`. The plugin reads it from the act
 Views are resolved in this order: `sections/<type>.php` in the active theme, then the plugin fallback.
 
 - `sections/text.php` overrides the `text` view. It receives `$data` and `$section`.
-- `sections/partials/cta.php` is included by the theme's `text.php`. It renders the CTA field of that section.
+- `sections/partials/cta.php` is included by the section views (e.g. `text.php`, `embed.php`). It renders the CTA field of that section.
 
 ## Embeds and consent
 
-The plugin stores only an embed URL and a caption. `sections/embed.php` resolves the URL through WordPress oEmbed (cached by WordPress on the front end), keeps the provider iframe inert inside a `<template>`, and `resources/js/embed.js` inserts it after the visitor clicks "Load embed". Without JavaScript the consent gate links to the provider. Provider output that does not contain an iframe is rendered as a link. No consent state is stored.
+The type-specific fields of `embed` are the URL and a caption; `body`, `backdrop` (color only) and `cta` are shared fields like in the other section types. `sections/embed.php` resolves the URL through WordPress oEmbed (cached by WordPress on the front end), keeps the provider iframe inert inside a `<template>`, and `resources/js/embed.js` inserts it after the visitor clicks "Load embed". Without JavaScript the consent gate links to the provider. Provider output that does not contain an iframe is rendered as a link. No consent state is stored.

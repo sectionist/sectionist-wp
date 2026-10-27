@@ -213,6 +213,13 @@ if (! function_exists('esc_html__')) {
     }
 }
 
+if (! function_exists('esc_html_e')) {
+    function esc_html_e(string $text, string $domain = 'default'): void
+    {
+        echo esc_html__($text, $domain);
+    }
+}
+
 if (! function_exists('esc_attr')) {
     function esc_attr(string $text): string
     {
@@ -470,6 +477,16 @@ if (! function_exists('esc_url')) {
     }
 }
 
+if (! function_exists('wp_parse_url')) {
+    /**
+     * @return array<string, int|string>|int|string|false|null
+     */
+    function wp_parse_url(string $url, int $component = -1): array|int|string|false|null
+    {
+        return parse_url($url, $component);
+    }
+}
+
 if (! function_exists('get_the_ID')) {
     function get_the_ID(): int|false
     {
@@ -566,5 +583,20 @@ if (! class_exists('WP_Post')) {
         public string $post_status = 'publish';
 
         public string $post_type = '';
+    }
+}
+
+if (! class_exists('WP_Embed')) {
+    class WP_Embed
+    {
+        /**
+         * Tests set a subclass in `$GLOBALS['wp_embed']` that returns provider HTML.
+         *
+         * @param  array<string, mixed>  $attr
+         */
+        public function shortcode(array $attr, string $url = ''): string
+        {
+            return '';
+        }
     }
 }

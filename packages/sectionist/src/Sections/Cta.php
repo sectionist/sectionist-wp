@@ -67,4 +67,20 @@ final class Cta
 
         return is_string($permalink) ? $permalink : '';
     }
+
+    /**
+     * Whether a CTA value renders at all: active, with a resolvable target and a non-empty label.
+     *
+     * @param  mixed  $cta  Raw or sanitized CTA value.
+     */
+    public static function renders(mixed $cta): bool
+    {
+        /** @var array<string, mixed> $in */
+        $in = is_array($cta) ? $cta : [];
+
+        return ($in['active'] ?? false) === true
+            && self::url($in) !== ''
+            && is_string($in['label'] ?? null)
+            && $in['label'] !== '';
+    }
 }

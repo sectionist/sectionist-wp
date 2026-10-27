@@ -42,7 +42,7 @@ Current state:
 - Implemented:
   - Storage: JSON with `schema_version` in `post_content` (ADR 0004), migration runner, `PostContentRepository`.
   - Rendering contract: data in, HTML out (ADR 0006, 0008). Resolution order: active theme, plugin fallback. The plugin knows no templating engine.
-  - Embeds: the core stores an HTTPS URL and a caption only; oEmbed and consent live in the theme (ADR 0009). The starter theme keeps the provider iframe inert until a click, and the plugin fallback renders a plain link.
+  - Embeds: the core stores an HTTPS URL and a caption, plus the shared body, backdrop (color only) and call to action; oEmbed and consent live in the theme (ADR 0009). The starter theme keeps the provider iframe inert until a click, and the plugin fallback renders a plain link.
   - Starter themes: complete themes a project copies and owns. Technology choices live only in the individual starter theme.
   - Admin UI: declarative field schema in PHP, generic renderer, slim Preact editor (Vite). Preview via server-side rendering over REST.
   - Theme manifest `sectionist.json` (ADR 0008).

@@ -8,8 +8,8 @@ An embed section references third-party media (video, audio, slides) through an 
 
 ## Decision
 
-- **Storage.** The section type `embed` stores a `url` and a `caption`. `url` is an absolute HTTPS URL, sanitized with `esc_url_raw(..., ['https'])`; `caption` is plain text. No provider name, provider ID or embed HTML is stored. The type and its fields are additive, so `schema_version` stays 1.
-- **The core does not embed.** The plugin never calls oEmbed and never outputs third-party iframes or scripts. Its fallback view renders the URL as a plain link plus the caption.
+- **Storage.** The section type `embed` stores `url` (absolute HTTPS, sanitized with `esc_url_raw(..., ['https'])`) and `caption` (plain text) as its type-specific fields, and uses the shared `body`, `Backdrop` (color only) and `cta` fields like the other section types. No provider name, provider ID or embed HTML is stored. The type and its fields are additive, so `schema_version` stays 1.
+- **The core does not embed.** The plugin never calls oEmbed and never outputs third-party iframes or scripts. Its fallback view renders the shared body, the URL as a plain link plus the caption, and the call to action.
 - **Rendering and consent live in the theme.** A theme view may resolve oEmbed and decides how consent works. The starter theme resolves the oEmbed HTML server-side (cached by WordPress in post meta), keeps the iframe inert inside a `<template>`, and inserts it only after the visitor clicks. The extracted iframe is sanitized with `wp_kses()` against an iframe attribute allowlist, only an HTTPS `src` is accepted, and `loading="lazy"` is added. Without JavaScript the visitor gets a link to the provider.
 - **Iframe only in the starter theme.** The starter theme uses oEmbed output only when it contains an iframe. Other provider output renders as a link. Providers that require their own script are out of scope for the starter theme.
 - **No consent state is stored.** Consent is per page view. The plugin keeps no preference, cookie or option for it.
@@ -17,7 +17,8 @@ An embed section references third-party media (video, audio, slides) through an 
 
 ## Consequences
 
-- A theme without embed support still renders the section as a link, so the content is never lost.
+- A theme without embed support still renders the body, the URL as a link, the caption and the call to action, so the content is never lost.
+- The shared `body` field feeds the plugin's excerpt logic like every other section type, so the embed prose appears in excerpts. That is intended.
 - The starter theme accepts only HTTPS iframe sources, so providers that return an HTTP iframe (for example on an HTTP-served site) fall back to the link.
 - The editor preview shows the consent gate's message and provider link, not the loaded embed, because the theme script is a front-end asset.
 - The server fetches provider metadata while rendering the page. WordPress caches the result per post when the theme resolves it through `$wp_embed->shortcode()`, so the fetch and cache are reliable on the front end. The REST preview has no post context and is not guaranteed to hit the post-meta cache.

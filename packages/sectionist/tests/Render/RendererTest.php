@@ -69,12 +69,63 @@ final class RendererTest extends TestCase
 
         $this->assertStringContainsString('href="https://www.youtube.com/watch?v=x"', $html);
         $this->assertStringContainsString('<figcaption>A video</figcaption>', $html);
+        $this->assertStringContainsString('sectionist-section sectionist-section--embed', $html);
+        $this->assertStringContainsString('sectionist-section__content', $html);
         $this->assertStringNotContainsString('<iframe', $html);
     }
 
-    public function test_embed_without_url_renders_nothing(): void
+    public function test_embed_without_content_renders_nothing(): void
     {
         $this->assertSame('', $this->renderer->renderSection(new Section('a', 'embed')));
+    }
+
+    public function test_renders_embed_body_without_link(): void
+    {
+        $html = $this->renderer->renderSection(new Section('a', 'embed', data: [
+            'body' => '<p>Only text</p>',
+        ]));
+
+        $this->assertStringContainsString('<p>Only text</p>', $html);
+        $this->assertStringContainsString('sectionist-section sectionist-section--embed', $html);
+        $this->assertStringContainsString('sectionist-section__content', $html);
+        $this->assertStringNotContainsString('<a ', $html);
+        $this->assertStringNotContainsString('target="_blank"', $html);
+    }
+
+    public function test_renders_embed_body_link_and_cta(): void
+    {
+        $html = $this->renderer->renderSection(new Section('a', 'embed', data: [
+            'body' => '<p>Intro</p>',
+            'url' => 'https://example.test/video',
+            'cta' => ['active' => true, 'label' => 'Watch', 'url' => 'https://example.test/watch'],
+        ]));
+
+        $this->assertStringContainsString('<p>Intro</p>', $html);
+        $this->assertStringContainsString('sectionist-section sectionist-section--embed', $html);
+        $this->assertStringContainsString('sectionist-section__content', $html);
+        $this->assertStringContainsString('href="https://example.test/video"', $html);
+        $this->assertStringContainsString('class="sectionist-cta"', $html);
+        $this->assertStringContainsString('>Watch</a>', $html);
+        $this->assertStringNotContainsString('<iframe', $html);
+    }
+
+    public function test_renders_embed_cta_without_url_or_body(): void
+    {
+        $html = $this->renderer->renderSection(new Section('a', 'embed', data: [
+            'cta' => ['active' => true, 'label' => 'Watch', 'url' => 'https://example.test/watch'],
+        ]));
+
+        $this->assertStringContainsString('class="sectionist-cta"', $html);
+        $this->assertStringContainsString('sectionist-section sectionist-section--embed', $html);
+        $this->assertStringContainsString('sectionist-section__content', $html);
+        $this->assertStringNotContainsString('<figure', $html);
+    }
+
+    public function test_embed_with_active_cta_without_target_renders_nothing(): void
+    {
+        $this->assertSame('', $this->renderer->renderSection(new Section('a', 'embed', data: [
+            'cta' => ['active' => true, 'label' => 'Watch'],
+        ])));
     }
 
     public function test_embed_caption_is_escaped(): void
@@ -86,6 +137,8 @@ final class RendererTest extends TestCase
 
         $this->assertStringNotContainsString('<script>', $html);
         $this->assertStringContainsString('&lt;script&gt;alert(1)&lt;/script&gt;', $html);
+        $this->assertStringContainsString('sectionist-section sectionist-section--embed', $html);
+        $this->assertStringContainsString('sectionist-section__content', $html);
     }
 
     public function test_render_post_uses_stored_sections(): void

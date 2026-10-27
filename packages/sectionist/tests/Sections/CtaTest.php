@@ -17,9 +17,27 @@ final class CtaTest extends TestCase
         ];
     }
 
+    protected function tearDown(): void
+    {
+        unset($GLOBALS['sectionist_test_posts']);
+    }
+
     public function test_invalid_input_gives_inactive_defaults(): void
     {
         $this->assertSame(Cta::defaults(), Cta::sanitize('nope'));
+    }
+
+    public function test_renders_requires_active_target_and_label(): void
+    {
+        $this->assertTrue(Cta::renders(['active' => true, 'label' => 'Go', 'url' => 'https://x.test']));
+        $this->assertTrue(Cta::renders(['active' => true, 'label' => 'Go', 'page_id' => 5]));
+
+        $this->assertFalse(Cta::renders(['active' => true, 'label' => '', 'url' => 'https://x.test']));
+        $this->assertFalse(Cta::renders(['active' => true, 'label' => ['Go'], 'url' => 'https://x.test']));
+        $this->assertFalse(Cta::renders(['active' => true, 'label' => 'Go']));
+        $this->assertFalse(Cta::renders(['active' => true, 'label' => 'Go', 'page_id' => 6]));
+        $this->assertFalse(Cta::renders(['active' => false, 'label' => 'Go', 'url' => 'https://x.test']));
+        $this->assertFalse(Cta::renders('nope'));
     }
 
     public function test_fields_are_sanitized(): void

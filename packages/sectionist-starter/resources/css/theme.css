@@ -120,6 +120,10 @@ img {
 	margin: 0;
 }
 
+.section__content > * + .section__embed {
+	margin-top: 2rem;
+}
+
 .section__embed-consent {
 	display: grid;
 	justify-items: start;
